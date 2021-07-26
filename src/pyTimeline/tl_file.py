@@ -159,6 +159,15 @@ class TlFile(Novel):
     def merge(self, source):
         """Copy required attributes of the timeline object.
         """
+        if self.file_exists():
+            message = self.read()
+            # initialize data
+
+            if message.startswith('ERROR'):
+                return message
+
+        self.chapters = source.chapters
+        self.srtChapters = source.srtChapters
 
         for scId in source.scenes:
 
@@ -186,6 +195,10 @@ class TlFile(Novel):
 
             if source.scenes[scId].lastsDays is not None:
                 self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
+
+            self.scenes[scId].isNotesScene = source.scenes[scId].isNotesScene
+            self.scenes[scId].isUnused = source.scenes[scId].isUnused
+            self.scenes[scId].isTodoScene = source.scenes[scId].isTodoScene
 
             scenes = list(self.scenes)
 
@@ -271,8 +284,30 @@ class TlFile(Novel):
 
             return dtMin, dtMax
 
+        #--- Begin write method
+
         dtMin = self.defaultDateTime
         dtMax = self.defaultDateTime
+
+        # List all scenes to be exported.
+        # Note: self.scenes may also contain orphaned ones.
+
+        srtScenes = []
+
+        for chId in self.srtChapters:
+
+            for scId in self.chapters[chId].srtScenes:
+
+                if self.scenes[scId].isNotesScene:
+                    continue
+
+                if self.scenes[scId].isUnused:
+                    continue
+
+                if self.scenes[scId].isTodoScene:
+                    continue
+
+                srtScenes.append(scId)
 
         try:
             root = self.tree.getroot()
@@ -294,7 +329,7 @@ class TlFile(Novel):
                 if scId is None:
                     continue
 
-                if not scId in self.scenes:
+                if not scId in srtScenes:
                     trash.append(event)
                     continue
 
@@ -303,11 +338,10 @@ class TlFile(Novel):
 
             # Add new events.
 
-            for scId in self.scenes:
+            for scId in srtScenes:
 
                 if not scId in scIds:
                     event = ET.SubElement(events, 'event')
-                    ET.SubElement(event, 'labels').text = 'ScID:' + scId
                     dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 
             # Remove events that are assigned to missing scenes.
@@ -325,7 +359,7 @@ class TlFile(Novel):
             ET.SubElement(root, 'categories')
             events = ET.SubElement(root, 'events')
 
-            for scId in self.scenes:
+            for scId in srtScenes:
                 event = ET.SubElement(events, 'event')
                 dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 

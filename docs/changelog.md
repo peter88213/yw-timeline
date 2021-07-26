@@ -4,6 +4,13 @@
 
 ## Changelog
 
+### v0.1.5 Alpha test release
+
+- Fix updating Timeline from yWriter.
+- Filter normal scenes.
+
+Based on PyWriter v3.12.9
+
 ### v0.1.4 Alpha test release
 
 - Updating yWriter from Timeline works.
