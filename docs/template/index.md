@@ -1,6 +1,13 @@
-Generate a yWriter 7 project from an csv outline exported from Aeon Timeline 2. 
+The [Timeline Project](http://thetimelineproj.sourceforge.net/) application 
+can be used to visualize the course of the narrative time in a 
+[yWriter](http://spacejock.com/yWriter7.html) project.
 
-You can generate a yWriter project from a timeline outline, whereby date/time specifications are taken over, or also generate a timeline from a yWriter project the other way around. Afterwards, the whole thing can be synchronized, so that you can manage the date/time information of the scenes in Timeline. 
+## Features
+
+- Generate a *yWriter* project from an outline created with *Timeline*.
+- Generate a *Timeline* project from a *yWriter* project.
+- Synchronize a *yWriter* project with a *Timeline* project.
+
  
 ## Requirements
 

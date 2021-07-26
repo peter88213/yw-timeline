@@ -1,15 +1,7 @@
 # yw-timeline
 Synchronize yWriter with Timeline
 
-The [Timeline Project](http://thetimelineproj.sourceforge.net/) application 
-can be used to visualize the course of the narrative time in a 
-[yWriter](http://spacejock.com/yWriter7.html) project.
-
-## Features
-
-- Generate a *yWriter* project from an outline created with *Timeline*.
-- Generate a *Timeline* project from a *yWriter* project.
-- Synchronize a *yWriter* project with a *Timeline* project.
+For more information, see the [project homepage](https://peter88213.github.io/yw-timeline) with description and download instructions.
 
 ## Credits
 
