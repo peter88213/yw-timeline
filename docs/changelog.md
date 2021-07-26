@@ -4,6 +4,13 @@
 
 ## Changelog
 
+### v0.1.6 Alpha test release
+
+- Refactor.
+- Update help text.
+
+Based on PyWriter v3.12.9
+
 ### v0.1.5 Alpha test release
 
 - Fix updating Timeline from yWriter.

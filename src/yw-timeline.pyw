@@ -12,6 +12,7 @@ import argparse
 
 
 SUFFIX = ''
+SCENE_MARKER = 'Scene'
 DEFAULT_DATE_TIME = '2021-07-26 00:00:00'
 
 
@@ -29,7 +30,7 @@ def run(sourcePath, silentMode=True):
 
     kwargs = dict(
         suffix=SUFFIX,
-        sceneMarker='Scene',
+        sceneMarker=SCENE_MARKER,
         defaultDateTime=DEFAULT_DATE_TIME
     )
     converter = TlConverter()
