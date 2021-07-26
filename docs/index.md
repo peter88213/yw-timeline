@@ -1,10 +1,6 @@
 Generate a yWriter 7 project from an csv outline exported from Aeon Timeline 2. 
 
-- Events are converted to scenes in one single chapter.
-- The scenes are sorted chronologically.
-- Events tagged "Scene" are converted to regular scenes; other events become "Notes" scenes.
-- Locations and participant characters are imported.
-
+You can generate a yWriter project from a timeline outline, whereby date/time specifications are taken over, or also generate a timeline from a yWriter project the other way around. Afterwards, the whole thing can be synchronized, so that you can manage the date/time information of the scenes in Timeline. 
  
 ## Requirements
 
@@ -16,9 +12,9 @@ Generate a yWriter 7 project from an csv outline exported from Aeon Timeline 2.
 
 ## Download and install
 
-[Download the latest release (version 0.1.2)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v0.1.2.zip)
+[Download the latest release (version 0.1.3)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v0.1.3.zip)
 
-- Unzip the downloaded zipfile "yw-timeline_v0.1.2.zip" into a new folder.
+- Unzip the downloaded zipfile "yw-timeline_v0.1.3.zip" into a new folder.
 - Move into this new folder and launch **install.bat**. This installs the script for the local user and creates a shortcut on the desktop.
 - Open "README.md" for usage instructions.
 

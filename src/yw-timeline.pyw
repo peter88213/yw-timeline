@@ -1,29 +1,60 @@
+#!/usr/bin/env python3
 """Synchronize yWriter project with Timeline
 
-This is a yw-timeline sample application.
+Version @release
+Requires Python 3.7 or above
 
 Copyright (c) 2021 Peter Triesberger
-For further information see https://github.com/peter88213/yw2md
+For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
+import argparse
+
+
 SUFFIX = ''
 DEFAULT_DATE_TIME = '2021-07-26 00:00:00'
 
-import sys
 
 from pywriter.ui.ui_tk import UiTk
 from pyTimeline.tl_converter import TlConverter
 
 
-def run(sourcePath, suffix=None):
-    ui = UiTk('Timeline sync with yWriter')
+def run(sourcePath, silentMode=True):
+
+    if silentMode:
+        ui = Ui('')
+
+    else:
+        ui = UiTk('Synchronize yWriter with Timeline @release')
+
+    kwargs = dict(
+        suffix=SUFFIX,
+        sceneMarker='Scene',
+        defaultDateTime=DEFAULT_DATE_TIME
+    )
     converter = TlConverter()
     converter.ui = ui
-    kwargs = {'suffix': suffix, 'sceneMarker': 'Scene',
-              'defaultDateTime': DEFAULT_DATE_TIME}
     converter.run(sourcePath, **kwargs)
     ui.start()
 
 
 if __name__ == '__main__':
-    run(sys.argv[1], SUFFIX)
+    parser = argparse.ArgumentParser(
+        description='Synchronize yWriter with Timeline',
+        epilog='')
+    parser.add_argument('sourcePath',
+                        metavar='Sourcefile',
+                        help='The path of the yWriter/Timeline project file.')
+
+    parser.add_argument('--silent',
+                        action="store_true",
+                        help='suppress error messages and the request to confirm overwriting')
+    args = parser.parse_args()
+
+    if args.silent:
+        silentMode = True
+
+    else:
+        silentMode = False
+
+    run(args.sourcePath, silentMode)
