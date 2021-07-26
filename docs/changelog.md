@@ -4,6 +4,16 @@
 
 ## Changelog
 
+### v0.1.4 Alpha test release
+
+- Updating yWriter from Timeline works.
+- Processing of end date/time and scene duration is missing.
+
+Known bugs:
+- When updating Timeline from yWriter, non-scene events are deleted.
+
+Based on PyWriter v3.12.9
+
 ### v0.1.3 Alpha test release
 
 - Generate a new yWriter project from a Timeline works.
