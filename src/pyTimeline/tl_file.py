@@ -203,8 +203,14 @@ class TlFile(Novel):
         def build_event_subtree(xmlEvent, scId, dtMin, dtMax):
             scene = self.scenes[scId]
 
-            if (scene.date is not None) and (scene.time is not None):
-                startDateTime = scene.date + ' ' + scene.time
+            if scene.date is not None:
+                startDateTime = scene.date + ' '
+
+                if scene.time is None:
+                    startDateTime += '00:00:00'
+
+                else:
+                    startDateTime += scene.time
 
             else:
                 startDateTime = self.defaultDateTime
