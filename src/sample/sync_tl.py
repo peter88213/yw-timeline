@@ -7,7 +7,7 @@ For further information see https://github.com/peter88213/yw2md
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
 SUFFIX = ''
-DEFAULT_DATE_TIME = '1970-01-01 00:00'
+DEFAULT_DATE_TIME = '2021-07-26 00:00:00'
 
 import sys
 

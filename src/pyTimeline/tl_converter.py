@@ -8,6 +8,7 @@ from pywriter.converter.yw_cnv_ui import YwCnvUi
 
 from pywriter.yw.yw7_file import Yw7File
 from pyTimeline.tl_file import TlFile
+from pyTimeline.tl_export_target_factory import TlExportTargetFactory
 from pyTimeline.tl_new_project_factory import TlNewProjectFactory
 
 
@@ -27,3 +28,4 @@ class TlConverter(YwCnvUi):
         """
         YwCnvUi.__init__(self)
         self.newProjectFactory = TlNewProjectFactory()
+        self.exportTargetFactory = TlExportTargetFactory()

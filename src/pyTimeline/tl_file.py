@@ -200,23 +200,8 @@ class TlFile(Novel):
         """Write selected properties to the file.
         """
 
-        def build_event_subtree(xmlEvent, scene):
-
-            if scene.title:
-
-                try:
-                    xmlEvent.find('text').text = scene.title
-
-                except(AttributeError):
-                    ET.SubElement(xmlEvent, 'text').text = scene.title
-
-            if scene.desc is not None:
-
-                try:
-                    xmlEvent.find('description').text = scene.desc
-
-                except(AttributeError):
-                    ET.SubElement(xmlEvent, 'description').text = scene.desc
+        def build_event_subtree(xmlEvent, scId, dtMin, dtMax):
+            scene = self.scenes[scId]
 
             if (scene.date is not None) and (scene.time is not None):
                 startDateTime = scene.date + ' ' + scene.time
@@ -230,6 +215,59 @@ class TlFile(Novel):
             except(AttributeError):
                 ET.SubElement(xmlEvent, 'start').text = startDateTime
 
+            if startDateTime < dtMin:
+                dtMin = startDateTime
+
+            endDateTime = startDateTime
+
+            try:
+                xmlEvent.find('end').text = endDateTime
+
+            except(AttributeError):
+                ET.SubElement(xmlEvent, 'end').text = endDateTime
+
+            if endDateTime > dtMax:
+                dtMax = endDateTime
+
+            if scene.title:
+
+                try:
+                    xmlEvent.find('text').text = scene.title
+
+                except(AttributeError):
+                    ET.SubElement(xmlEvent, 'text').text = scene.title
+
+            if xmlEvent.find('progress') is None:
+                ET.SubElement(xmlEvent, 'progress').text = '0'
+
+            if xmlEvent.find('fuzzy') is None:
+                ET.SubElement(xmlEvent, 'fuzzy').text = 'False'
+
+            if xmlEvent.find('locked') is None:
+                ET.SubElement(xmlEvent, 'locked').text = 'False'
+
+            if xmlEvent.find('ends_today') is None:
+                ET.SubElement(xmlEvent, 'ends_today').text = 'False'
+
+            if scene.desc is not None:
+
+                try:
+                    xmlEvent.find('description').text = scene.desc
+
+                except(AttributeError):
+                    ET.SubElement(xmlEvent, 'description').text = scene.desc
+
+            if xmlEvent.find('labels') is None:
+                ET.SubElement(xmlEvent, 'labels').text = 'ScID:' + scId
+
+            if xmlEvent.find('default_color') is None:
+                ET.SubElement(xmlEvent, 'default_color').text = '192,192,192'
+
+            return dtMin, dtMax
+
+        dtMin = self.defaultDateTime
+        dtMax = self.defaultDateTime
+
         try:
             root = self.tree.getroot()
             events = root.find('events')
@@ -239,12 +277,13 @@ class TlFile(Novel):
             # Update events that are assigned to scenes.
 
             for event in events.iter('event'):
-                labels = event.find('labels')
 
-                if labels is None:
+                try:
+                    labels = event.find('labels').text
+                    scId = re.search('ScID\:([0-9])+', labels).group(1)
+
+                except:
                     continue
-
-                scId = re.search('ScID\:([0-9])+', labels).group(1)
 
                 if scId is None:
                     continue
@@ -254,7 +293,7 @@ class TlFile(Novel):
                     continue
 
                 scIds.append(scId)
-                build_event_subtree(event, self.scenes[scId])
+                dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 
             # Add new events.
 
@@ -263,7 +302,7 @@ class TlFile(Novel):
                 if not scId in scIds:
                     event = ET.SubElement(events, 'event')
                     ET.SubElement(event, 'labels').text = 'ScID:' + scId
-                    build_event_subtree(event, self.scenes[scId])
+                    dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 
             # Remove events that are assigned to missing scenes.
 
@@ -277,13 +316,17 @@ class TlFile(Novel):
             root = ET.Element('timeline')
             ET.SubElement(root, 'version').text = '2.4.0 (3f207fbb63f0 2021-04-07)'
             ET.SubElement(root, 'timetype').text = 'gregoriantime'
-            # ET.SubElement(root, 'categories')
+            ET.SubElement(root, 'categories')
             events = ET.SubElement(root, 'events')
 
             for scId in self.scenes:
                 event = ET.SubElement(events, 'event')
-                ET.SubElement(event, 'labels').text = 'ScID:' + scId
-                build_event_subtree(event, self.scenes[scId])
+                dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
+
+            view = ET.SubElement(root, 'view')
+            period = ET.SubElement(view, 'displayed_period')
+            ET.SubElement(period, 'start').text = dtMin
+            ET.SubElement(period, 'end').text = dtMax
 
         self.indent_xml(root)
         self.tree = ET.ElementTree(root)
