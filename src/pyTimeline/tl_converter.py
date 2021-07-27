@@ -29,7 +29,13 @@ class TlConverter(YwCnvUi):
         if fileExtension == Yw7File.EXTENSION:
             sourceFile = Yw7File(sourcePath, **kwargs)
             targetFile = TlFile(fileName + TlFile.EXTENSION, **kwargs)
-            self.export_from_yw(sourceFile, targetFile)
+
+            if targetFile.file_exists():
+                self.ui.set_info_how('ERROR: File "' + os.path.normpath(fileName +
+                                                                        TlFile.EXTENSION) + '" already exists.')
+
+            else:
+                self.export_from_yw(sourceFile, targetFile)
 
         elif fileExtension == TlFile.EXTENSION:
             sourceFile = TlFile(sourcePath, **kwargs)

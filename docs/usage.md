@@ -35,6 +35,7 @@ Synchronize yWriter with Timeline.
 
 ### Known limitations
 
+- In version 0.2.x, synchronization works only one-way: Existing timelines are not overwritten due to critical bugs yet to be fixed.
 - Events that are linked with scenes can not be periods at the time. Only the start date/time is synchronized with yWriter.
 
 
