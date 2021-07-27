@@ -4,6 +4,12 @@
 
 ## Changelog
 
+### v0.1.7 Alpha bugfix release
+
+- Provisionally fix a bug making a Timeline project not processible for the application, if all events have the same date/time.
+
+Based on PyWriter v3.12.9
+
 ### v0.1.6 Alpha test release
 
 - Refactor.

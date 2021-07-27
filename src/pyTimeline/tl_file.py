@@ -12,6 +12,10 @@ from pywriter.model.novel import Novel
 from pywriter.model.scene import Scene
 from pywriter.model.chapter import Chapter
 
+DIRTY_FIX_TIME = '2021-10-01 11:11:11'
+# This is used to provisionally create a time interval if needed.
+# To be removed as soon as better time calculation methods are available.
+
 
 class TlFile(Novel):
     """Timeline project file representation.
@@ -365,6 +369,15 @@ class TlFile(Novel):
 
             view = ET.SubElement(root, 'view')
             period = ET.SubElement(view, 'displayed_period')
+
+            if dtMin == dtMax:
+
+                if DIRTY_FIX_TIME > dtMax:
+                    dtMax = DIRTY_FIX_TIME
+
+                elif DIRTY_FIX_TIME < dtMin:
+                    dtMin = DIRTY_FIX_TIME
+
             ET.SubElement(period, 'start').text = dtMin
             ET.SubElement(period, 'end').text = dtMax
 
