@@ -55,6 +55,7 @@ Synchronize yWriter with Timeline.
 ### Known limitations
 
 - Events that are linked with scenes can not be periods at the time. Only the start date/time is synchronized with yWriter.
+- Links between events and containers in Timeline are marked with bracketed numbers in the event text. They are hidden in Timeline, but appear after synchronization in yWriter. Be sure not to remove them when editing the scene titles. 
 
 
 ## Instructions for use
