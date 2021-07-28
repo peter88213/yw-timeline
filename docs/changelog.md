@@ -4,11 +4,13 @@
 
 ## Changelog
 
-### v0.4.0 Alpha bugfix release
+### v0.4.0 Alpha release
 
 - Fix faulty regular expressions causing scene IDs not to be unique.
 - Make sure that subsequently added event descriptions are inserted at the right position in the Timeline XML tree.
 - Delete event description during synchronization, if the corresponding scene description is empty.
+- Color events that are linked to scenes mint green.
+- Synchronize items with yWriter. Items are mapped to events with category "Item" (light blue). 
 
 Based on PyWriter v3.12.9
 

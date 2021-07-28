@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 
 from pywriter.model.novel import Novel
 from pywriter.model.scene import Scene
+from pywriter.model.world_element import WorldElement
 from pywriter.model.chapter import Chapter
 
 DIRTY_FIX_TIME = '2021-10-01 11:11:11'
@@ -33,8 +34,10 @@ class TlFile(Novel):
     def __init__(self, filePath, **kwargs):
         Novel.__init__(self, filePath, **kwargs)
         self.sceneMarker = kwargs['sceneMarker']
+        self.itemMarker = kwargs['itemMarker']
         self.defaultDateTime = kwargs['defaultDateTime']
         self.defaultColor = kwargs['defaultColor']
+        self.itemColor = kwargs['itemColor']
 
     def read(self):
         """Parse the file and store selected properties.
@@ -57,81 +60,152 @@ class TlFile(Novel):
         root = self.tree.getroot()
 
         sceneCount = 0
+        itemCount = 0
         scIdsByDate = {}
+        itIdsByDate = {}
 
         for event in root.iter('event'):
+            isScene = False
+            isItem = False
             scId = None
 
-            try:
+            if event.find('labels') is not None:
                 labels = event.find('labels').text
+                itemMatch = re.search('ItemID\:([0-9]+)', labels)
+                sceneMatch = re.search('ScID\:([0-9]+)', labels)
 
-            except:
+                if sceneMatch is not None:
+                    isScene = True
+                    sceneCount += 1
+                    sceneMarker = sceneMatch.group()
+
+                elif itemMatch is not None:
+                    isItem = True
+                    itemCount += 1
+
+            elif event.find('category') is not None:
+                category = event.find('category').text
+
+                if self.itemMarker in category:
+                    isItem = True
+                    itemCount += 1
+
+            else:
                 continue
 
             if isOutline:
-                sceneMarker = self.sceneMarker
 
-                if not sceneMarker in labels:
-                    match = re.search('ScID\:([0-9])+', labels)
+                if self.sceneMarker in labels:
+                    sceneMarker = self.sceneMarker
+                    isScene = True
+                    sceneCount += 1
 
-                    if match is None:
-                        continue
+                elif isItem:
+                    itId = str(itemCount)
+                    self.items[itId] = WorldElement()
+
+                    if event.find('labels') is None:
+                        label = ET.Element('labels')
+                        label.text = 'ItemID:' + itId
+                        event.insert(9, label)
 
                     else:
-                        sceneMarker = match.group()
+                        event.find('labels').text = 'ItemID:' + itId
 
-                    if sceneMarker is None:
-                        continue
+                if isScene:
+                    scId = str(sceneCount)
+                    event.find('labels').text = labels.replace(sceneMarker, 'ScID:' + scId)
+                    self.scenes[scId] = Scene()
+                    self.scenes[scId].status = 1
+                    # Set scene status = "Outline".
 
-                sceneCount += 1
-                scId = str(sceneCount)
-                event.find('labels').text = labels.replace(sceneMarker, 'ScID:' + scId)
-                self.scenes[scId] = Scene()
-                self.scenes[scId].status = 1
-                # Set scene status = "Outline".
-
-            else:
+            elif isScene:
 
                 try:
-                    scId = re.search('ScID\:([0-9]+)', labels).group(1)
+                    scId = sceneMatch.group(1)
                     self.scenes[scId] = Scene()
 
                 except:
                     continue
 
-            try:
-                self.scenes[scId].title = event.find('text').text
+            elif isItem:
 
-            except:
-                self.scenes[scId].title = 'Scene ' + scId
+                try:
+                    itId = itemMatch.group(1)
+                    self.items[itId] = WorldElement()
 
-            try:
-                self.scenes[scId].desc = event.find('description').text
+                except:
+                    continue
 
-            except:
-                pass
+            if isItem:
 
-            try:
-                startDateTime = event.find('start').text
+                try:
+                    self.items[itId].title = event.find('text').text
 
-                if not startDateTime in scIdsByDate:
-                    scIdsByDate[startDateTime] = []
+                except:
+                    self.items[itId].title = self.itemMarker + ' ' + itId
 
-                scIdsByDate[startDateTime].append(scId)
-                dt = startDateTime.split(' ')
-                self.scenes[scId].date = dt[0]
-                self.scenes[scId].time = dt[1]
+                try:
+                    self.items[itId].desc = event.find('description').text
 
-            except:
-                pass
+                except:
+                    pass
 
-            try:
-                endDateTime = event.find('end').text
+                try:
+                    startDateTime = event.find('start').text
 
-                #--- TODO: Calculate scene duration
+                    if not startDateTime in itIdsByDate:
+                        itIdsByDate[startDateTime] = []
 
-            except:
-                pass
+                    itIdsByDate[startDateTime].append(itId)
+
+                except:
+                    pass
+
+            elif isScene:
+
+                try:
+                    self.scenes[scId].title = event.find('text').text
+
+                except:
+                    self.scenes[scId].title = 'Scene ' + scId
+
+                try:
+                    self.scenes[scId].desc = event.find('description').text
+
+                except:
+                    pass
+
+                try:
+                    startDateTime = event.find('start').text
+
+                    if not startDateTime in scIdsByDate:
+                        scIdsByDate[startDateTime] = []
+
+                    scIdsByDate[startDateTime].append(scId)
+                    dt = startDateTime.split(' ')
+                    self.scenes[scId].date = dt[0]
+                    self.scenes[scId].time = dt[1]
+
+                except:
+                    pass
+
+                try:
+                    endDateTime = event.find('end').text
+
+                    #--- TODO: Calculate scene duration
+
+                except:
+                    pass
+
+        # Sort items by date/time
+
+        srtItems = sorted(itIdsByDate.items())
+
+        for date, itList in srtItems:
+
+            for itId in itList:
+                self.srtItems.append(itId)
 
         if isOutline:
 
@@ -151,7 +225,7 @@ class TlFile(Novel):
                 for scId in scList:
                     self.chapters[chId].srtScenes.append(scId)
 
-            # Rewrite the timeline with scene IDs inserted.
+            # Rewrite the timeline with item/scene IDs inserted.
 
             try:
                 self.tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
@@ -211,11 +285,109 @@ class TlFile(Novel):
             if not scId in source.scenes:
                 del self.scenes[scId]
 
+        for itId in source.srtItems:
+
+            if not itId in self.items:
+                self.items[itId] = WorldElement()
+
+            if source.items[itId].title:
+                self.items[itId].title = source.items[itId].title
+
+            self.items[itId].desc = source.items[itId].desc
+
+        items = list(self.items)
+
+        for itId in items:
+
+            if not itId in source.items:
+                del self.items[itId]
+
+        self.srtItems = list(self.items)
+
         return 'SUCCESS'
 
     def write(self):
         """Write selected properties to the file.
         """
+
+        def build_item_subtree(xmlEvent, itId):
+            item = self.items[itId]
+            scIndex = 0
+
+            if xmlEvent.find('start') is None:
+                ET.SubElement(xmlEvent, 'start').text = self.defaultDateTime
+
+            scIndex += 1
+
+            if xmlEvent.find('end') is None:
+                ET.SubElement(xmlEvent, 'end').text = self.defaultDateTime
+
+            scIndex += 1
+
+            if item.title:
+
+                try:
+                    xmlEvent.find('text').text = item.title
+
+                except(AttributeError):
+                    ET.SubElement(xmlEvent, 'text').text = item.title
+
+            scIndex += 1
+
+            if xmlEvent.find('progress') is None:
+                ET.SubElement(xmlEvent, 'progress').text = '0'
+
+            scIndex += 1
+
+            if xmlEvent.find('fuzzy') is None:
+                ET.SubElement(xmlEvent, 'fuzzy').text = 'False'
+
+            scIndex += 1
+
+            if xmlEvent.find('locked') is None:
+                ET.SubElement(xmlEvent, 'locked').text = 'False'
+
+            scIndex += 1
+
+            if xmlEvent.find('ends_today') is None:
+                ET.SubElement(xmlEvent, 'ends_today').text = 'False'
+
+            try:
+                xmlEvent.find('category').text = self.itemMarker
+
+            except:
+                ET.SubElement(xmlEvent, 'category').text = self.itemMarker
+
+            scIndex += 1
+
+            if item.desc is not None:
+
+                try:
+                    xmlEvent.find('description').text = item.desc
+
+                except(AttributeError):
+
+                    if xmlEvent.find('labels') is None:
+
+                        # Append the description.
+
+                        ET.SubElement(xmlEvent, 'description').text = item.desc
+
+                    else:
+                        # Insert the description.
+
+                        desc = ET.Element('description')
+                        desc.text = item.desc
+                        xmlEvent.insert(scIndex, desc)
+
+            elif xmlEvent.find('description') is not None:
+                xmlEvent.remove(xmlEvent.find('description'))
+
+            if xmlEvent.find('labels') is None:
+                ET.SubElement(xmlEvent, 'labels').text = 'ItemID:' + itId
+
+            if xmlEvent.find('default_color') is None:
+                ET.SubElement(xmlEvent, 'default_color').text = self.defaultColor
 
         def build_event_subtree(xmlEvent, scId, dtMin, dtMax):
             scene = self.scenes[scId]
@@ -351,27 +523,39 @@ class TlFile(Novel):
             events = root.find('events')
             trash = []
             scIds = []
+            itIds = []
 
-            # Update events that are assigned to scenes.
+            #--- Update events that are assigned to scenes or items.
 
             for event in events.iter('event'):
 
-                try:
+                if event.find('labels') is not None:
                     labels = event.find('labels').text
-                    scId = re.search('ScID\:([0-9]+)', labels).group(1)
+                    itemMatch = re.search('ItemID\:([0-9]+)', labels)
+                    sceneMatch = re.search('ScID\:([0-9]+)', labels)
 
-                except:
+                else:
                     continue
 
-                if scId is None:
-                    continue
+                if sceneMatch is not None:
+                    scId = sceneMatch.group(1)
 
-                if not scId in srtScenes:
-                    trash.append(event)
-                    continue
+                    if scId in srtScenes:
+                        scIds.append(scId)
+                        dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 
-                scIds.append(scId)
-                dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
+                    else:
+                        trash.append(event)
+
+                elif itemMatch is not None:
+                    itId = itemMatch.group(1)
+
+                    if itId in self.items:
+                        itIds.append(itId)
+                        build_item_subtree(event, itId)
+
+                    else:
+                        trash.append(event)
 
             # Add new events.
 
@@ -381,10 +565,35 @@ class TlFile(Novel):
                     event = ET.SubElement(events, 'event')
                     dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 
+            for itId in self.items:
+
+                if not itId in itIds:
+                    event = ET.SubElement(events, 'event')
+                    build_item_subtree(event, itId)
+
             # Remove events that are assigned to missing scenes.
 
             for event in trash:
                 events.remove(event)
+
+            # Add "Item" category, if missing.
+
+            hasItemCategory = False
+            categories = root.find('categories')
+
+            for cat in categories.iter('category'):
+
+                if self.itemMarker in cat.text:
+                    hasItemCategory = True
+                    break
+
+            if not hasItemCategory:
+                item = ET.SubElement(categories, 'category')
+                ET.SubElement(item, 'name').text = self.itemMarker
+                ET.SubElement(item, 'color').text = self.itemColor
+                ET.SubElement(item, 'progress_color').text = '255,153,153'
+                ET.SubElement(item, 'done_color').text = '255,153,153'
+                ET.SubElement(item, 'font_color').text = '0,0,0'
 
         except(AttributeError):
 
@@ -393,12 +602,23 @@ class TlFile(Novel):
             root = ET.Element('timeline')
             ET.SubElement(root, 'version').text = '2.4.0 (3f207fbb63f0 2021-04-07)'
             ET.SubElement(root, 'timetype').text = 'gregoriantime'
-            ET.SubElement(root, 'categories')
+            categories = ET.SubElement(root, 'categories')
+            item = ET.SubElement(categories, 'category')
+            ET.SubElement(item, 'name').text = self.itemMarker
+            ET.SubElement(item, 'color').text = self.itemColor
+            ET.SubElement(item, 'progress_color').text = '255,153,153'
+            ET.SubElement(item, 'done_color').text = '255,153,153'
+            ET.SubElement(item, 'font_color').text = '0,0,0'
+
             events = ET.SubElement(root, 'events')
 
             for scId in srtScenes:
                 event = ET.SubElement(events, 'event')
                 dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
+
+            for itId in self.items:
+                event = ET.SubElement(events, 'event')
+                build_item_subtree(event, itId)
 
             view = ET.SubElement(root, 'view')
             period = ET.SubElement(view, 'displayed_period')
