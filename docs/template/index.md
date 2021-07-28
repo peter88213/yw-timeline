@@ -6,7 +6,8 @@ can be used to visualize the course of the narrative time in a
 
 - Generate a *yWriter* project from an outline created with *Timeline*.
 - Generate a *Timeline* project from a *yWriter* project.
-- Synchronize a *yWriter* project with a *Timeline* project.
+- Synchronize *yWriter* scenes with corresponding *Timeline* events in both directions.
+- Synchronize *yWriter* items with corresponding special *Timeline* events in both directions.
 
  
 ## Requirements

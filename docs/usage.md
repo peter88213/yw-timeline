@@ -10,9 +10,18 @@ Synchronize yWriter with Timeline.
 - The yWriter project file and the Timeline file are located in the same directory.
 - They have the same file name and differ in the file extension.
 - Either a timeline or a yWriter project is generated from the other file for the first time. After that, the two files can be synchronized against each other.
+- **Please keep in mind:** Synchronizing means overwriting target data with source data. Since yw-timeline works in both directions, there is always a danger of confusing source and target, thus losing changes. So if the program asks you for confirmation to overwrite a file, better check if it's actually the target file.
 
 
 ### On the yWriter side
+
+#### Items
+- Each item is synchronized with Timeline. Items appear in Timeline as events of the "Item" category. 
+- You can add and remove "Item" events in yWriter. 
+- Changes to the item short name affect the event text during synchronization.
+- Changes to the item description affect the event description during synchronization.
+
+#### Scenes
 - Only normal scenes are synchronized with Timeline, or exported to Timeline. Unused scenes, "Notes" scenes, and "Todo" scenes will not show up in the timeline.
 - Changes to the scene date/time affect the event start date/time during synchronization.
 - Changes to the scene title affect the event text during synchronization.
@@ -23,6 +32,16 @@ Synchronize yWriter with Timeline.
 
 
 ### On the Timeline side
+
+#### Items
+- Each event of the "Item" category is synchronized with yWriter. Such events appear in yWriter as items. Although the date/time stamps of these special events are not visible in yWriter, they determine the order in yWriter's item list.
+- An item ID is a string looking like "ItemID:1". It is auto-generated and must not be changed manually.
+- "Item" events can not be "Scene" events at the same time.
+- You can add and remove "Item" events in Timeline. 
+- Changes to the event text affect the item short name during synchronization.
+- Changes to the event description affect the item description during synchronization.
+
+#### Scenes
 - A scene ID is a string looking like "ScID:1". It is auto-generated and must not be changed manually.
 - Only events with a label containing the string "Scene" (user input) or a scene ID (auto-generated) are exported as scenes to a new yWriter project.
 - When generating a new yWriter project from a timeline the first time, "Scene" labels are replaced with scene ID labels.

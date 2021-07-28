@@ -47,9 +47,11 @@ class TlFile(Novel):
 
         if os.path.isfile(ywFile):
             isOutline = False
+            doRewrite = False
 
         else:
             isOutline = True
+            doRewrite = True
 
         try:
             self.tree = ET.parse(self.filePath)
@@ -58,6 +60,23 @@ class TlFile(Novel):
             return 'ERROR: Can not process "' + os.path.normpath(self.filePath) + '".'
 
         root = self.tree.getroot()
+
+        # Find all itemIDs.
+
+        existingItemIds = []
+
+        for event in root.iter('event'):
+
+            try:
+                category = event.find('category').text
+
+                if self.itemMarker in category:
+                    labels = event.find('labels').text
+                    itemId = re.search('ItemID\:([0-9]+)', labels).group(1)
+                    existingItemIds.append(itemId)
+
+            except:
+                pass
 
         sceneCount = 0
         itemCount = 0
@@ -68,27 +87,35 @@ class TlFile(Novel):
             isScene = False
             isItem = False
             scId = None
+            sceneMatch = None
+            itemMatch = None
 
             if event.find('labels') is not None:
                 labels = event.find('labels').text
                 itemMatch = re.search('ItemID\:([0-9]+)', labels)
                 sceneMatch = re.search('ScID\:([0-9]+)', labels)
 
-                if sceneMatch is not None:
-                    isScene = True
-                    sceneCount += 1
-                    sceneMarker = sceneMatch.group()
-
-                elif itemMatch is not None:
-                    isItem = True
-                    itemCount += 1
-
-            elif event.find('category') is not None:
+            if event.find('category') is not None:
                 category = event.find('category').text
 
                 if self.itemMarker in category:
                     isItem = True
                     itemCount += 1
+
+                if sceneMatch is not None:
+                    labels = labels.replace(sceneMatch.group(), '')
+                    event.find('labels').text = labels
+                    doRewrite = True
+
+            elif itemMatch is not None:
+                labels = labels.replace(itemMatch.group(), '')
+                event.find('labels').text = labels
+                doRewrite = True
+
+            elif sceneMatch is not None:
+                isScene = True
+                sceneCount += 1
+                sceneMarker = sceneMatch.group()
 
             else:
                 continue
@@ -132,10 +159,24 @@ class TlFile(Novel):
 
                 try:
                     itId = itemMatch.group(1)
-                    self.items[itId] = WorldElement()
 
                 except:
-                    continue
+                    i = itemCount
+
+                    while str(i) in existingItemIds:
+                        i += 1
+
+                    itId = str(i)
+                    existingItemIds.append(itId)
+
+                    if event.find('labels') is None:
+                        label = ET.Element('labels')
+                        label.text = 'ItemID:' + itId
+                        event.insert(9, label)
+
+                    doRewrite = True
+
+                self.items[itId] = WorldElement()
 
             if isItem:
 
@@ -224,6 +265,8 @@ class TlFile(Novel):
 
                 for scId in scList:
                     self.chapters[chId].srtScenes.append(scId)
+
+        if doRewrite:
 
             # Rewrite the timeline with item/scene IDs inserted.
 
@@ -387,7 +430,7 @@ class TlFile(Novel):
                 ET.SubElement(xmlEvent, 'labels').text = 'ItemID:' + itId
 
             if xmlEvent.find('default_color') is None:
-                ET.SubElement(xmlEvent, 'default_color').text = self.defaultColor
+                ET.SubElement(xmlEvent, 'default_color').text = '192,192,192'
 
         def build_event_subtree(xmlEvent, scId, dtMin, dtMax):
             scene = self.scenes[scId]
@@ -537,22 +580,22 @@ class TlFile(Novel):
                 else:
                     continue
 
-                if sceneMatch is not None:
-                    scId = sceneMatch.group(1)
-
-                    if scId in srtScenes:
-                        scIds.append(scId)
-                        dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
-
-                    else:
-                        trash.append(event)
-
-                elif itemMatch is not None:
+                if itemMatch is not None:
                     itId = itemMatch.group(1)
 
                     if itId in self.items:
                         itIds.append(itId)
                         build_item_subtree(event, itId)
+
+                    else:
+                        trash.append(event)
+
+                elif sceneMatch is not None:
+                    scId = sceneMatch.group(1)
+
+                    if scId in srtScenes:
+                        scIds.append(scId)
+                        dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 
                     else:
                         trash.append(event)
