@@ -36,7 +36,7 @@ Synchronize yWriter with Timeline.
 #### Items
 - Each event of the "Item" category is synchronized with yWriter. Such events appear in yWriter as items. Although the date/time stamps of these special events are not visible in yWriter, they determine the order in yWriter's item list.
 - An item ID is a string looking like "ItemID:1". It is auto-generated and must not be changed manually.
-- "Item" events can not be "Scene" events at the same time.
+- An "Item category" event can not be a "Scene" event at the same time. When creating a new yWriter project from a timeline, the "Item" category has priority over the "Scene" label.
 - You can add and remove "Item" events in Timeline. 
 - Changes to the event text affect the item short name during synchronization.
 - Changes to the event description affect the item description during synchronization.
