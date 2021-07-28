@@ -92,7 +92,7 @@ class TlFile(Novel):
             else:
 
                 try:
-                    scId = re.search('ScID\:([0-9])+', labels).group(1)
+                    scId = re.search('ScID\:([0-9]+)', labels).group(1)
                     self.scenes[scId] = Scene()
 
                 except:
@@ -204,12 +204,12 @@ class TlFile(Novel):
             self.scenes[scId].isUnused = source.scenes[scId].isUnused
             self.scenes[scId].isTodoScene = source.scenes[scId].isTodoScene
 
-            scenes = list(self.scenes)
+        scenes = list(self.scenes)
 
-            for scId in scenes:
+        for scId in scenes:
 
-                if not scId in source.scenes:
-                    del self.scenes[scId]
+            if not scId in source.scenes:
+                del self.scenes[scId]
 
         return 'SUCCESS'
 
@@ -325,7 +325,7 @@ class TlFile(Novel):
 
                 try:
                     labels = event.find('labels').text
-                    scId = re.search('ScID\:([0-9])+', labels).group(1)
+                    scId = re.search('ScID\:([0-9]+)', labels).group(1)
 
                 except:
                     continue
