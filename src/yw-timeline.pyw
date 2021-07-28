@@ -14,6 +14,7 @@ import argparse
 SUFFIX = ''
 SCENE_MARKER = 'Scene'
 DEFAULT_DATE_TIME = '2021-07-26 00:00:00'
+DEFAULT_COLOR = '170,240,160'
 
 
 from pywriter.ui.ui_tk import UiTk
@@ -31,7 +32,8 @@ def run(sourcePath, silentMode=True):
     kwargs = dict(
         suffix=SUFFIX,
         sceneMarker=SCENE_MARKER,
-        defaultDateTime=DEFAULT_DATE_TIME
+        defaultDateTime=DEFAULT_DATE_TIME,
+        defaultColor=DEFAULT_COLOR,
     )
     converter = TlConverter()
     converter.ui = ui

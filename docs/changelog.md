@@ -4,6 +4,14 @@
 
 ## Changelog
 
+### v0.4.0 Alpha bugfix release
+
+- Fix faulty regular expressions causing scene IDs not to be unique.
+- Make sure that subsequently added event descriptions are inserted at the right position in the Timeline XML tree.
+- Delete event description during synchronization, if the corresponding scene description is empty.
+
+Based on PyWriter v3.12.9
+
 ### v0.2.0 Limited alpha release
 
 - Synchronization works only one-way: In order to avoid damage, existing timelines are not overwritten due to [critical bugs yet to be fixed](https://github.com/peter88213/yw-timeline/issues). 

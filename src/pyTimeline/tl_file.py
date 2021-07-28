@@ -34,6 +34,7 @@ class TlFile(Novel):
         Novel.__init__(self, filePath, **kwargs)
         self.sceneMarker = kwargs['sceneMarker']
         self.defaultDateTime = kwargs['defaultDateTime']
+        self.defaultColor = kwargs['defaultColor']
 
     def read(self):
         """Parse the file and store selected properties.
@@ -182,8 +183,7 @@ class TlFile(Novel):
                 # avoids deleting the title, if it is empty by accident
                 self.scenes[scId].title = source.scenes[scId].title
 
-            if source.scenes[scId].desc is not None:
-                self.scenes[scId].desc = source.scenes[scId].desc
+            self.scenes[scId].desc = source.scenes[scId].desc
 
             if source.scenes[scId].date is not None:
                 self.scenes[scId].date = source.scenes[scId].date
@@ -219,6 +219,7 @@ class TlFile(Novel):
 
         def build_event_subtree(xmlEvent, scId, dtMin, dtMax):
             scene = self.scenes[scId]
+            scIndex = 0
 
             if scene.date is not None:
                 startDateTime = scene.date + ' '
@@ -238,6 +239,8 @@ class TlFile(Novel):
             except(AttributeError):
                 ET.SubElement(xmlEvent, 'start').text = startDateTime
 
+            scIndex += 1
+
             if startDateTime < dtMin:
                 dtMin = startDateTime
 
@@ -248,6 +251,8 @@ class TlFile(Novel):
 
             except(AttributeError):
                 ET.SubElement(xmlEvent, 'end').text = endDateTime
+
+            scIndex += 1
 
             if endDateTime > dtMax:
                 dtMax = endDateTime
@@ -260,17 +265,27 @@ class TlFile(Novel):
                 except(AttributeError):
                     ET.SubElement(xmlEvent, 'text').text = scene.title
 
+            scIndex += 1
+
             if xmlEvent.find('progress') is None:
                 ET.SubElement(xmlEvent, 'progress').text = '0'
+
+            scIndex += 1
 
             if xmlEvent.find('fuzzy') is None:
                 ET.SubElement(xmlEvent, 'fuzzy').text = 'False'
 
+            scIndex += 1
+
             if xmlEvent.find('locked') is None:
                 ET.SubElement(xmlEvent, 'locked').text = 'False'
 
+            scIndex += 1
+
             if xmlEvent.find('ends_today') is None:
                 ET.SubElement(xmlEvent, 'ends_today').text = 'False'
+
+            scIndex += 1
 
             if scene.desc is not None:
 
@@ -278,13 +293,31 @@ class TlFile(Novel):
                     xmlEvent.find('description').text = scene.desc
 
                 except(AttributeError):
-                    ET.SubElement(xmlEvent, 'description').text = scene.desc
+
+                    if xmlEvent.find('labels') is None:
+
+                        # Append the description.
+
+                        ET.SubElement(xmlEvent, 'description').text = scene.desc
+
+                    else:
+                        # Insert the description.
+
+                        if xmlEvent.find('category') is not None:
+                            scIndex += 1
+
+                        desc = ET.Element('description')
+                        desc.text = scene.desc
+                        xmlEvent.insert(scIndex, desc)
+
+            elif xmlEvent.find('description') is not None:
+                xmlEvent.remove(xmlEvent.find('description'))
 
             if xmlEvent.find('labels') is None:
                 ET.SubElement(xmlEvent, 'labels').text = 'ScID:' + scId
 
             if xmlEvent.find('default_color') is None:
-                ET.SubElement(xmlEvent, 'default_color').text = '192,192,192'
+                ET.SubElement(xmlEvent, 'default_color').text = self.defaultColor
 
             return dtMin, dtMax
 
