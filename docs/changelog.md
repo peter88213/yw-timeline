@@ -4,6 +4,11 @@
 
 ## Changelog
 
+### v0.6.0 Alpha 
+
+- Read configuration from INI file.
+
+Based on PyWriter v3.14.0
 
 ### v0.4.2 Alpha bugfix release
 

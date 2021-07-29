@@ -33,12 +33,12 @@ class TlFile(Novel):
 
     def __init__(self, filePath, **kwargs):
         Novel.__init__(self, filePath, **kwargs)
-        self.sceneMarker = kwargs['sceneMarker']
-        self.ignoreItems = kwargs['ignoreItems']
-        self.itemMarker = kwargs['itemMarker']
-        self.defaultDateTime = kwargs['defaultDateTime']
-        self.sceneColor = kwargs['sceneColor']
-        self.itemColor = kwargs['itemColor']
+        self.sceneMarker = kwargs['scene_label']
+        self.itemMarker = kwargs['item_category']
+        self.defaultDateTime = kwargs['default_date_time']
+        self.sceneColor = kwargs['scene_color']
+        self.itemColor = kwargs['item_color']
+        self.ignoreItems = kwargs['ignore_items']
 
     def read(self):
         """Parse the file and store selected properties.
