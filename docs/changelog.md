@@ -10,8 +10,6 @@
 
 Based on PyWriter v3.12.9
 
-### v0.2.0 Limited alpha release
-
 ### v0.4.0 Alpha release
 
 - Fix faulty regular expressions causing scene IDs not to be unique.
