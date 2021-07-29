@@ -35,6 +35,12 @@ OPTIONS = dict(
 
 def run(sourcePath, silentMode=True):
 
+    if silentMode:
+        ui = Ui('')
+
+    else:
+        ui = UiTk('Synchronize yWriter with Timeline @release')
+
     #--- Try to get persistent configuration data
 
     sourceDir = os.path.dirname(sourcePath)
@@ -54,15 +60,10 @@ def run(sourcePath, silentMode=True):
     for iniFile in iniFiles:
         configuration.read(iniFile)
 
-    if silentMode:
-        ui = Ui('')
-
-    else:
-        ui = UiTk('Synchronize yWriter with Timeline @release')
-
     kwargs = {'suffix': SUFFIX}
     kwargs.update(configuration.settings)
     kwargs.update(configuration.options)
+
     converter = TlConverter()
     converter.ui = ui
     converter.run(sourcePath, **kwargs)

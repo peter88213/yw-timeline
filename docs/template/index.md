@@ -28,7 +28,7 @@ can be used to visualize the course of the narrative time in a
 
 [Changelog](changelog)
 
-## Usage
+## Usage and conventions
 
 See the [instructions for use](usage)
 

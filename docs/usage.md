@@ -4,6 +4,86 @@
 
 Synchronize yWriter with Timeline.
 
+## Instructions for use
+
+### Intended usage
+
+The included installation script creates a shortcut on the desktop. 
+- If you drag a Timeline project onto it and drop it, either a new yWriter project is generated or an existing one is synchronized. 
+- If you drag a yWriter project and drop it on the icon, a new timeline will be generated or an existing one will be synchronized. 
+
+### Command line usage
+
+Alternatively, you can
+
+- launch the program on the command line passing the yWriter/Timeline project file as an argument, or
+- launch the program via a batch file.
+
+usage: `yw-timeline.pyw [--silent] Sourcefile`
+
+#### positional arguments:
+
+`Sourcefile` 
+
+The path of the yWriter/Timeline project file.
+
+#### optional arguments:
+
+`--silent`  suppress error messages and the request to confirm overwriting
+
+
+## Custom configuration
+
+You can override the default settings by providing a configuration file. Be always aware that faulty entries may cause program errors or unreadable Timeline projects. If you change a configuration inbetween, previously synchronized projects might no longer match. 
+
+### Global configuration
+
+An optional global configuration file can be placed in the configuration directory in your user profile. It is applied to any project. Its entries override yw-timeline's built-in constants. This is the path:
+`c:\Users\<user name>\AppData\Roaming\PyWriter\yw-timeline\config\yw-timeline.ini`
+  
+The **install.bat** installation script installs a sample configuration file containing yw-timeline's default values. You can modify or delete it. 
+
+### Local project configuration
+
+An optional project configuration file named `yw-timeline.ini` can be placed in your project directory, i.e. the folder containing your yWriter and Timeline project files. It is only applied to this project. Its entries override yw-timeline's built-in constants as well as the global configuration, if any.
+
+### How to provide/modify a configuration file
+
+The yw-timeline distribution comes with a sample configuration file located in the `sample` subfolder. It contains yw-timeline's default settings and options. This file is also automatically copied to the global configuration folder during installation. You best make a copy and edit it.
+
+- The SETTINGS section comprises the program "constants" usually not to be changed. If you change them, the program might behave differently than described in the documentation. So only touch them if you are clear about the consequences.
+- The OPTIONS section comprises options for regular program execution. 
+- Comment lines begin with a `#` number sign. In the example, they refer to the code line immediately above.
+
+This is the configuration explained: 
+
+```
+[SETTINGS]
+scene_label = Scene
+# Events with this label becone scenes in a newly creates yWriter project. 
+item_category = Item
+# Events assigned to this category become items in the yWriter project.
+default_date_time = 2021-07-26 00:00:00
+# Date/time stamp for imported yWriter scenes without date/time set.
+scene_color = 170,240,160
+# Color for events imported as scenes from yWriter.
+item_color = 160,230,250
+# Color for events that are assigned to the "item" category.
+
+[OPTIONS]
+ignore_items = No
+# No: Synchronize items with yWriter.
+# Yes: Do not synchronize items with yWriter.
+
+```
+
+
+### How to reset the configuration to defaults
+
+Just delete your global and local configuration files.
+
+
+
 ## Conventions
 
 ### General
@@ -56,35 +136,6 @@ Synchronize yWriter with Timeline.
 
 - Events that are linked with scenes can not be periods at the time. Only the start date/time is synchronized with yWriter.
 - Links between events and containers in Timeline are marked with bracketed numbers in the event text. They are hidden in Timeline, but appear after synchronization in yWriter. Be sure not to remove them when editing the scene titles. 
-
-
-## Instructions for use
-
-### Intended usage
-
-The included installation script creates a shortcut on the desktop. 
-- If you drag a Timeline project onto it and drop it, either a new yWriter project is generated or an existing one is synchronized. 
-- If you drag a yWriter project and drop it on the icon, a new timeline will be generated or an existing one will be synchronized. 
-
-### Command line usage
-
-Alternatively, you can
-
-- launch the program on the command line passing the yWriter/Timeline project file as an argument, or
-- launch the program via a batch file.
-
-usage: `yw-timeline.pyw [--silent] Sourcefile`
-
-#### positional arguments:
-
-`Sourcefile` 
-
-The path of the yWriter/Timeline project file.
-
-#### optional arguments:
-
-`--silent`  suppress error messages and the request to confirm overwriting
-
 
 
 ## Installation path
