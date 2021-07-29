@@ -99,16 +99,16 @@ class TlFile(Novel):
             if event.find('category') is not None:
                 category = event.find('category').text
 
-                if self.itemMarker in category:
+                if not self.ignoreItems and self.itemMarker in category:
                     isItem = True
                     itemCount += 1
 
-                if sceneMatch is not None:
-                    labels = labels.replace(sceneMatch.group(), '')
-                    event.find('labels').text = labels
-                    doRewrite = True
+                    if sceneMatch is not None:
+                        labels = labels.replace(sceneMatch.group(), '')
+                        event.find('labels').text = labels
+                        doRewrite = True
 
-            elif itemMatch is not None:
+            elif not self.ignoreItems and itemMatch is not None:
                 labels = labels.replace(itemMatch.group(), '')
                 event.find('labels').text = labels
                 doRewrite = True
@@ -355,10 +355,6 @@ class TlFile(Novel):
         """
 
         def build_item_subtree(xmlEvent, itId):
-
-            # if self.ignoreItems:
-            #    return
-
             item = self.items[itId]
             scIndex = 0
 
@@ -585,7 +581,7 @@ class TlFile(Novel):
                 else:
                     continue
 
-                if itemMatch is not None:
+                if not self.ignoreItems and itemMatch is not None:
                     itId = itemMatch.group(1)
 
                     if itId in self.items:
@@ -613,35 +609,39 @@ class TlFile(Novel):
                     event = ET.SubElement(events, 'event')
                     dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 
-            for itId in self.items:
+            if not self.ignoreItems:
 
-                if not itId in itIds:
-                    event = ET.SubElement(events, 'event')
-                    build_item_subtree(event, itId)
+                for itId in self.items:
+
+                    if not itId in itIds:
+                        event = ET.SubElement(events, 'event')
+                        build_item_subtree(event, itId)
 
             # Remove events that are assigned to missing scenes.
 
             for event in trash:
                 events.remove(event)
 
-            # Add "Item" category, if missing.
+            if not self.ignoreItems:
 
-            hasItemCategory = False
-            categories = root.find('categories')
+                # Add "Item" category, if missing.
 
-            for cat in categories.iter('category'):
+                hasItemCategory = False
+                categories = root.find('categories')
 
-                if self.itemMarker in cat.find('name').text:
-                    hasItemCategory = True
-                    break
+                for cat in categories.iter('category'):
 
-            if not hasItemCategory:
-                item = ET.SubElement(categories, 'category')
-                ET.SubElement(item, 'name').text = self.itemMarker
-                ET.SubElement(item, 'color').text = self.itemColor
-                ET.SubElement(item, 'progress_color').text = '255,153,153'
-                ET.SubElement(item, 'done_color').text = '255,153,153'
-                ET.SubElement(item, 'font_color').text = '0,0,0'
+                    if self.itemMarker in cat.find('name').text:
+                        hasItemCategory = True
+                        break
+
+                if not hasItemCategory:
+                    item = ET.SubElement(categories, 'category')
+                    ET.SubElement(item, 'name').text = self.itemMarker
+                    ET.SubElement(item, 'color').text = self.itemColor
+                    ET.SubElement(item, 'progress_color').text = '255,153,153'
+                    ET.SubElement(item, 'done_color').text = '255,153,153'
+                    ET.SubElement(item, 'font_color').text = '0,0,0'
 
         except(AttributeError):
 
@@ -651,12 +651,14 @@ class TlFile(Novel):
             ET.SubElement(root, 'version').text = '2.4.0 (3f207fbb63f0 2021-04-07)'
             ET.SubElement(root, 'timetype').text = 'gregoriantime'
             categories = ET.SubElement(root, 'categories')
-            item = ET.SubElement(categories, 'category')
-            ET.SubElement(item, 'name').text = self.itemMarker
-            ET.SubElement(item, 'color').text = self.itemColor
-            ET.SubElement(item, 'progress_color').text = '255,153,153'
-            ET.SubElement(item, 'done_color').text = '255,153,153'
-            ET.SubElement(item, 'font_color').text = '0,0,0'
+
+            if not self.ignoreItems:
+                item = ET.SubElement(categories, 'category')
+                ET.SubElement(item, 'name').text = self.itemMarker
+                ET.SubElement(item, 'color').text = self.itemColor
+                ET.SubElement(item, 'progress_color').text = '255,153,153'
+                ET.SubElement(item, 'done_color').text = '255,153,153'
+                ET.SubElement(item, 'font_color').text = '0,0,0'
 
             events = ET.SubElement(root, 'events')
 
@@ -664,9 +666,11 @@ class TlFile(Novel):
                 event = ET.SubElement(events, 'event')
                 dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
 
-            for itId in self.items:
-                event = ET.SubElement(events, 'event')
-                build_item_subtree(event, itId)
+            if not self.ignoreItems:
+
+                for itId in self.items:
+                    event = ET.SubElement(events, 'event')
+                    build_item_subtree(event, itId)
 
             view = ET.SubElement(root, 'view')
             period = ET.SubElement(view, 'displayed_period')

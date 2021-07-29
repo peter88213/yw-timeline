@@ -4,6 +4,13 @@
 
 ## Changelog
 
+
+### v0.4.2 Alpha bugfix release
+
+- Fix a bug deleting the scene ID if an event is assigned to any category.
+
+Based on PyWriter v3.12.9
+
 ### v0.4.1 Alpha bugfix release
 
 - Fix a bug causing multiple "Item" category entries.

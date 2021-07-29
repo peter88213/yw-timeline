@@ -13,6 +13,7 @@ import argparse
 
 SUFFIX = ''
 SCENE_MARKER = 'Scene'
+IGNORE_ITEMS = False
 ITEM_MARKER = 'Item'
 DEFAULT_DATE_TIME = '2021-07-26 00:00:00'
 SCENE_COLOR = '170,240,160'
@@ -22,7 +23,7 @@ from pywriter.ui.ui_tk import UiTk
 from pyTimeline.tl_converter import TlConverter
 
 
-def run(sourcePath, silentMode=True, ignoreItems=False):
+def run(sourcePath, silentMode=True):
 
     if silentMode:
         ui = Ui('')
@@ -32,7 +33,7 @@ def run(sourcePath, silentMode=True, ignoreItems=False):
 
     kwargs = dict(
         suffix=SUFFIX,
-        ignoreItems=ignoreItems,
+        ignoreItems=IGNORE_ITEMS,
         sceneMarker=SCENE_MARKER,
         itemMarker=ITEM_MARKER,
         defaultDateTime=DEFAULT_DATE_TIME,
