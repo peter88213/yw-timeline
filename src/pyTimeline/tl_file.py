@@ -34,9 +34,10 @@ class TlFile(Novel):
     def __init__(self, filePath, **kwargs):
         Novel.__init__(self, filePath, **kwargs)
         self.sceneMarker = kwargs['sceneMarker']
+        self.ignoreItems = kwargs['ignoreItems']
         self.itemMarker = kwargs['itemMarker']
         self.defaultDateTime = kwargs['defaultDateTime']
-        self.defaultColor = kwargs['defaultColor']
+        self.sceneColor = kwargs['sceneColor']
         self.itemColor = kwargs['itemColor']
 
     def read(self):
@@ -354,6 +355,10 @@ class TlFile(Novel):
         """
 
         def build_item_subtree(xmlEvent, itId):
+
+            # if self.ignoreItems:
+            #    return
+
             item = self.items[itId]
             scIndex = 0
 
@@ -532,7 +537,7 @@ class TlFile(Novel):
                 ET.SubElement(xmlEvent, 'labels').text = 'ScID:' + scId
 
             if xmlEvent.find('default_color') is None:
-                ET.SubElement(xmlEvent, 'default_color').text = self.defaultColor
+                ET.SubElement(xmlEvent, 'default_color').text = self.sceneColor
 
             return dtMin, dtMax
 
@@ -626,7 +631,7 @@ class TlFile(Novel):
 
             for cat in categories.iter('category'):
 
-                if self.itemMarker in cat.text:
+                if self.itemMarker in cat.find('name').text:
                     hasItemCategory = True
                     break
 

@@ -15,15 +15,14 @@ SUFFIX = ''
 SCENE_MARKER = 'Scene'
 ITEM_MARKER = 'Item'
 DEFAULT_DATE_TIME = '2021-07-26 00:00:00'
-DEFAULT_COLOR = '170,240,160'
+SCENE_COLOR = '170,240,160'
 ITEM_COLOR = '160,230,250'
-
 
 from pywriter.ui.ui_tk import UiTk
 from pyTimeline.tl_converter import TlConverter
 
 
-def run(sourcePath, silentMode=True):
+def run(sourcePath, silentMode=True, ignoreItems=False):
 
     if silentMode:
         ui = Ui('')
@@ -33,10 +32,11 @@ def run(sourcePath, silentMode=True):
 
     kwargs = dict(
         suffix=SUFFIX,
+        ignoreItems=ignoreItems,
         sceneMarker=SCENE_MARKER,
         itemMarker=ITEM_MARKER,
         defaultDateTime=DEFAULT_DATE_TIME,
-        defaultColor=DEFAULT_COLOR,
+        sceneColor=SCENE_COLOR,
         itemColor=ITEM_COLOR,
     )
     converter = TlConverter()
@@ -56,12 +56,7 @@ if __name__ == '__main__':
     parser.add_argument('--silent',
                         action="store_true",
                         help='suppress error messages and the request to confirm overwriting')
+
     args = parser.parse_args()
 
-    if args.silent:
-        silentMode = True
-
-    else:
-        silentMode = False
-
-    run(args.sourcePath, silentMode)
+    run(args.sourcePath, args.silent)
