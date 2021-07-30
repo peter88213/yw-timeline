@@ -19,6 +19,7 @@ class TlConverter(YwCnvUi):
         Override the superclass method.
         """
         self.newFile = None
+        singleBackup = kwargs['single_backup']
 
         if not os.path.isfile(sourcePath):
             self.ui.set_info_how('ERROR: File "' + os.path.normpath(sourcePath) + '" not found.')
@@ -29,6 +30,7 @@ class TlConverter(YwCnvUi):
         if fileExtension == Yw7File.EXTENSION:
             sourceFile = Yw7File(sourcePath, **kwargs)
             targetFile = TlFile(fileName + TlFile.EXTENSION, **kwargs)
+            targetFile.back_up(singleBackup)
             self.export_from_yw(sourceFile, targetFile)
 
         elif fileExtension == TlFile.EXTENSION:
@@ -36,6 +38,7 @@ class TlConverter(YwCnvUi):
             targetFile = Yw7File(fileName + Yw7File.EXTENSION, **kwargs)
 
             if targetFile.file_exists():
+                targetFile.back_up(singleBackup)
                 self.import_to_yw(sourceFile, targetFile)
 
             else:

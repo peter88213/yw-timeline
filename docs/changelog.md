@@ -4,6 +4,12 @@
 
 ## Changelog
 
+### v0.6.1 Alpha 
+
+- Back up target files. Note: Backups are created even if the synchronization process is cancelled.
+
+Based on PyWriter v3.16.0
+
 ### v0.6.0 Alpha 
 
 - Read configuration from INI file.

@@ -207,7 +207,8 @@ class TlFile(Novel):
             elif isScene:
 
                 try:
-                    self.scenes[scId].title = event.find('text').text
+                    sceneTitle = event.find('text').text
+                    self.scenes[scId].title = sceneTitle
 
                 except:
                     self.scenes[scId].title = 'Scene ' + scId
