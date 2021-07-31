@@ -90,6 +90,7 @@ class TlFile(Novel):
             scId = None
             sceneMatch = None
             itemMatch = None
+            labels = ''
 
             if event.find('labels') is not None:
                 labels = event.find('labels').text

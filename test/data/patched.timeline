@@ -1,11 +1,11 @@
-<?xml version='1.0' encoding='utf-8'?>
+<?xml version="1.0" encoding="utf-8"?>
 <timeline>
   <version>2.4.0 (3f207fbb63f0 2021-04-07)</version>
   <timetype>gregoriantime</timetype>
   <categories>
     <category>
-      <name>scene</name>
-      <color>0,128,255</color>
+      <name>Item</name>
+      <color>160,230,250</color>
       <progress_color>255,153,153</progress_color>
       <done_color>255,153,153</done_color>
       <font_color>0,0,0</font_color>
@@ -14,28 +14,26 @@
   <events>
     <event>
       <start>2018-07-13 00:00:00</start>
-      <end>2018-07-20 11:54:37</end>
+      <end>2018-07-13 00:00:00</end>
       <text>Die zweite Szene</text>
       <progress>0</progress>
       <fuzzy>False</fuzzy>
       <locked>False</locked>
-      <labels>ScID:1</labels>
       <ends_today>False</ends_today>
-      <category>scene</category>
-      <default_color>192,192,192</default_color>
+      <labels>ScID:1</labels>
+      <default_color>170,240,160</default_color>
     </event>
     <event>
       <start>2018-07-21 11:02:34</start>
-      <end>2018-07-25 13:56:04</end>
+      <end>2018-07-21 11:02:34</end>
       <text>Die dritte Szene</text>
       <progress>0</progress>
       <fuzzy>False</fuzzy>
       <locked>False</locked>
       <ends_today>False</ends_today>
-      <category>scene</category>
       <description>Das ist die dritte Szene.</description>
-      <labels>ScID:2; Label2</labels>
-      <default_color>192,192,192</default_color>
+      <labels>ScID:2</labels>
+      <default_color>170,240,160</default_color>
     </event>
     <event>
       <start>2018-07-29 09:17:00</start>
@@ -46,25 +44,14 @@
       <locked>False</locked>
       <ends_today>False</ends_today>
       <description>Dieses Ereignis wird nicht beschrieben.</description>
-      <labels>ScID:3; Hal Spacejock</labels>
-      <default_color>192,192,192</default_color>
-    </event>
-    <event>
-      <start>2018-07-10 00:00:00</start>
-      <end>2018-07-15 00:00:00</end>
-      <text>Das erste Ereignis</text>
-      <progress>0</progress>
-      <fuzzy>False</fuzzy>
-      <locked>False</locked>
-      <ends_today>False</ends_today>
-      <description>Das erste Ereignis wird szenisch beschrieben.</description>
-      <default_color>192,192,192</default_color>
+      <labels>ScID:3</labels>
+      <default_color>170,240,160</default_color>
     </event>
   </events>
   <view>
     <displayed_period>
-      <start>2018-07-09 16:14:52</start>
-      <end>2018-08-08 16:14:52</end>
+      <start>2017-01-24 19:04:10</start>
+      <end>2020-02-07 19:04:10</end>
     </displayed_period>
     <hidden_categories>
     </hidden_categories>

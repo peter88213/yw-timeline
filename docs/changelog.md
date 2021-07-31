@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.6.1 Alpha bugfix release
+
+- Fix a bug (uninitialized variable).
+
+Based on PyWriter v3.16.0
+
 ### v0.6.1 Alpha 
 
 - Back up target files. Note: Backups are created even if the synchronization process is cancelled.
