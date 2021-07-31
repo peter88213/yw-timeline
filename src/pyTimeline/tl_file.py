@@ -151,6 +151,11 @@ class TlFile(Novel):
                         event.find('labels').text = labels
                         doRewrite = True
 
+                elif sceneMatch is not None:
+                    isScene = True
+                    sceneCount += 1
+                    sceneMarker = sceneMatch.group()
+
             elif not self.ignoreItems and itemMatch is not None:
                 labels = labels.replace(itemMatch.group(), '')
                 event.find('labels').text = labels
