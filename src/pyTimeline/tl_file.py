@@ -33,6 +33,7 @@ class TlFile(Novel):
 
     def __init__(self, filePath, **kwargs):
         Novel.__init__(self, filePath, **kwargs)
+        self.tree = None
         self.sceneMarker = kwargs['scene_label']
         self.itemMarker = kwargs['item_category']
         self.defaultDateTime = kwargs['default_date_time']
@@ -40,9 +41,50 @@ class TlFile(Novel):
         self.itemColor = kwargs['item_color']
         self.ignoreItems = kwargs['ignore_items']
 
+    def convert_to_yw(self, text):
+        """Return text, converted from source format to yw7 markup.
+        """
+        if text is not None:
+
+            if text.startswith('_('):
+                text = text.lstrip('_')
+
+            elif text.startswith('_['):
+                text = text.lstrip('_')
+
+        return text
+
+    def convert_from_yw(self, text):
+        """Return text, converted from yw7 markup to target format.
+        """
+        if text is not None:
+
+            if text.startswith('('):
+                text = '_' + text
+
+            elif text.startswith('['):
+                text = '_' + text
+
+        return text
+
     def read(self):
         """Parse the file and store selected properties.
         """
+        def remove_contId(event, text):
+            """If text comes with a Container ID, remove it 
+            and store it in the event.tags property. 
+            """
+
+            if text:
+                match = re.match('([\(\[][0-9]+[\)\]])', text)
+
+                if match:
+                    contId = match.group()
+                    event.tags = contId
+                    text = text.lstrip(contId)
+
+            return text
+
         fileName, fileExtension = os.path.splitext(self.filePath)
         ywFile = fileName + '.yw7'
 
@@ -183,7 +225,10 @@ class TlFile(Novel):
             if isItem:
 
                 try:
-                    self.items[itId].title = event.find('text').text
+                    title = event.find('text').text
+                    title = remove_contId(self.items[itId], title)
+                    title = self.convert_to_yw(title)
+                    self.items[itId].title = title
 
                 except:
                     self.items[itId].title = self.itemMarker + ' ' + itId
@@ -208,8 +253,10 @@ class TlFile(Novel):
             elif isScene:
 
                 try:
-                    sceneTitle = event.find('text').text
-                    self.scenes[scId].title = sceneTitle
+                    title = event.find('text').text
+                    title = remove_contId(self.scenes[scId], title)
+                    title = self.convert_to_yw(title)
+                    self.scenes[scId].title = title
 
                 except:
                     self.scenes[scId].title = 'Scene ' + scId
@@ -284,6 +331,15 @@ class TlFile(Novel):
     def merge(self, source):
         """Copy required attributes of the timeline object.
         """
+        def add_contId(event, text):
+            """If event has a tags property, add it to text. 
+            """
+
+            if event.tags is not None:
+                return event.tags + text
+
+            return text
+
         if self.file_exists():
             message = self.read()
             # initialize data
@@ -300,8 +356,10 @@ class TlFile(Novel):
                 self.scenes[scId] = Scene()
 
             if source.scenes[scId].title:
-                # avoids deleting the title, if it is empty by accident
-                self.scenes[scId].title = source.scenes[scId].title
+                title = source.scenes[scId].title
+                title = self.convert_from_yw(title)
+                title = add_contId(self.scenes[scId], title)
+                self.scenes[scId].title = title
 
             self.scenes[scId].desc = source.scenes[scId].desc
 
@@ -337,7 +395,10 @@ class TlFile(Novel):
                 self.items[itId] = WorldElement()
 
             if source.items[itId].title:
-                self.items[itId].title = source.items[itId].title
+                title = source.items[itId].title
+                title = self.convert_from_yw(title)
+                title = add_contId(self.items[itId], title)
+                self.items[itId].title = title
 
             self.items[itId].desc = source.items[itId].desc
 
@@ -356,7 +417,7 @@ class TlFile(Novel):
         """Write selected properties to the file.
         """
 
-        def build_item_subtree(xmlEvent, itId):
+        def build_item_subtree(xmlEvent, itId, dtMin, dtMax):
             item = self.items[itId]
             scIndex = 0
 
@@ -370,13 +431,14 @@ class TlFile(Novel):
 
             scIndex += 1
 
-            if item.title:
+            if not item.title:
+                item.title = 'Unnamed item ID' + itId
 
-                try:
-                    xmlEvent.find('text').text = item.title
+            try:
+                xmlEvent.find('text').text = item.title
 
-                except(AttributeError):
-                    ET.SubElement(xmlEvent, 'text').text = item.title
+            except(AttributeError):
+                ET.SubElement(xmlEvent, 'text').text = item.title
 
             scIndex += 1
 
@@ -397,6 +459,8 @@ class TlFile(Novel):
 
             if xmlEvent.find('ends_today') is None:
                 ET.SubElement(xmlEvent, 'ends_today').text = 'False'
+
+            scIndex += 1
 
             try:
                 xmlEvent.find('category').text = self.itemMarker
@@ -434,6 +498,14 @@ class TlFile(Novel):
 
             if xmlEvent.find('default_color') is None:
                 ET.SubElement(xmlEvent, 'default_color').text = '192,192,192'
+
+            if self.defaultDateTime < dtMin:
+                dtMin = self.defaultDateTime
+
+            if self.defaultDateTime > dtMax:
+                dtMax = self.defaultDateTime
+
+            return dtMin, dtMax
 
         def build_event_subtree(xmlEvent, scId, dtMin, dtMax):
             scene = self.scenes[scId]
@@ -475,13 +547,14 @@ class TlFile(Novel):
             if endDateTime > dtMax:
                 dtMax = endDateTime
 
-            if scene.title:
+            if not scene.title:
+                scene.title = 'Unnamed scene ID' + scId
 
-                try:
-                    xmlEvent.find('text').text = scene.title
+            try:
+                xmlEvent.find('text').text = scene.title
 
-                except(AttributeError):
-                    ET.SubElement(xmlEvent, 'text').text = scene.title
+            except(AttributeError):
+                ET.SubElement(xmlEvent, 'text').text = scene.title
 
             scIndex += 1
 
@@ -564,7 +637,10 @@ class TlFile(Novel):
 
                 srtScenes.append(scId)
 
-        try:
+        if self.tree is not None:
+
+            # Update an existing XML tree.
+
             root = self.tree.getroot()
             events = root.find('events')
             trash = []
@@ -588,7 +664,7 @@ class TlFile(Novel):
 
                     if itId in self.items:
                         itIds.append(itId)
-                        build_item_subtree(event, itId)
+                        dtMin, dtMax = build_item_subtree(event, itId, dtMin, dtMax)
 
                     else:
                         trash.append(event)
@@ -617,7 +693,7 @@ class TlFile(Novel):
 
                     if not itId in itIds:
                         event = ET.SubElement(events, 'event')
-                        build_item_subtree(event, itId)
+                        dtMin, dtMax = build_item_subtree(event, itId, dtMin, dtMax)
 
             # Remove events that are assigned to missing scenes.
 
@@ -645,9 +721,9 @@ class TlFile(Novel):
                     ET.SubElement(item, 'done_color').text = '255,153,153'
                     ET.SubElement(item, 'font_color').text = '0,0,0'
 
-        except(AttributeError):
+        else:
 
-            # Create a new XML tree
+            # Create a new XML tree.
 
             root = ET.Element('timeline')
             ET.SubElement(root, 'version').text = '2.4.0 (3f207fbb63f0 2021-04-07)'
@@ -672,7 +748,7 @@ class TlFile(Novel):
 
                 for itId in self.items:
                     event = ET.SubElement(events, 'event')
-                    build_item_subtree(event, itId)
+                    dtMin, dtMax = build_item_subtree(event, itId, dtMin, dtMax)
 
             view = ET.SubElement(root, 'view')
             period = ET.SubElement(view, 'displayed_period')
