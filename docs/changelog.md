@@ -8,7 +8,7 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
-### v0.9.0 Alpha - Add "ignore unspecific" option
+### v0.10.0 Alpha - Add "ignore unspecific" option
 
 - Implement an option to synchronize only scenes with a specific date/time set. 
 

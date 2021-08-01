@@ -61,12 +61,16 @@ This is the configuration explained:
 [SETTINGS]
 scene_label = Scene
 # Events with this label becone scenes in a newly creates yWriter project. 
+
 item_category = Item
 # Events assigned to this category become items in the yWriter project.
+
 default_date_time = 2021-07-26 00:00:00
 # Date/time stamp for imported yWriter scenes without date/time set.
+
 scene_color = 170,240,160
 # Color for events imported as scenes from yWriter.
+
 item_color = 160,230,250
 # Color for events that are assigned to the "item" category.
 
@@ -76,8 +80,8 @@ ignore_items = No
 # Yes: Do not synchronize items with yWriter.
 
 ignore_unspecific = No
-# No: Overwrite unspecific scene data (d/h/m) with a specific date/time stamp when synchronizing.
-# Yes: Only synchronize Scenes with a specific date/time stamp.
+# No: Transfer all Scenes from yWriter to Timeline. Events assigned to scenes having no specific date/time stamp get the default date/time.
+# Yes: Only transfer Scenes with a specific date/time stamp from yWriter to Timeline.
 
 single_backup = Yes
 # Yes: Overwrite existing backup file. Extension = .bak
@@ -111,12 +115,13 @@ Just delete your global and local configuration files.
 
 #### Scenes
 - Only normal scenes are synchronized with Timeline, or exported to Timeline. Unused scenes, "Notes" scenes, and "Todo" scenes will not show up in the timeline.
+- Optionally, scenes with an unspecific time stamp (day, hours, minutes) are not transferred to the timeline.
+- Scenes with an unspecific time stamp (day, hours, minutes) get a specific time stamp (date/time) when transferred from the timeline.
 - Changes to the scene date/time affect the event start date/time during synchronization.
 - Changes to the scene title affect the event text during synchronization.
 - Changes to the scene description affect the event description during synchronization.
 - Changes to the scene type may add or remove the corresponding event during synchronization.
 - Adding or removing scenes will add or remove the corresponding event during synchronization.
-- Synchronizing scenes with Timeline events may switch the date/time mode to "Specific Date/Time".
 
 
 ### On the Timeline side
@@ -143,7 +148,6 @@ Just delete your global and local configuration files.
 ### Known limitations
 
 - Events that are linked with scenes can not be periods at the time. Only the start date/time is synchronized with yWriter.
-- Scenes with an unspecific time stamp (day, hours, minutes) get a specific time stamp (date/time) when synchronized with Timeline.
 
 
 ## Installation path
