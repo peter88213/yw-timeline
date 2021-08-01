@@ -9,9 +9,9 @@ import re
 import xml.etree.ElementTree as ET
 
 from pywriter.model.novel import Novel
-from pywriter.model.scene import Scene
-from pywriter.model.world_element import WorldElement
 from pywriter.model.chapter import Chapter
+from pyTimeline.scene_event import SceneEvent
+from pyTimeline.item_event import ItemEvent
 
 DIRTY_FIX_TIME = '2021-10-01 11:11:11'
 # This is used to provisionally create a time interval if needed.
@@ -72,7 +72,7 @@ class TlFile(Novel):
         """
         def remove_contId(event, text):
             """If text comes with a Container ID, remove it 
-            and store it in the event.tags property. 
+            and store it in the contId property. 
             """
 
             if text:
@@ -80,7 +80,7 @@ class TlFile(Novel):
 
                 if match:
                     contId = match.group()
-                    event.tags = contId
+                    event.contId = contId
                     text = text.lstrip(contId)
 
             return text
@@ -178,7 +178,7 @@ class TlFile(Novel):
 
                 elif isItem:
                     itId = str(itemCount)
-                    self.items[itId] = WorldElement()
+                    self.items[itId] = ItemEvent()
 
                     if event.find('labels') is None:
                         label = ET.Element('labels')
@@ -191,7 +191,7 @@ class TlFile(Novel):
                 if isScene:
                     scId = str(sceneCount)
                     event.find('labels').text = labels.replace(sceneMarker, 'ScID:' + scId)
-                    self.scenes[scId] = Scene()
+                    self.scenes[scId] = SceneEvent()
                     self.scenes[scId].status = 1
                     # Set scene status = "Outline".
 
@@ -199,7 +199,7 @@ class TlFile(Novel):
 
                 try:
                     scId = sceneMatch.group(1)
-                    self.scenes[scId] = Scene()
+                    self.scenes[scId] = SceneEvent()
 
                 except:
                     continue
@@ -225,7 +225,7 @@ class TlFile(Novel):
 
                     doRewrite = True
 
-                self.items[itId] = WorldElement()
+                self.items[itId] = ItemEvent()
 
             if isItem:
 
@@ -337,11 +337,11 @@ class TlFile(Novel):
         """Copy required attributes of the timeline object.
         """
         def add_contId(event, text):
-            """If event has a tags property, add it to text. 
+            """If event has a container ID, add it to text. 
             """
 
-            if event.tags is not None:
-                return event.tags + text
+            if event.contId is not None:
+                return event.contId + text
 
             return text
 
@@ -358,7 +358,7 @@ class TlFile(Novel):
         for scId in source.scenes:
 
             if not scId in self.scenes:
-                self.scenes[scId] = Scene()
+                self.scenes[scId] = SceneEvent()
 
             if source.scenes[scId].title:
                 title = source.scenes[scId].title
@@ -397,7 +397,7 @@ class TlFile(Novel):
         for itId in source.srtItems:
 
             if not itId in self.items:
-                self.items[itId] = WorldElement()
+                self.items[itId] = ItemEvent()
 
             if source.items[itId].title:
                 title = source.items[itId].title

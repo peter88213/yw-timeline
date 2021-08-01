@@ -8,6 +8,13 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.8.0 Alpha - Handle containers
+
+- Containers are invisible in yWriter.
+- Brackets at scene title start are prefixed with '_' in the timeline.
+
+Based on PyWriter v3.16.0
+
 ### v0.6.1 Alpha bugfix release
 
 - Fix a bug (uninitialized variable).
