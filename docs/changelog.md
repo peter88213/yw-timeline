@@ -8,6 +8,14 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.10.1 Alpha - Do not change "BC" dates
+
+- When synchronizing with yWriter, "BC" dates remain unchanged.
+
+"BC" Dates are stored in Timeline with a negative sign. Such dates are changed by yWriter to 0001-01-01, since it apparently can't handle negative dates. In order to preserve "BC" Dates in Timeline when synchronizing, date/time information is not overwritten, if yWriter's scene date is 0001-01-01. 
+
+Based on PyWriter v3.16.0
+
 ### v0.10.0 Alpha - Add "ignore unspecific" option
 
 - Implement an option to synchronize only scenes with a specific date/time set. 

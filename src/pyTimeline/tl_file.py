@@ -380,19 +380,24 @@ class TlFile(Novel):
                 self.scenes[scId].desc = source.scenes[scId].desc
 
                 if source.scenes[scId].date is not None:
-                    self.scenes[scId].date = source.scenes[scId].date
 
-                if source.scenes[scId].time is not None:
-                    self.scenes[scId].time = source.scenes[scId].time
+                    if source.scenes[scId].date != '0001-01-01':
 
-                if source.scenes[scId].lastsMinutes is not None:
-                    self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
+                        # The date is not "BC", so synchronize it.
 
-                if source.scenes[scId].lastsHours is not None:
-                    self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
+                        self.scenes[scId].date = source.scenes[scId].date
 
-                if source.scenes[scId].lastsDays is not None:
-                    self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
+                        if source.scenes[scId].time is not None:
+                            self.scenes[scId].time = source.scenes[scId].time
+
+                        if source.scenes[scId].lastsMinutes is not None:
+                            self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
+
+                        if source.scenes[scId].lastsHours is not None:
+                            self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
+
+                        if source.scenes[scId].lastsDays is not None:
+                            self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
 
                 self.scenes[scId].isNotesScene = source.scenes[scId].isNotesScene
                 self.scenes[scId].isUnused = source.scenes[scId].isUnused
