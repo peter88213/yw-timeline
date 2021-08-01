@@ -40,6 +40,7 @@ class TlFile(Novel):
         self.sceneColor = kwargs['scene_color']
         self.itemColor = kwargs['item_color']
         self.ignoreItems = kwargs['ignore_items']
+        self.ignoreUnspecific = kwargs['ignore_unspecific']
 
     def convert_to_yw(self, text):
         """Return text, converted from source format to yw7 markup.
@@ -352,40 +353,50 @@ class TlFile(Novel):
             if message.startswith('ERROR'):
                 return message
 
-        self.chapters = source.chapters
-        self.srtChapters = source.srtChapters
+        self.chapters = {}
+        self.srtChapters = []
 
-        for scId in source.scenes:
+        for chId in source.srtChapters:
+            self.chapters[chId] = Chapter()
+            self.srtChapters.append(chId)
 
-            if not scId in self.scenes:
-                self.scenes[scId] = SceneEvent()
+            for scId in source.chapters[chId].srtScenes:
 
-            if source.scenes[scId].title:
-                title = source.scenes[scId].title
-                title = self.convert_from_yw(title)
-                title = add_contId(self.scenes[scId], title)
-                self.scenes[scId].title = title
+                if self.ignoreUnspecific and source.scenes[scId].date is None and source.scenes[scId].time is None:
+                    # Skip scenes with unspecific date/time stamps.
+                    continue
 
-            self.scenes[scId].desc = source.scenes[scId].desc
+                if not scId in self.scenes:
+                    self.scenes[scId] = SceneEvent()
 
-            if source.scenes[scId].date is not None:
-                self.scenes[scId].date = source.scenes[scId].date
+                self.chapters[chId].srtScenes.append(scId)
 
-            if source.scenes[scId].time is not None:
-                self.scenes[scId].time = source.scenes[scId].time
+                if source.scenes[scId].title:
+                    title = source.scenes[scId].title
+                    title = self.convert_from_yw(title)
+                    title = add_contId(self.scenes[scId], title)
+                    self.scenes[scId].title = title
 
-            if source.scenes[scId].lastsMinutes is not None:
-                self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
+                self.scenes[scId].desc = source.scenes[scId].desc
 
-            if source.scenes[scId].lastsHours is not None:
-                self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
+                if source.scenes[scId].date is not None:
+                    self.scenes[scId].date = source.scenes[scId].date
 
-            if source.scenes[scId].lastsDays is not None:
-                self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
+                if source.scenes[scId].time is not None:
+                    self.scenes[scId].time = source.scenes[scId].time
 
-            self.scenes[scId].isNotesScene = source.scenes[scId].isNotesScene
-            self.scenes[scId].isUnused = source.scenes[scId].isUnused
-            self.scenes[scId].isTodoScene = source.scenes[scId].isTodoScene
+                if source.scenes[scId].lastsMinutes is not None:
+                    self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
+
+                if source.scenes[scId].lastsHours is not None:
+                    self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
+
+                if source.scenes[scId].lastsDays is not None:
+                    self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
+
+                self.scenes[scId].isNotesScene = source.scenes[scId].isNotesScene
+                self.scenes[scId].isUnused = source.scenes[scId].isUnused
+                self.scenes[scId].isTodoScene = source.scenes[scId].isTodoScene
 
         scenes = list(self.scenes)
 

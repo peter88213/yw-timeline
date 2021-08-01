@@ -30,7 +30,8 @@ SETTINGS = dict(
 )
 OPTIONS = dict(
     ignore_items=False,
-    single_backup=True
+    ignore_unspecific=False,
+    single_backup=True,
 )
 
 
