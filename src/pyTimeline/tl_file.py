@@ -46,11 +46,11 @@ class TlFile(Novel):
         """
         if text is not None:
 
-            if text.startswith('_('):
-                text = text.lstrip('_')
+            if text.startswith(' ('):
+                text = text.lstrip()
 
-            elif text.startswith('_['):
-                text = text.lstrip('_')
+            elif text.startswith(' ['):
+                text = text.lstrip()
 
         return text
 
@@ -60,10 +60,10 @@ class TlFile(Novel):
         if text is not None:
 
             if text.startswith('('):
-                text = '_' + text
+                text = ' ' + text
 
             elif text.startswith('['):
-                text = '_' + text
+                text = ' ' + text
 
         return text
 
@@ -81,7 +81,7 @@ class TlFile(Novel):
                 if match:
                     contId = match.group()
                     event.contId = contId
-                    text = text.lstrip(contId)
+                    text = text.split(contId, 1)[1]
 
             return text
 

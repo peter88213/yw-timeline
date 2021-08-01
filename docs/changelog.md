@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.8.1 Alpha - Handle containers
+
+- Opening brackets at scene title start are prefixed with ' ' in the timeline. Thus, the masking of leading brackets is invisible in Timeline as well.
+
+Based on PyWriter v3.16.0
+
 ### v0.8.0 Alpha - Handle containers
 
 - Containers are invisible in yWriter.

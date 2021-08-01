@@ -124,7 +124,6 @@ Just delete your global and local configuration files.
 - You can add and remove "Item" events in Timeline. 
 - Changes to the event text affect the item short name during synchronization.
 - Changes to the event description affect the item description during synchronization.
-- Scene titles beginning with an opening bracket '(' or '[') are automatically prefixed with '_' in Timeline. Do not remove this prefix; it will not appear in yWriter after synchronization. 
 
 #### Scenes
 - A scene ID is a string looking like "ScID:1". It is auto-generated and must not be changed manually.
