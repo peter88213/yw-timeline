@@ -16,3 +16,5 @@ class SceneEvent(Scene):
         """
         Scene.__init__(self)
         self.contId = None
+        self.startDate = None
+        self.startTime = None

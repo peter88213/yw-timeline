@@ -281,8 +281,28 @@ class TlFile(Novel):
 
                     scIdsByDate[startDateTime].append(scId)
                     dt = startDateTime.split(' ')
-                    self.scenes[scId].date = dt[0]
-                    self.scenes[scId].time = dt[1]
+                    self.scenes[scId].startDate = dt[0]
+                    self.scenes[scId].startTime = dt[1]
+
+                    # Prevent two-figure years from becoming "completed" by yWriter.
+
+                    if dt[0].startswith('-'):
+                        year = -1 * int(dt[0].split('-')[1])
+
+                    else:
+                        year = int(dt[0].split('-')[0])
+
+                    if year < 100:
+                        self.scenes[scId].date = '-0001-01-01'
+                        self.scenes[scId].time = '00:00:00'
+                        self.scenes[scId].startDate = dt[0]
+                        self.scenes[scId].startTime = dt[1]
+
+                    else:
+                        self.scenes[scId].date = dt[0]
+                        self.scenes[scId].time = dt[1]
+                        self.scenes[scId].startDate = None
+                        self.scenes[scId].startTime = None
 
                 except:
                     pass
@@ -299,7 +319,7 @@ class TlFile(Novel):
 
         srtItems = sorted(itIdsByDate.items())
 
-        for date, itList in srtItems:
+        for dt, itList in srtItems:
 
             for itId in itList:
                 self.srtItems.append(itId)
@@ -317,7 +337,7 @@ class TlFile(Novel):
 
             srtScenes = sorted(scIdsByDate.items())
 
-            for date, scList in srtScenes:
+            for dt, scList in srtScenes:
 
                 for scId in scList:
                     self.chapters[chId].srtScenes.append(scId)
@@ -379,25 +399,33 @@ class TlFile(Novel):
 
                 self.scenes[scId].desc = source.scenes[scId].desc
 
-                if source.scenes[scId].date is not None:
+                if source.scenes[scId].date is not None and source.scenes[scId].date != '0001-01-01':
 
-                    if source.scenes[scId].date != '0001-01-01':
+                    # The date is not "BC", so synchronize it.
 
-                        # The date is not "BC", so synchronize it.
+                    self.scenes[scId].date = source.scenes[scId].date
 
-                        self.scenes[scId].date = source.scenes[scId].date
+                    if source.scenes[scId].time:
+                        self.scenes[scId].time = source.scenes[scId].time
 
-                        if source.scenes[scId].time is not None:
-                            self.scenes[scId].time = source.scenes[scId].time
+                    else:
+                        self.scenes[scId].time = '00:00:00'
 
-                        if source.scenes[scId].lastsMinutes is not None:
-                            self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
+                    if source.scenes[scId].lastsMinutes is not None:
+                        self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
 
-                        if source.scenes[scId].lastsHours is not None:
-                            self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
+                    if source.scenes[scId].lastsHours is not None:
+                        self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
 
-                        if source.scenes[scId].lastsDays is not None:
-                            self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
+                    if source.scenes[scId].lastsDays is not None:
+                        self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
+
+                elif self.scenes[scId].startDate is not None:
+
+                    # Restore two-figure year.
+
+                    self.scenes[scId].date = self.scenes[scId].startDate
+                    self.scenes[scId].time = self.scenes[scId].startTime
 
                 self.scenes[scId].isNotesScene = source.scenes[scId].isNotesScene
                 self.scenes[scId].isUnused = source.scenes[scId].isUnused
@@ -535,7 +563,7 @@ class TlFile(Novel):
             if scene.date is not None:
                 startDateTime = scene.date + ' '
 
-                if scene.time is None:
+                if not scene.time:
                     startDateTime += '00:00:00'
 
                 else:

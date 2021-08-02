@@ -8,6 +8,14 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.10.2 Alpha - Handle two-figure years
+
+- When synchronizing with yWriter, prevent two-figure years from being "completed".
+
+Ywriter prefixes two-figure years automatically with "19" or "20", so do not synchronize dates below the year 100.
+
+Based on PyWriter v3.16.0
+
 ### v0.10.1 Alpha - Do not change "BC" dates
 
 - When synchronizing with yWriter, "BC" dates remain unchanged.
