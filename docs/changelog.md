@@ -43,7 +43,7 @@ Based on PyWriter v3.16.0
 
 Based on PyWriter v3.16.0
 
-### v0.6.1 Alpha bugfix release
+### v0.6.2 Alpha bugfix release
 
 - Fix a bug (uninitialized variable).
 
