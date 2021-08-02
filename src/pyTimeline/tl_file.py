@@ -324,6 +324,10 @@ class TlFile(Novel):
             for itId in itList:
                 self.srtItems.append(itId)
 
+        # Sort scenes by date/time
+
+        srtScenes = sorted(scIdsByDate.items())
+
         if isOutline:
 
             # Create a single chapter and assign all scenes to it.
@@ -332,10 +336,6 @@ class TlFile(Novel):
             self.chapters[chId] = Chapter()
             self.chapters[chId].title = 'Chapter 1'
             self.srtChapters = [chId]
-
-            # Sort scenes by date/time
-
-            srtScenes = sorted(scIdsByDate.items())
 
             for dt, scList in srtScenes:
 
