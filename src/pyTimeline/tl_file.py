@@ -8,6 +8,11 @@ import os
 import re
 import xml.etree.ElementTree as ET
 
+from datetime import datetime
+from datetime import date
+from datetime import time
+from datetime import timedelta
+
 from pywriter.model.novel import Novel
 from pywriter.model.chapter import Chapter
 from pyTimeline.scene_event import SceneEvent
@@ -273,6 +278,11 @@ class TlFile(Novel):
                 except:
                     pass
 
+                #--- Process start date/time.
+
+                dtIsValid = True
+                # The date/time combination is within the range yWriter can process.
+
                 try:
                     startDateTime = event.find('start').text
 
@@ -287,16 +297,18 @@ class TlFile(Novel):
                     # Prevent two-figure years from becoming "completed" by yWriter.
 
                     if dt[0].startswith('-'):
-                        year = -1 * int(dt[0].split('-')[1])
+                        startYear = -1 * int(dt[0].split('-')[1])
+                        dtIsValid = False
 
                     else:
-                        year = int(dt[0].split('-')[0])
+                        startYear = int(dt[0].split('-')[0])
 
-                    if year < 100:
+                    if startYear < 100:
                         self.scenes[scId].date = '-0001-01-01'
                         self.scenes[scId].time = '00:00:00'
                         self.scenes[scId].startDate = dt[0]
                         self.scenes[scId].startTime = dt[1]
+                        dtIsValid = False
 
                     else:
                         self.scenes[scId].date = dt[0]
@@ -305,13 +317,38 @@ class TlFile(Novel):
                         self.scenes[scId].startTime = None
 
                 except:
-                    pass
+                    dtIsValid = False
 
                 try:
-                    endDateTime = event.find('end').text
 
-                    #--- TODO: Calculate scene duration
+                    if dtIsValid:
 
+                        #--- Calculate scene duration.
+
+                        startYear = int(dt[0].split('-')[0])
+                        startMonth = int(dt[0].split('-')[1])
+                        startDay = int(dt[0].split('-')[2])
+                        startHour = int(dt[1].split(':')[0])
+                        startMinute = int(dt[1].split(':')[1])
+
+                        sceneStart = datetime(startYear, startMonth, startDay, hour=startHour, minute=startMinute)
+
+                        endDateTime = event.find('end').text
+                        endDate, endTime = endDateTime.split(' ')
+                        endYear = int(endDate.split('-')[0])
+                        endMonth = int(endDate.split('-')[1])
+                        endDay = int(endDate.split('-')[2])
+                        endHour = int(endTime.split(':')[0])
+                        endMinute = int(endTime.split(':')[1])
+
+                        sceneEnd = datetime(endYear, endMonth, endDay, hour=endHour, minute=endMinute)
+
+                        sceneDuration = sceneEnd - sceneStart
+                        self.scenes[scId].lastsDays = str(sceneDuration.days)
+                        lastsHours = sceneDuration.seconds // 3600
+                        lastsMinutes = (sceneDuration.seconds % 3600) // 60
+                        self.scenes[scId].lastsHours = str(lastsHours)
+                        self.scenes[scId].lastsMinutes = str(lastsMinutes)
                 except:
                     pass
 
