@@ -147,7 +147,8 @@ Just delete your global and local configuration files.
 
 ### Known limitations
 
-- Since yWriter cannot handle dates before the year 100, they remain unchanged in the timeline when synchronizing with yWriter. The same applies to the scene duration in this case.
+- Scene events that begin before 0100-01-01 in the timeline, will not be synchronized with yWriter, because yWriter can not handle these dates. The same applies to the scene duration in this case, i.e. the event duration in Timeline and the scene duration in yWriter may differ.
+- If a scene event ends after 9999-12-31 in the timeline, the scene duration is not synchronized with yWriter.
 
 
 ## Installation path
