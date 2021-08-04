@@ -147,8 +147,7 @@ Just delete your global and local configuration files.
 
 ### Known limitations
 
-- Events that are linked with scenes can not be periods at the time. Only the start date/time is synchronized with yWriter.
-- Since yWriter cannot handle dates before the year 100, they remain unchanged in the timeline when synchronizing with yWriter.
+- Since yWriter cannot handle dates before the year 100, they remain unchanged in the timeline when synchronizing with yWriter. The same applies to the scene duration in this case.
 
 
 ## Installation path

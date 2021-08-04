@@ -18,3 +18,4 @@ class SceneEvent(Scene):
         self.contId = None
         self.startDate = None
         self.startTime = None
+        self.endDateTime = None

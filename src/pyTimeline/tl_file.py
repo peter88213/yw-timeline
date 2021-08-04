@@ -285,19 +285,19 @@ class TlFile(Novel):
 
                 try:
                     startDateTime = event.find('start').text
+                    endDateTime = event.find('end').text
 
                     if not startDateTime in scIdsByDate:
                         scIdsByDate[startDateTime] = []
 
                     scIdsByDate[startDateTime].append(scId)
                     dt = startDateTime.split(' ')
-                    self.scenes[scId].startDate = dt[0]
-                    self.scenes[scId].startTime = dt[1]
 
                     # Prevent two-figure years from becoming "completed" by yWriter.
 
                     if dt[0].startswith('-'):
                         startYear = -1 * int(dt[0].split('-')[1])
+                        self.scenes[scId].endDateTime = endDateTime
                         dtIsValid = False
 
                     else:
@@ -308,13 +308,12 @@ class TlFile(Novel):
                         self.scenes[scId].time = '00:00:00'
                         self.scenes[scId].startDate = dt[0]
                         self.scenes[scId].startTime = dt[1]
+                        self.scenes[scId].endDateTime = endDateTime
                         dtIsValid = False
 
                     else:
                         self.scenes[scId].date = dt[0]
                         self.scenes[scId].time = dt[1]
-                        self.scenes[scId].startDate = None
-                        self.scenes[scId].startTime = None
 
                 except:
                     dtIsValid = False
@@ -333,7 +332,6 @@ class TlFile(Novel):
 
                         sceneStart = datetime(startYear, startMonth, startDay, hour=startHour, minute=startMinute)
 
-                        endDateTime = event.find('end').text
                         endDate, endTime = endDateTime.split(' ')
                         endYear = int(endDate.split('-')[0])
                         endMonth = int(endDate.split('-')[1])
