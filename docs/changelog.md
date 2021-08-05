@@ -8,6 +8,13 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.12.0 Alpha - Handle time periods
+
+- When converting to yWriter, calculate the duration and store it in the yWriter scene metadata.
+- When converting to Timeline, calculate the end date from the scene duration.
+
+Based on PyWriter v3.16.0
+
 ### v0.10.2 Alpha - Handle two-figure years
 
 - When synchronizing with yWriter, prevent two-figure years from being "completed".

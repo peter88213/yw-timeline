@@ -1,4 +1,4 @@
-"""Timeline base class
+"""Provide a Timeline project file representation.
 
 Part of the yw-timeline project (https://github.com/peter88213/yw-timeline)
 Copyright (c) 2021 Peter Triesberger
@@ -9,8 +9,6 @@ import re
 import xml.etree.ElementTree as ET
 
 from datetime import datetime
-from datetime import date
-from datetime import time
 from datetime import timedelta
 
 from pywriter.model.novel import Novel
