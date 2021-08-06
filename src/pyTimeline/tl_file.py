@@ -21,6 +21,17 @@ DIRTY_FIX_TIME = '2021-10-01 11:11:11'
 # To be removed as soon as better time calculation methods are available.
 
 
+def fix_iso_dt(tlDateTime):
+    """Return a date/time string with a four-number year.
+    """
+    if not tlDateTime.startswith('-'):
+        dt = tlDateTime.split('-', 1)
+        dt[0] = dt[0].zfill(4)
+        tlDateTime = ('-').join(dt)
+
+    return tlDateTime
+
+
 class TlFile(Novel):
     """Timeline project file representation.
 
@@ -328,7 +339,8 @@ class TlFile(Novel):
                         startHour = int(dt[1].split(':')[0])
                         startMinute = int(dt[1].split(':')[1])
 
-                        sceneStart = datetime(startYear, startMonth, startDay, hour=startHour, minute=startMinute)
+                        altSceneStart = datetime(startYear, startMonth, startDay, hour=startHour, minute=startMinute)
+                        sceneStart = datetime.fromisoformat(fix_iso_dt(startDateTime))
 
                         endDate, endTime = endDateTime.split(' ')
                         endYear = int(endDate.split('-')[0])
@@ -337,8 +349,10 @@ class TlFile(Novel):
                         endHour = int(endTime.split(':')[0])
                         endMinute = int(endTime.split(':')[1])
 
-                        sceneEnd = datetime(endYear, endMonth, endDay, hour=endHour, minute=endMinute)
+                        altSceneEnd = datetime(endYear, endMonth, endDay, hour=endHour, minute=endMinute)
+                        sceneEnd = datetime.fromisoformat(fix_iso_dt(endDateTime))
 
+                        altSceneDuration = altSceneEnd - altSceneStart
                         sceneDuration = sceneEnd - sceneStart
                         self.scenes[scId].lastsDays = str(sceneDuration.days)
                         lastsHours = sceneDuration.seconds // 3600
