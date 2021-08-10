@@ -19,9 +19,9 @@
 		<fixcrlf encoding="utf-8" eol="lf" srcdir="${test}" includes="**/*.pyw" />
 	</target>
 
-	<target name="test" description="inline all library modules">
+	<target name="test" description="unit tests">
 		<exec executable="python" failonerror="true">
-		    <arg value="${test}/test_yw-timeline.pyw"/>
+		    <arg value="${test}/test_yw-timeline.py"/>
 		</exec>
 	</target>
 
@@ -37,7 +37,7 @@
 		
 		<copy file="./install.bat" todir="${build}/${release-name}" />
 		
-		<copy file="${test}/yw-timeline.pyw" todir="${build}/${release-name}" />
+		<copy file="${test}/yw_timeline.pyw" tofile="${build}/${release-name}/yw-timeline.pyw" />
 		<replace encoding="utf-8" file="${build}/${release-name}/yw-timeline.pyw" token="@release" value="${release}" />
 
 		<copy file="../LICENSE" todir="${build}/${release-name}" />
@@ -52,7 +52,7 @@
 
 	<target name="clean" description="clean up">
 		
-		<delete file="${test}/yw-timeline.pyw" />
+		<delete file="${test}/yw_timeline.pyw" />
 		
 	</target>
 
