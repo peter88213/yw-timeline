@@ -4,42 +4,77 @@
     <Ver>7</Ver>
   </PROJECT>
   <LOCATIONS />
-  <ITEMS />
+  <ITEMS>
+    <ITEM>
+      <ID>1</ID>
+      <Title><![CDATA[Bird]]></Title>
+      <Desc><![CDATA[This bird is not dead.]]></Desc>
+      <SortOrder>1</SortOrder>
+    </ITEM>
+  </ITEMS>
   <CHARACTERS />
   <SCENES>
     <SCENE>
       <ID>1</ID>
-      <Title><![CDATA[Die zweite Szene]]></Title>
+      <Title><![CDATA[(3)Die <zweite> Szene]]></Title>
       <BelongsToChID>1</BelongsToChID>
       <SceneContent />
       <WordCount>0</WordCount>
       <LetterCount>0</LetterCount>
       <Status>1</Status>
-      <SpecificDateTime>2018-07-13 00:00:00</SpecificDateTime>
+      <SpecificDateTime>2016-12-26 14:11:16</SpecificDateTime>
       <SpecificDateMode>-1</SpecificDateMode>
+      <LastsDays>0</LastsDays>
+      <LastsHours>0</LastsHours>
+      <LastsMinutes>0</LastsMinutes>
     </SCENE>
     <SCENE>
       <ID>2</ID>
-      <Title><![CDATA[Die dritte Szene]]></Title>
-      <BelongsToChID>1</BelongsToChID>
-      <Desc><![CDATA[Das ist die dritte Szene.]]></Desc>
-      <SceneContent />
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
-      <Status>1</Status>
-      <SpecificDateTime>2018-07-21 11:02:34</SpecificDateTime>
-      <SpecificDateMode>-1</SpecificDateMode>
-    </SCENE>
-    <SCENE>
-      <ID>3</ID>
-      <Title><![CDATA[Ein Ereignis]]></Title>
+      <Title><![CDATA[Die erste Szene]]></Title>
       <BelongsToChID>1</BelongsToChID>
       <Desc><![CDATA[Dieses Ereignis wird nicht beschrieben.]]></Desc>
       <SceneContent />
       <WordCount>0</WordCount>
       <LetterCount>0</LetterCount>
       <Status>1</Status>
-      <SpecificDateTime>2018-07-29 09:17:00</SpecificDateTime>
+      <SpecificDateTime>166-05-12 09:33:00</SpecificDateTime>
+      <SpecificDateMode>-1</SpecificDateMode>
+      <LastsDays>0</LastsDays>
+      <LastsHours>0</LastsHours>
+      <LastsMinutes>0</LastsMinutes>
+    </SCENE>
+    <SCENE>
+      <ID>3</ID>
+      <Title><![CDATA[(6)Die dritte Szene]]></Title>
+      <BelongsToChID>1</BelongsToChID>
+      <Desc><![CDATA[Das ist die <dritte> Szene.]]></Desc>
+      <SceneContent />
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Status>1</Status>
+      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <SpecificDateMode>-1</SpecificDateMode>
+    </SCENE>
+    <SCENE>
+      <ID>4</ID>
+      <Title><![CDATA[Die vierte Szene]]></Title>
+      <BelongsToChID>1</BelongsToChID>
+      <SceneContent />
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Status>1</Status>
+      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <SpecificDateMode>-1</SpecificDateMode>
+    </SCENE>
+    <SCENE>
+      <ID>5</ID>
+      <Title><![CDATA[New Scene]]></Title>
+      <BelongsToChID>1</BelongsToChID>
+      <SceneContent />
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Status>1</Status>
+      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
       <SpecificDateMode>-1</SpecificDateMode>
     </SCENE>
   </SCENES>
@@ -49,9 +84,11 @@
       <SortOrder>1</SortOrder>
       <Title><![CDATA[Chapter 1]]></Title>
       <Scenes>
-        <ScID>1</ScID>
-        <ScID>2</ScID>
+        <ScID>5</ScID>
         <ScID>3</ScID>
+        <ScID>2</ScID>
+        <ScID>1</ScID>
+        <ScID>4</ScID>
       </Scenes>
     </CHAPTER>
   </CHAPTERS>
