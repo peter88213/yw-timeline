@@ -333,26 +333,8 @@ class TlFile(Novel):
 
                         #--- Calculate scene duration.
 
-                        startYear = int(dt[0].split('-')[0])
-                        startMonth = int(dt[0].split('-')[1])
-                        startDay = int(dt[0].split('-')[2])
-                        startHour = int(dt[1].split(':')[0])
-                        startMinute = int(dt[1].split(':')[1])
-
-                        altSceneStart = datetime(startYear, startMonth, startDay, hour=startHour, minute=startMinute)
                         sceneStart = datetime.fromisoformat(fix_iso_dt(startDateTime))
-
-                        endDate, endTime = endDateTime.split(' ')
-                        endYear = int(endDate.split('-')[0])
-                        endMonth = int(endDate.split('-')[1])
-                        endDay = int(endDate.split('-')[2])
-                        endHour = int(endTime.split(':')[0])
-                        endMinute = int(endTime.split(':')[1])
-
-                        altSceneEnd = datetime(endYear, endMonth, endDay, hour=endHour, minute=endMinute)
                         sceneEnd = datetime.fromisoformat(fix_iso_dt(endDateTime))
-
-                        altSceneDuration = altSceneEnd - altSceneStart
                         sceneDuration = sceneEnd - sceneStart
                         self.scenes[scId].lastsDays = str(sceneDuration.days)
                         lastsHours = sceneDuration.seconds // 3600
