@@ -15,7 +15,7 @@ from pywriter.yw.xml_indent import indent
 from pyTimeline.scene_event import SceneEvent
 from pyTimeline.item_event import ItemEvent
 
-from pyTimeline.dt_helper import fix_iso_dt, set_view_range
+from pyTimeline.dt_helper import set_view_range
 
 
 class TlFile(Novel):
