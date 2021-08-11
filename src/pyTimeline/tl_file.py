@@ -8,16 +8,12 @@ import os
 import re
 import xml.etree.ElementTree as ET
 
-from datetime import datetime
-from datetime import timedelta
-
 from pywriter.model.novel import Novel
 from pywriter.model.chapter import Chapter
 from pywriter.yw.xml_indent import indent
 
 from pyTimeline.scene_event import SceneEvent
 from pyTimeline.item_event import ItemEvent
-from pyTimeline.dt_helper import fix_iso_dt
 
 
 def set_view_range(dtMin, dtMax):
@@ -575,17 +571,7 @@ class TlFile(Novel):
             scene = self.scenes[scId]
             scIndex = 0
 
-            if scene.date is not None:
-                startDateTime = scene.date + ' '
-
-                if not scene.time:
-                    startDateTime += '00:00:00'
-
-                else:
-                    startDateTime += scene.time
-
-            else:
-                startDateTime = self.defaultDateTime
+            startDateTime = scene.get_startDateTime(self.defaultDateTime)
 
             try:
                 xmlEvent.find('start').text = startDateTime
@@ -598,24 +584,7 @@ class TlFile(Novel):
             if startDateTime < dtMin:
                 dtMin = startDateTime
 
-            #--- Calculate end date from scene duration.
-
-            if scene.lastsDays and scene.lastsHours and scene.lastsMinutes:
-                lastsDays = int(scene.lastsDays)
-                lastsSeconds = (int(scene.lastsHours) * 3600) + (int(scene.lastsMinutes) * 60)
-                sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
-                sceneStart = datetime.fromisoformat(fix_iso_dt(startDateTime))
-                sceneEnd = sceneStart + sceneDuration
-                endDateTime = sceneEnd.isoformat(' ')
-
-                if startDateTime > endDateTime:
-                    endDateTime = startDateTime
-
-            elif scene.endDateTime is not None and scene.endDateTime > startDateTime:
-                endDateTime = scene.endDateTime
-
-            else:
-                endDateTime = startDateTime
+            endDateTime = scene.get_endDateTime(startDateTime)
 
             try:
                 xmlEvent.find('end').text = endDateTime

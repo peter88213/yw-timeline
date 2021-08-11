@@ -77,3 +77,45 @@ class SceneEvent(Scene):
             # Save scene end date/time for Timeline use.
 
             self.endDateTime = endDateTime
+
+    def get_startDateTime(self, defaultDateTime):
+        """Return the event's start date/time stamp for Timeline use.
+        """
+
+        if self.date is not None:
+            startDateTime = self.date + ' '
+
+            if not self.time:
+                startDateTime += '00:00:00'
+
+            else:
+                startDateTime += self.time
+
+        else:
+            startDateTime = defaultDateTime
+
+        return startDateTime
+
+    def get_endDateTime(self, startDateTime):
+        """Return the event's end date/time stamp for Timeline use,
+        calculated from the scene duration.
+        """
+
+        if self.lastsDays and self.lastsHours and self.lastsMinutes:
+            lastsDays = int(self.lastsDays)
+            lastsSeconds = (int(self.lastsHours) * 3600) + (int(self.lastsMinutes) * 60)
+            sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
+            sceneStart = datetime.fromisoformat(fix_iso_dt(startDateTime))
+            sceneEnd = sceneStart + sceneDuration
+            endDateTime = sceneEnd.isoformat(' ')
+
+            if startDateTime > endDateTime:
+                endDateTime = startDateTime
+
+        elif self.endDateTime is not None and self.endDateTime > startDateTime:
+            endDateTime = self.endDateTime
+
+        else:
+            endDateTime = startDateTime
+
+        return endDateTime

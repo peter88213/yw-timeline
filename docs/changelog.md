@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.12.5 Alpha - Optional update
+
+Major Refactoring.
+
+Based on PyWriter v3.16.1
+
 ### v0.12.4 Alpha - Optional update
 
 Major Refactoring.
