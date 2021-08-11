@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<YWRITER7>
+  <PROJECT>
+    <Ver>7</Ver>
+    <Title />
+    <AuthorName />
+    <Bio />
+    <Desc />
+    <FieldTitle1 />
+    <FieldTitle2 />
+    <FieldTitle3 />
+    <FieldTitle4 />
+    <LastFullBackup>2021-08-10</LastFullBackup>
+    <WordTarget>0</WordTarget>
+    <WordTargetStartDate>0001-01-01</WordTargetStartDate>
+    <WordTargetEndDate>0001-01-01</WordTargetEndDate>
+    <WordCountStart>0</WordCountStart>
+    <EndFrontMatterChID>0</EndFrontMatterChID>
+    <EndMiddleChID>0</EndMiddleChID>
+    <EndBeginningChID>0</EndBeginningChID>
+    <LatexSingleQuotes>0</LatexSingleQuotes>
+    <LatexSuppressChapterTitles>0</LatexSuppressChapterTitles>
+    <LatexSceneDivider />
+    <HtmlSceneDivider />
+    <HtmlEncoding />
+    <HtmlUnicode>0</HtmlUnicode>
+    <LaTeXHeaderFile />
+    <MRUSpecificDate>2021-08-10</MRUSpecificDate>
+    <MRUSpecificTime>19:36:00</MRUSpecificTime>
+    <LastViewedScID>6</LastViewedScID>
+    <DeadlineDate1>0001-01-01</DeadlineDate1>
+    <DeadlineDate2>0001-01-01</DeadlineDate2>
+    <DeadlineDate3>0001-01-01</DeadlineDate3>
+    <DeadlineDate4>0001-01-01</DeadlineDate4>
+    <DeadlineDate5>0001-01-01</DeadlineDate5>
+    <DeadlineStartDate1>0001-01-01</DeadlineStartDate1>
+    <DeadlineStartDate2>0001-01-01</DeadlineStartDate2>
+    <DeadlineStartDate3>0001-01-01</DeadlineStartDate3>
+    <DeadlineStartDate4>0001-01-01</DeadlineStartDate4>
+    <DeadlineStartDate5>0001-01-01</DeadlineStartDate5>
+    <Fields>
+		</Fields>
+  </PROJECT>
+  <LOCATIONS>
+	</LOCATIONS>
+  <ITEMS>
+    <ITEM>
+      <ID>2</ID>
+      <Title><![CDATA[The ministry of silly walk]]></Title>
+      <Desc><![CDATA[The place to be.]]></Desc>
+      <SortOrder>1</SortOrder>
+    </ITEM>
+    <ITEM>
+      <ID>1</ID>
+      <Title><![CDATA[Bird]]></Title>
+      <Desc><![CDATA[This bird is not dead.]]></Desc>
+      <SortOrder>2</SortOrder>
+    </ITEM>
+  </ITEMS>
+  <CHARACTERS>
+	</CHARACTERS>
+  <PROJECTNOTES>
+	</PROJECTNOTES>
+  <PROJECTVARS>
+	</PROJECTVARS>
+  <PROJECTEXPS>
+	</PROJECTEXPS>
+  <SCENES>
+    <SCENE>
+      <ID>1</ID>
+      <Title><![CDATA[(3)Die <zweite> Szene]]></Title>
+      <BelongsToChID>1</BelongsToChID>
+      <SpecificDateMode>-1</SpecificDateMode>
+      <SpecificDateTime>1844-02-10 13:34:51</SpecificDateTime>
+      <Field1>1</Field1>
+      <Field2>1</Field2>
+      <Field3>1</Field3>
+      <Field4>1</Field4>
+      <Status>1</Status>
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Characters>
+		</Characters>
+      <Locations>
+		</Locations>
+      <Items>
+		</Items>
+      <SceneContent />
+      <LastsDays>56937</LastsDays>
+      <LastsHours>10</LastsHours>
+      <LastsMinutes>25</LastsMinutes>
+    </SCENE>
+    <SCENE>
+      <ID>2</ID>
+      <Title><![CDATA[Die erste Szene]]></Title>
+      <Desc><![CDATA[Dieses Ereignis wird nicht beschrieben.]]></Desc>
+      <BelongsToChID>1</BelongsToChID>
+      <SpecificDateMode>-1</SpecificDateMode>
+      <SpecificDateTime>166-05-12 09:33:00</SpecificDateTime>
+      <Field1>1</Field1>
+      <Field2>1</Field2>
+      <Field3>1</Field3>
+      <Field4>1</Field4>
+      <Status>1</Status>
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Characters>
+		</Characters>
+      <Locations>
+		</Locations>
+      <Items>
+		</Items>
+      <SceneContent />
+      <LastsDays>0</LastsDays>
+      <LastsHours>0</LastsHours>
+      <LastsMinutes>0</LastsMinutes>
+    </SCENE>
+    <SCENE>
+      <ID>3</ID>
+      <Title><![CDATA[(6)Die dritte Szene]]></Title>
+      <Desc><![CDATA[Das ist die <dritte> Szene.]]></Desc>
+      <BelongsToChID>1</BelongsToChID>
+      <SpecificDateMode>-1</SpecificDateMode>
+      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <Field1>1</Field1>
+      <Field2>1</Field2>
+      <Field3>1</Field3>
+      <Field4>1</Field4>
+      <Status>1</Status>
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Characters>
+		</Characters>
+      <Locations>
+		</Locations>
+      <Items>
+		</Items>
+      <SceneContent />
+    </SCENE>
+    <SCENE>
+      <ID>4</ID>
+      <Title><![CDATA[Die vierte Szene]]></Title>
+      <BelongsToChID>1</BelongsToChID>
+      <SpecificDateMode>-1</SpecificDateMode>
+      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <Field1>1</Field1>
+      <Field2>1</Field2>
+      <Field3>1</Field3>
+      <Field4>1</Field4>
+      <Status>1</Status>
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Characters>
+		</Characters>
+      <Locations>
+		</Locations>
+      <Items>
+		</Items>
+      <SceneContent />
+    </SCENE>
+    <SCENE>
+      <ID>5</ID>
+      <Title><![CDATA[New Scene]]></Title>
+      <BelongsToChID>1</BelongsToChID>
+      <SpecificDateMode>-1</SpecificDateMode>
+      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <Field1>1</Field1>
+      <Field2>1</Field2>
+      <Field3>1</Field3>
+      <Field4>1</Field4>
+      <Status>1</Status>
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Characters>
+		</Characters>
+      <Locations>
+		</Locations>
+      <Items>
+		</Items>
+      <SceneContent />
+    </SCENE>
+    <SCENE>
+      <ID>6</ID>
+      <Title><![CDATA[An other scene]]></Title>
+      <Desc><![CDATA[And now, for something completely different.]]></Desc>
+      <Fields>
+        <Field_UseExporterTags>0</Field_UseExporterTags>
+      </Fields>
+      <BelongsToChID>1</BelongsToChID>
+      <SpecificDateMode>-1</SpecificDateMode>
+      <SpecificDateTime>2021-08-10 19:36:00</SpecificDateTime>
+      <Field1>1</Field1>
+      <Field2>1</Field2>
+      <Field3>1</Field3>
+      <Field4>1</Field4>
+      <Status>1</Status>
+      <WordCount>0</WordCount>
+      <LetterCount>0</LetterCount>
+      <Characters>
+		</Characters>
+      <Locations>
+		</Locations>
+      <Items>
+		</Items>
+      <SceneContent><![CDATA[]]></SceneContent>
+      <LastsDays>0</LastsDays>
+      <LastsHours>0</LastsHours>
+      <LastsMinutes>0</LastsMinutes>
+    </SCENE>
+  </SCENES>
+  <CHAPTERS>
+    <CHAPTER>
+      <ID>1</ID>
+      <Title><![CDATA[Chapter 1]]></Title>
+      <SortOrder>1</SortOrder>
+      <Type>0</Type>
+      <ChapterType>0</ChapterType>
+      <Scenes>
+        <ScID>5</ScID>
+        <ScID>3</ScID>
+        <ScID>2</ScID>
+        <ScID>1</ScID>
+        <ScID>4</ScID>
+        <ScID>6</ScID>
+      </Scenes>
+    </CHAPTER>
+  </CHAPTERS>
+  <WCLog>
+    <WC>
+      <Date>2021-08-10</Date>
+      <Count>0</Count>
+      <TotalCount>0</TotalCount>
+    </WC>
+  </WCLog>
+</YWRITER7>

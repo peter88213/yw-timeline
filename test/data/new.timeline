@@ -1,0 +1,117 @@
+<?xml version='1.0' encoding='utf-8'?>
+<timeline>
+  <version>2.4.0 (3f207fbb63f0 2021-04-07)</version>
+  <timetype>gregoriantime</timetype>
+  <categories>
+    <category>
+      <name>Item</name>
+      <color>160,230,250</color>
+      <progress_color>255,153,153</progress_color>
+      <done_color>255,153,153</done_color>
+      <font_color>0,0,0</font_color>
+    </category>
+  </categories>
+  <events>
+    <event>
+      <start>2021-07-26 00:00:00</start>
+      <end>2021-07-26 00:00:00</end>
+      <text>New Scene</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <labels>ScID:5</labels>
+      <default_color>170,240,160</default_color>
+    </event>
+    <event>
+      <start>2021-07-26 00:00:00</start>
+      <end>2021-07-26 00:00:00</end>
+      <text> (6)Die dritte Szene</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <description>Das ist die &lt;dritte&gt; Szene.</description>
+      <labels>ScID:3</labels>
+      <default_color>170,240,160</default_color>
+    </event>
+    <event>
+      <start>0166-05-12 09:33:00</start>
+      <end>0166-05-12 09:33:00</end>
+      <text>Die erste Szene</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <description>Dieses Ereignis wird nicht beschrieben.</description>
+      <labels>ScID:2</labels>
+      <default_color>170,240,160</default_color>
+    </event>
+    <event>
+      <start>2016-12-26 14:11:16</start>
+      <end>2016-12-26 14:11:16</end>
+      <text> (3)Die &lt;zweite&gt; Szene</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <labels>ScID:1</labels>
+      <default_color>170,240,160</default_color>
+    </event>
+    <event>
+      <start>2021-07-26 00:00:00</start>
+      <end>2021-07-26 00:00:00</end>
+      <text>Die vierte Szene</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <labels>ScID:4</labels>
+      <default_color>170,240,160</default_color>
+    </event>
+    <event>
+      <start>2021-08-10 19:36:00</start>
+      <end>2021-08-10 19:36:00</end>
+      <text>An other scene</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <description>And now, for something completely different.</description>
+      <labels>ScID:6</labels>
+      <default_color>170,240,160</default_color>
+    </event>
+    <event>
+      <start>2021-07-26 00:00:00</start>
+      <end>2021-07-26 00:00:00</end>
+      <text>Bird</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <category>Item</category>
+      <description>This bird is not dead.</description>
+      <labels>ItemID:1</labels>
+      <default_color>192,192,192</default_color>
+    </event>
+    <event>
+      <start>2021-07-26 00:00:00</start>
+      <end>2021-07-26 00:00:00</end>
+      <text>The ministry of silly walk</text>
+      <progress>0</progress>
+      <fuzzy>False</fuzzy>
+      <locked>False</locked>
+      <ends_today>False</ends_today>
+      <category>Item</category>
+      <description>The place to be.</description>
+      <labels>ItemID:2</labels>
+      <default_color>192,192,192</default_color>
+    </event>
+  </events>
+  <view>
+    <displayed_period>
+      <start>0166-05-12 09:33:00</start>
+      <end>2021-08-10 19:36:00</end>
+    </displayed_period>
+  </view>
+</timeline>

@@ -21,7 +21,7 @@
 
 	<target name="test" description="unit tests">
 		<exec executable="python" failonerror="true">
-		    <arg value="${test}/test_yw-timeline.py"/>
+		    <arg value="${test}/test_yw_timeline.py"/>
 		</exec>
 	</target>
 
