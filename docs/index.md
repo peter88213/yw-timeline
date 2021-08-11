@@ -20,9 +20,9 @@ can be used to visualize the course of the narrative time in a
 
 ## Download and install
 
-[Download the latest release (version 0.12.5)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v0.12.5.zip)
+[Download the latest release (version 0.13.0)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v0.13.0.zip)
 
-- Unzip the downloaded zipfile "yw-timeline_v0.12.5.zip" into a new folder.
+- Unzip the downloaded zipfile "yw-timeline_v0.13.0.zip" into a new folder.
 - Move into this new folder and launch **install.bat**. This installs the script for the local user.
 - Create a shortcut on the desktop when asked.
 - Open "README.md" for usage instructions.
