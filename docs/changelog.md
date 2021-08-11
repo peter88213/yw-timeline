@@ -8,9 +8,15 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.12.3 Alpha - Optional update
+
+- Use standardlib methods in TlFile.write() for converting iso date/time stamps.  
+
+Based on PyWriter v3.16.0
+
 ### v0.12.2 Alpha - Optional update
 
-- Use standardlib methods for converting iso date/time stamps.  
+- Use standardlib methods in TlFile.read() for converting iso date/time stamps.  
 
 Based on PyWriter v3.16.0
 
