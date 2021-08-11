@@ -16,10 +16,6 @@ from pywriter.model.chapter import Chapter
 from pyTimeline.scene_event import SceneEvent
 from pyTimeline.item_event import ItemEvent
 
-DIRTY_FIX_TIME = '2021-10-01 11:11:11'
-# This is used to provisionally create a time interval if needed.
-# To be removed as soon as better time calculation methods are available.
-
 
 def fix_iso_dt(tlDateTime):
     """Return a date/time string with a four-number year.
@@ -30,6 +26,46 @@ def fix_iso_dt(tlDateTime):
         tlDateTime = ('-').join(dt)
 
     return tlDateTime
+
+
+def set_view_range(dtMin, dtMax):
+    """Return maximum/minimum timestamp defining the view range in Timeline.
+    """
+    DIRTY_FIX_TIME = '2021-10-01 11:11:11'
+    # This is used to provisionally create a time interval if needed.
+    # To be removed as soon as better time calculation methods are available.
+
+    if dtMin == dtMax:
+
+        if DIRTY_FIX_TIME > dtMax:
+            dtMax = DIRTY_FIX_TIME
+
+        elif DIRTY_FIX_TIME < dtMin:
+            dtMin = DIRTY_FIX_TIME
+
+    return dtMin, dtMax
+
+    '''
+    if dt[0].startswith('-'):
+        startYear = -1 * int(dt[0].split('-')[1])
+        self.scenes[scId].endDateTime = endDateTime
+        dtIsValid = False
+
+    else:
+        startYear = int(dt[0].split('-')[0])
+
+    if startYear < 100:
+        self.scenes[scId].date = '-0001-01-01'
+        self.scenes[scId].time = '00:00:00'
+        self.scenes[scId].startDate = dt[0]
+        self.scenes[scId].startTime = dt[1]
+        self.scenes[scId].endDateTime = endDateTime
+        dtIsValid = False
+
+    else:
+        self.scenes[scId].date = dt[0]
+        self.scenes[scId].time = dt[1]
+'''
 
 
 class TlFile(Novel):
@@ -848,14 +884,7 @@ class TlFile(Novel):
             view = ET.SubElement(root, 'view')
             period = ET.SubElement(view, 'displayed_period')
 
-            if dtMin == dtMax:
-
-                if DIRTY_FIX_TIME > dtMax:
-                    dtMax = DIRTY_FIX_TIME
-
-                elif DIRTY_FIX_TIME < dtMin:
-                    dtMin = DIRTY_FIX_TIME
-
+            dtMin, dtMax = set_view_range(dtMin, dtMax)
             ET.SubElement(period, 'start').text = dtMin
             ET.SubElement(period, 'end').text = dtMax
 
