@@ -1,7 +1,7 @@
 """Provide a Timeline project file representation.
 
-Part of the yw-timeline project (https://github.com/peter88213/yw-timeline)
 Copyright (c) 2021 Peter Triesberger
+For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
 import os
@@ -13,19 +13,11 @@ from datetime import timedelta
 
 from pywriter.model.novel import Novel
 from pywriter.model.chapter import Chapter
+from pywriter.yw.xml_indent import indent
+
 from pyTimeline.scene_event import SceneEvent
 from pyTimeline.item_event import ItemEvent
-
-
-def fix_iso_dt(tlDateTime):
-    """Return a date/time string with a four-number year.
-    """
-    if not tlDateTime.startswith('-'):
-        dt = tlDateTime.split('-', 1)
-        dt[0] = dt[0].zfill(4)
-        tlDateTime = ('-').join(dt)
-
-    return tlDateTime
+from pyTimeline.dt_helper import fix_iso_dt
 
 
 def set_view_range(dtMin, dtMax):
@@ -323,10 +315,7 @@ class TlFile(Novel):
                 except:
                     pass
 
-                #--- Process start date/time.
-
-                dtIsValid = True
-                # The date/time combination is within the range yWriter can process.
+                #--- Set date/time/duration.
 
                 try:
                     startDateTime = event.find('start').text
@@ -336,47 +325,8 @@ class TlFile(Novel):
                         scIdsByDate[startDateTime] = []
 
                     scIdsByDate[startDateTime].append(scId)
-                    dt = startDateTime.split(' ')
+                    self.scenes[scId].set_date_time(startDateTime, endDateTime)
 
-                    # Prevent two-figure years from becoming "completed" by yWriter.
-
-                    if dt[0].startswith('-'):
-                        startYear = -1 * int(dt[0].split('-')[1])
-                        self.scenes[scId].endDateTime = endDateTime
-                        dtIsValid = False
-
-                    else:
-                        startYear = int(dt[0].split('-')[0])
-
-                    if startYear < 100:
-                        self.scenes[scId].date = '-0001-01-01'
-                        self.scenes[scId].time = '00:00:00'
-                        self.scenes[scId].startDate = dt[0]
-                        self.scenes[scId].startTime = dt[1]
-                        self.scenes[scId].endDateTime = endDateTime
-                        dtIsValid = False
-
-                    else:
-                        self.scenes[scId].date = dt[0]
-                        self.scenes[scId].time = dt[1]
-
-                except:
-                    dtIsValid = False
-
-                try:
-
-                    if dtIsValid:
-
-                        #--- Calculate scene duration.
-
-                        sceneStart = datetime.fromisoformat(fix_iso_dt(startDateTime))
-                        sceneEnd = datetime.fromisoformat(fix_iso_dt(endDateTime))
-                        sceneDuration = sceneEnd - sceneStart
-                        self.scenes[scId].lastsDays = str(sceneDuration.days)
-                        lastsHours = sceneDuration.seconds // 3600
-                        lastsMinutes = (sceneDuration.seconds % 3600) // 60
-                        self.scenes[scId].lastsHours = str(lastsHours)
-                        self.scenes[scId].lastsMinutes = str(lastsMinutes)
                 except:
                     pass
 
@@ -888,7 +838,7 @@ class TlFile(Novel):
             ET.SubElement(period, 'start').text = dtMin
             ET.SubElement(period, 'end').text = dtMax
 
-        self.indent_xml(root)
+        indent(root)
         self.tree = ET.ElementTree(root)
 
         try:
@@ -898,29 +848,3 @@ class TlFile(Novel):
             return 'ERROR: "' + os.path.normpath(self.filePath) + '" is write protected.'
 
         return 'SUCCESS: "' + os.path.normpath(self.filePath) + '" written.'
-
-    def indent_xml(self, elem, level=0):
-        """xml pretty printer
-
-        Kudos to to Fredrik Lundh. 
-        Source: http://effbot.org/zone/element-lib.htm#prettyprint
-        """
-        i = "\n" + level * "  "
-
-        if len(elem):
-
-            if not elem.text or not elem.text.strip():
-                elem.text = i + "  "
-
-            if not elem.tail or not elem.tail.strip():
-                elem.tail = i
-
-            for elem in elem:
-                self.indent_xml(elem, level + 1)
-
-            if not elem.tail or not elem.tail.strip():
-                elem.tail = i
-
-        else:
-            if level and (not elem.tail or not elem.tail.strip()):
-                elem.tail = i
