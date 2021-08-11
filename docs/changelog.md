@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.12.2 Alpha - Optional update
+
+- Use standardlib methods for converting iso date/time stamps.  
+
+Based on PyWriter v3.16.0
+
 ### v0.12.1 Alpha - No automatic shortcut creation
 
 - Due to sporadic security warnings, the automatic shortcut creation during installation is removed. The user is now guided to create the application shortcut manually.  
