@@ -618,15 +618,7 @@ class TlFile(Novel):
                 lastsDays = int(scene.lastsDays)
                 lastsSeconds = (int(scene.lastsHours) * 3600) + (int(scene.lastsMinutes) * 60)
                 sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
-
-                startDate, startTime = startDateTime.split(' ')
-                startYear = int(startDate.split('-')[0])
-                startMonth = int(startDate.split('-')[1])
-                startDay = int(startDate.split('-')[2])
-                startHour = int(startTime.split(':')[0])
-                startMinute = int(startTime.split(':')[1])
-                sceneStart = datetime(startYear, startMonth, startDay, hour=startHour, minute=startMinute)
-
+                sceneStart = datetime.fromisoformat(fix_iso_dt(startDateTime))
                 sceneEnd = sceneStart + sceneDuration
                 endDateTime = sceneEnd.isoformat(' ')
 
