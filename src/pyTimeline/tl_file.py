@@ -421,10 +421,20 @@ class TlFile(Novel):
             if xmlEvent.find('start') is None:
                 ET.SubElement(xmlEvent, 'start').text = self.defaultDateTime
 
+            startDateTime = fix_iso_dt(xmlEvent.find('start').text)
+
+            if (not dtMin) or (startDateTime < dtMin):
+                dtMin = startDateTime
+
             scIndex += 1
 
             if xmlEvent.find('end') is None:
                 ET.SubElement(xmlEvent, 'end').text = self.defaultDateTime
+
+            endDateTime = fix_iso_dt(xmlEvent.find('end').text)
+
+            if (not dtMax) or (endDateTime > dtMax):
+                dtMax = endDateTime
 
             scIndex += 1
 
@@ -496,12 +506,6 @@ class TlFile(Novel):
             if xmlEvent.find('default_color') is None:
                 ET.SubElement(xmlEvent, 'default_color').text = '192,192,192'
 
-            if self.defaultDateTime < dtMin:
-                dtMin = self.defaultDateTime
-
-            if self.defaultDateTime > dtMax:
-                dtMax = self.defaultDateTime
-
             return dtMin, dtMax
 
         def build_event_subtree(xmlEvent, scId, dtMin, dtMax):
@@ -516,10 +520,10 @@ class TlFile(Novel):
             except(AttributeError):
                 ET.SubElement(xmlEvent, 'start').text = startDateTime
 
-            scIndex += 1
-
-            if startDateTime < dtMin:
+            if (not dtMin) or (startDateTime < dtMin):
                 dtMin = startDateTime
+
+            scIndex += 1
 
             endDateTime = scene.get_endDateTime(startDateTime)
 
@@ -529,10 +533,10 @@ class TlFile(Novel):
             except(AttributeError):
                 ET.SubElement(xmlEvent, 'end').text = endDateTime
 
-            scIndex += 1
-
-            if endDateTime > dtMax:
+            if (not dtMax) or (endDateTime > dtMax):
                 dtMax = endDateTime
+
+            scIndex += 1
 
             if not scene.title:
                 scene.title = 'Unnamed scene ID' + scId
@@ -658,8 +662,8 @@ class TlFile(Novel):
 
         #--- Begin write method
 
-        dtMin = self.defaultDateTime
-        dtMax = self.defaultDateTime
+        dtMin = None
+        dtMax = None
 
         # List all scenes to be exported.
         # Note: self.scenes may also contain orphaned ones.
