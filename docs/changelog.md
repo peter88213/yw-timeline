@@ -10,7 +10,7 @@ See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/pr
 
 ### v0.14.0 Alpha - New feature
 
-Set the view range in new timelines.
+Set the view range in new and synchronized timelines.
 
 Based on PyWriter v3.16.1
 

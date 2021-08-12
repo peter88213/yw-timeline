@@ -55,8 +55,8 @@
       <default_color>170,240,160</default_color>
     </event>
     <event>
-      <start>-98-01-01 00:00:00</start>
-      <end>121-08-23 01:05:38</end>
+      <start>-0098-01-01 00:00:00</start>
+      <end>0121-08-23 01:05:38</end>
       <text> (6)Die dritte Szene</text>
       <progress>0</progress>
       <fuzzy>False</fuzzy>
@@ -67,8 +67,8 @@
       <default_color>170,240,160</default_color>
     </event>
     <event>
-      <start>52-05-08 02:20:00</start>
-      <end>52-05-10 02:20:00</end>
+      <start>0052-05-08 02:20:00</start>
+      <end>0052-05-10 02:20:00</end>
       <text>Die vierte Szene</text>
       <progress>0</progress>
       <fuzzy>False</fuzzy>
@@ -78,8 +78,8 @@
       <default_color>170,240,160</default_color>
     </event>
     <event>
-      <start>-163-09-21 18:29:21</start>
-      <end>119-08-04 14:11:21</end>
+      <start>-0163-09-21 18:29:21</start>
+      <end>0119-08-04 14:11:21</end>
       <text>New Scene</text>
       <progress>0</progress>
       <fuzzy>False</fuzzy>
@@ -129,8 +129,8 @@
   </events>
   <view>
     <displayed_period>
-      <start>1425-06-01 07:24:06</start>
-      <end>2171-09-14 09:02:01</end>
+      <start>-0098-01-01 00:00:00</start>
+      <end>2021-08-10 19:36:00</end>
     </displayed_period>
     <hidden_categories>
     </hidden_categories>

@@ -7,6 +7,8 @@ Published under the MIT License (https://opensource.org/licenses/mit-license.php
 import os
 import re
 import xml.etree.ElementTree as ET
+from datetime import datetime
+from datetime import timedelta
 
 from pywriter.model.novel import Novel
 from pywriter.model.chapter import Chapter
@@ -14,8 +16,7 @@ from pywriter.yw.xml_indent import indent
 
 from pyTimeline.scene_event import SceneEvent
 from pyTimeline.item_event import ItemEvent
-
-from pyTimeline.dt_helper import set_view_range
+from pyTimeline.dt_helper import fix_iso_dt
 
 
 class TlFile(Novel):
@@ -41,32 +42,6 @@ class TlFile(Novel):
         self.itemColor = kwargs['item_color']
         self.ignoreItems = kwargs['ignore_items']
         self.ignoreUnspecific = kwargs['ignore_unspecific']
-
-    def convert_to_yw(self, text):
-        """Return text, converted from source format to yw7 markup.
-        """
-        if text is not None:
-
-            if text.startswith(' ('):
-                text = text.lstrip()
-
-            elif text.startswith(' ['):
-                text = text.lstrip()
-
-        return text
-
-    def convert_from_yw(self, text):
-        """Return text, converted from yw7 markup to target format.
-        """
-        if text is not None:
-
-            if text.startswith('('):
-                text = ' ' + text
-
-            elif text.startswith('['):
-                text = ' ' + text
-
-        return text
 
     def read(self):
         """Parse the file and store selected properties.
@@ -246,7 +221,7 @@ class TlFile(Novel):
                     pass
 
                 try:
-                    startDateTime = event.find('start').text
+                    startDateTime = fix_iso_dt(event.find('start').text)
 
                     if not startDateTime in itIdsByDate:
                         itIdsByDate[startDateTime] = []
@@ -276,8 +251,8 @@ class TlFile(Novel):
                 #--- Set date/time/duration.
 
                 try:
-                    startDateTime = event.find('start').text
-                    endDateTime = event.find('end').text
+                    startDateTime = fix_iso_dt(event.find('start').text)
+                    endDateTime = fix_iso_dt(event.find('end').text)
 
                     if not startDateTime in scIdsByDate:
                         scIdsByDate[startDateTime] = []
@@ -624,6 +599,63 @@ class TlFile(Novel):
 
             return dtMin, dtMax
 
+        def set_view_range(dtMin, dtMax):
+            """Return maximum/minimum timestamp defining the view range in Timeline.
+            """
+            TIME_LIMIT = '0100-01-01 00:00:00'
+            # This is used to create a time interval outsides the processible time range.
+
+            SEC_PER_DAY = 24 * 3600
+
+            dt = dtMin.split(' ')
+
+            if dt[0].startswith('-'):
+                startYear = -1 * int(dt[0].split('-')[1])
+                # "BC" year.
+
+            else:
+                startYear = int(dt[0].split('-')[0])
+
+            if startYear < 100:
+
+                if dtMax == dtMin:
+                    dtMax = TIME_LIMIT
+
+                return dtMin, dtMax
+
+            # dtMin and dtMax are within the processible range.
+
+            vrMax = datetime.fromisoformat(dtMax)
+            vrMin = datetime.fromisoformat(dtMin)
+
+            viewRange = (vrMax - vrMin).total_seconds()
+
+            # Calculate a margin added to the (dtMin dtMax) interval.
+
+            if viewRange > SEC_PER_DAY:
+                margin = viewRange / 10
+
+            else:
+                margin = 3600
+
+            dtMargin = timedelta(seconds=margin)
+
+            try:
+                vrMin -= dtMargin
+                dtMin = vrMin.isoformat(' ', 'seconds')
+
+            except OverflowError:
+                pass
+
+            try:
+                vrMax += dtMargin
+                dtMax = vrMax.isoformat(' ', 'seconds')
+
+            except OverflowError:
+                pass
+
+            return dtMin, dtMax
+
         #--- Begin write method
 
         dtMin = self.defaultDateTime
@@ -651,7 +683,7 @@ class TlFile(Novel):
 
         if self.tree is not None:
 
-            # Update an existing XML tree.
+            #--- Update an existing XML tree.
 
             root = self.tree.getroot()
             events = root.find('events')
@@ -659,7 +691,7 @@ class TlFile(Novel):
             scIds = []
             itIds = []
 
-            #--- Update events that are assigned to scenes or items.
+            # Update events that are assigned to scenes or items.
 
             for event in events.iter('event'):
 
@@ -733,9 +765,17 @@ class TlFile(Novel):
                     ET.SubElement(item, 'done_color').text = '255,153,153'
                     ET.SubElement(item, 'font_color').text = '0,0,0'
 
+            # Set the view range.
+
+            dtMin, dtMax = set_view_range(dtMin, dtMax)
+            view = root.find('view')
+            period = view.find('displayed_period')
+            period.find('start').text = dtMin
+            period.find('end').text = dtMax
+
         else:
 
-            # Create a new XML tree.
+            #--- Create a new XML tree.
 
             root = ET.Element('timeline')
             ET.SubElement(root, 'version').text = '2.4.0 (3f207fbb63f0 2021-04-07)'
@@ -762,10 +802,11 @@ class TlFile(Novel):
                     event = ET.SubElement(events, 'event')
                     dtMin, dtMax = build_item_subtree(event, itId, dtMin, dtMax)
 
-            view = ET.SubElement(root, 'view')
-            period = ET.SubElement(view, 'displayed_period')
+            # Set the view range.
 
             dtMin, dtMax = set_view_range(dtMin, dtMax)
+            view = ET.SubElement(root, 'view')
+            period = ET.SubElement(view, 'displayed_period')
             ET.SubElement(period, 'start').text = dtMin
             ET.SubElement(period, 'end').text = dtMax
 
@@ -779,3 +820,29 @@ class TlFile(Novel):
             return 'ERROR: "' + os.path.normpath(self.filePath) + '" is write protected.'
 
         return 'SUCCESS: "' + os.path.normpath(self.filePath) + '" written.'
+
+    def convert_to_yw(self, text):
+        """Return text, converted from source format to yw7 markup.
+        """
+        if text is not None:
+
+            if text.startswith(' ('):
+                text = text.lstrip()
+
+            elif text.startswith(' ['):
+                text = text.lstrip()
+
+        return text
+
+    def convert_from_yw(self, text):
+        """Return text, converted from yw7 markup to target format.
+        """
+        if text is not None:
+
+            if text.startswith('('):
+                text = ' ' + text
+
+            elif text.startswith('['):
+                text = ' ' + text
+
+        return text

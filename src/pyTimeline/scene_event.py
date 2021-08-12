@@ -7,7 +7,6 @@ Published under the MIT License (https://opensource.org/licenses/mit-license.php
 from datetime import datetime
 from datetime import timedelta
 from pywriter.model.scene import Scene
-from pyTimeline.dt_helper import fix_iso_dt
 
 
 class SceneEvent(Scene):
@@ -63,8 +62,8 @@ class SceneEvent(Scene):
 
             # Calculate duration of scenes that begin after 99-12-31.
 
-            sceneStart = datetime.fromisoformat(fix_iso_dt(startDateTime))
-            sceneEnd = datetime.fromisoformat(fix_iso_dt(endDateTime))
+            sceneStart = datetime.fromisoformat(startDateTime)
+            sceneEnd = datetime.fromisoformat(endDateTime)
             sceneDuration = sceneEnd - sceneStart
             self.lastsDays = str(sceneDuration.days)
             lastsHours = sceneDuration.seconds // 3600
@@ -105,7 +104,7 @@ class SceneEvent(Scene):
             lastsDays = int(self.lastsDays)
             lastsSeconds = (int(self.lastsHours) * 3600) + (int(self.lastsMinutes) * 60)
             sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
-            sceneStart = datetime.fromisoformat(fix_iso_dt(startDateTime))
+            sceneStart = datetime.fromisoformat(startDateTime)
             sceneEnd = sceneStart + sceneDuration
             endDateTime = sceneEnd.isoformat(' ')
 
