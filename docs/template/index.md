@@ -2,6 +2,8 @@ The [Timeline Project](http://thetimelineproj.sourceforge.net/) application
 can be used to visualize the course of the narrative time in a 
 [yWriter](http://spacejock.com/yWriter7.html) project.
 
+![Screenshot: Example](Screenshots/screen01.png)
+
 ## Features
 
 - Generate a *yWriter* project from an outline created with *Timeline*.
