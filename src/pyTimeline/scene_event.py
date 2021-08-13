@@ -74,11 +74,36 @@ class SceneEvent(Scene):
             sceneStart = datetime.fromisoformat(startDateTime)
             sceneEnd = datetime.fromisoformat(endDateTime)
             sceneDuration = sceneEnd - sceneStart
-            self.lastsDays = str(sceneDuration.days)
             lastsHours = sceneDuration.seconds // 3600
             lastsMinutes = (sceneDuration.seconds % 3600) // 60
+
+            self.lastsDays = str(sceneDuration.days)
             self.lastsHours = str(lastsHours)
             self.lastsMinutes = str(lastsMinutes)
+
+            if isUnspecific:
+
+                # Convert date/time to D/H/M
+
+                try:
+                    sceneTime = self.time.split(':')
+                    self.hour = sceneTime[0]
+                    self.minute = sceneTime[1]
+
+                    sceneDate = date.fromisoformat(self.date)
+                    referenceDate = date.fromisoformat(self.defaultDateTime.split(' ')[0])
+                    self.day = str((sceneDate - referenceDate).days)
+
+                except:
+
+                    # Do not synchronize.
+
+                    self.day = None
+                    self.hour = None
+                    self.minute = None
+
+                self.date = None
+                self.time = None
 
     def merge_date_time(self, source):
         """Get date/time related variables from a yWriter-generated source scene.

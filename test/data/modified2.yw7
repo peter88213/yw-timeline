@@ -165,8 +165,11 @@
         <Field_UseExporterTags>0</Field_UseExporterTags>
       </Fields>
       <BelongsToChID>1</BelongsToChID>
-      <LastsMinutes>20</LastsMinutes>
-      <LastsHours>1</LastsHours>
+      <Minute>00</Minute>
+      <Hour>11</Hour>
+      <Day>18</Day>
+      <LastsMinutes>53</LastsMinutes>
+      <LastsHours>4</LastsHours>
       <Field1>1</Field1>
       <Field2>1</Field2>
       <Field3>1</Field3>
@@ -181,8 +184,7 @@
       <Items>
 		</Items>
       <SceneContent><![CDATA[]]></SceneContent>
-      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
-      <SpecificDateMode>-1</SpecificDateMode>
+      <LastsDays>0</LastsDays>
     </SCENE>
     <SCENE>
       <ID>6</ID>

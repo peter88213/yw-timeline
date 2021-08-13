@@ -81,6 +81,7 @@ class TlFile(Novel):
             doRewrite = True
 
         else:
+            self.ywProject.read()
             isOutline = False
             doRewrite = False
 
@@ -266,14 +267,13 @@ class TlFile(Novel):
                 endDateTime = fix_iso_dt(event.find('end').text)
 
                 # Consider unspecific date/time in the target file.
-                '''
+
                 if not isOutline and self.ywProject.scenes[scId].date is None:
                     isUnspecific = True
 
                 else:
                     isUnspecific = False
-                '''
-                isUnspecific = False
+
                 self.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
 
                 if not startDateTime in scIdsByDate:
