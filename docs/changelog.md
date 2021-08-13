@@ -12,7 +12,15 @@ See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/pr
 
 Synchronize unspecific date/time in yWriter with specific date/time in Timeline.
 
-Based on PyWriter v3.16.1
+D/H/M is converted to specific Timeline start/end date/time stamps, using the duration and the default date/time.
+
+The other way around (Timeline to yWriter), there are three options:
+
+- Retain each scene's date/time mode (default).
+- Overwrite D/H/M with specific date/time stamps (dhm_to_datetime option).
+- Convert specific Timeline date/time stamps to D/H/M (datetime_to_dhm option)
+
+Based on PyWriter v3.16.3
 
 ### v0.14.0 Alpha - New feature
 

@@ -8,6 +8,7 @@ can be used to visualize the course of the narrative time in a
 - Generate a *Timeline* project from a *yWriter* project.
 - Synchronize *yWriter* scenes with corresponding *Timeline* events in both directions.
 - Synchronize *yWriter* items with corresponding special *Timeline* events in both directions.
+- When synchronizing a yWriter project with a timeline, optionally change unspecific scene "Day/Hour/Minute" to specific "date/time" and vice versa.
 
  
 ## Requirements
@@ -20,9 +21,9 @@ can be used to visualize the course of the narrative time in a
 
 ## Download and install
 
-[Download the latest release (version 0.15.5)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v0.15.5.zip)
+[Download the latest release (version 0.16.0)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v0.16.0.zip)
 
-- Unzip the downloaded zipfile "yw-timeline_v0.15.5.zip" into a new folder.
+- Unzip the downloaded zipfile "yw-timeline_v0.16.0.zip" into a new folder.
 - Move into this new folder and launch **install.bat**. This installs the script for the local user.
 - Create a shortcut on the desktop when asked.
 - Open "README.md" for usage instructions.

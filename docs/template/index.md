@@ -8,6 +8,7 @@ can be used to visualize the course of the narrative time in a
 - Generate a *Timeline* project from a *yWriter* project.
 - Synchronize *yWriter* scenes with corresponding *Timeline* events in both directions.
 - Synchronize *yWriter* items with corresponding special *Timeline* events in both directions.
+- When synchronizing a yWriter project with a timeline, optionally change unspecific scene "Day/Hour/Minute" to specific "date/time" and vice versa.
 
  
 ## Requirements

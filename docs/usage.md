@@ -51,7 +51,7 @@ An optional project configuration file named `yw-timeline.ini` can be placed in 
 
 The yw-timeline distribution comes with a sample configuration file located in the `sample` subfolder. It contains yw-timeline's default settings and options. This file is also automatically copied to the global configuration folder during installation. You best make a copy and edit it.
 
-- The SETTINGS section comprises the program "constants" usually not to be changed. If you change them, the program might behave differently than described in the documentation. So only touch them if you are clear about the consequences.
+- The SETTINGS section comprises the program "constants". If you change them, the program might behave differently than described in the documentation. So only touch them if you are clear about the consequences.
 - The OPTIONS section comprises options for regular program execution. 
 - Comment lines begin with a `#` number sign. In the example, they refer to the code line immediately above.
 
@@ -67,6 +67,8 @@ item_category = Item
 
 default_date_time = 2021-07-26 00:00:00
 # Date/time stamp for imported yWriter scenes without date/time set.
+# When converting between specific date/time and unspecific D/H/M, 
+# this time stamp is used as a reference.
 
 scene_color = 170,240,160
 # Color for events imported as scenes from yWriter.
@@ -80,17 +82,22 @@ ignore_items = No
 # Yes: Do not synchronize items with yWriter.
 
 ignore_unspecific = No
-# No: Transfer all Scenes from yWriter to Timeline. Events assigned to scenes having no specific date/time stamp
-#     get the default date plus the unspecific 'D' as start date, and 'H':'M' as start time.
+# No: Transfer all Scenes from yWriter to Timeline. Events assigned to 
+#     scenes having no specific date/time stamp get the default date
+#     plus the unspecific 'D' as start date, and 'H':'M' as start time.
 # Yes: Only transfer Scenes with a specific date/time stamp from yWriter to Timeline.
 
 dhm_to_datetime = No
 # Yes: Convert yWriter unspecific D/H/M to specific date/time when synchronizing from Timeline.
 #      Use the date from default_date_time as a reference. Time is 'H':'M'.
+# Precondition:
+# ignore_items = No AND datetime_to_dhm = No
 
 datetime_to_dhm = No
 # Yes: Convert yWriter spcific date/time to unspecific D/H/M when synchronizing from Timeline.
 #      Use the date from default_date_time as a reference. H, M are taken from the scene time.
+# Precondition:
+# ignore_items = No AND dhm_to_datetime = No
 
 single_backup = Yes
 # Yes: Overwrite existing backup file. Extension = .bak
@@ -125,7 +132,6 @@ Just delete your global and local configuration files.
 #### Scenes
 - Only normal scenes are synchronized with Timeline, or exported to Timeline. Unused scenes, "Notes" scenes, and "Todo" scenes will not show up in the timeline.
 - Optionally, scenes with an unspecific time stamp (day, hours, minutes) are not transferred to the timeline.
-- Scenes with an unspecific time stamp (day, hours, minutes) get a specific time stamp (date/time) when transferred from the timeline.
 - Changes to the scene date/time affect the event start date/time during synchronization.
 - Changes to the scene title affect the event text during synchronization.
 - Changes to the scene description affect the event description during synchronization.
@@ -154,9 +160,24 @@ Just delete your global and local configuration files.
 - Changes to the event description affect the scene description during synchronization.
 - The scene structure of an existing yWriter project can not be changed in Timeline. Adding/removing events, or adding/removing scene IDs from event labels will *not* add or remove the corresponding scene during synchronization. 
 
+### Synchronization of unspecific date/time in yWriter with specific date/time in Timeline.
+
+Day/Hour/Minute is converted to specific Timeline start/end date/time stamps, using the duration and the default date/time.
+
+The other way around (Timeline to yWriter), there are three options:
+
+- Retain each scene's date/time mode (default).
+- Overwrite D/H/M with specific date/time stamps (**dhm_to_datetime** option).
+- Convert specific Timeline date/time stamps to D/H/M (**datetime_to_dhm** option)
+
+D/H/M refers to the default date/time stamp that can be set in the configuration.
+
+
 ### Known limitations
 
-- Scene events that begin before 0100-01-01 in the timeline, will not be synchronized with yWriter, because yWriter can not handle these dates. The same applies to the scene duration in this case, i.e. the event duration in Timeline and the scene duration in yWriter may differ.
+- Scene events that begin before 0100-01-01 in the timeline, will not be synchronized with yWriter, because yWriter can not handle these dates.
+- The same applies to the scene duration in this case, i.e. the event duration in Timeline and the scene duration in yWriter may differ.
+- Scenes that begin before 0100-01-01 in the timeline, can not have the D/H/M information converted to a date/time stamp and vice versa.
 - If a scene event ends after 9999-12-31 in the timeline, the scene duration is not synchronized with yWriter.
 
 
