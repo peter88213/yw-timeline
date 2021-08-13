@@ -11,9 +11,9 @@ import sys
 import os
 
 from pywriter.config.configuration import Configuration
-from yw_timeline import SETTINGS
-from yw_timeline import OPTIONS
-from yw_timeline import APPNAME
+from _yw_timeline import SETTINGS
+from _yw_timeline import OPTIONS
+from _yw_timeline import APPNAME
 
 
 def run(iniFile):
