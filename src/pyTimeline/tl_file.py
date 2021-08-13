@@ -43,6 +43,8 @@ class TlFile(Novel):
         self.itemColor = kwargs['item_color']
         self.ignoreItems = kwargs['ignore_items']
         self.ignoreUnspecific = kwargs['ignore_unspecific']
+        self.dateTimeToDhm = kwargs['datetime_to_dhm']
+        self.dhmToDateTime = kwargs['dhm_to_datetime']
 
     def read(self):
         """Parse the file and store selected properties.

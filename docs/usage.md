@@ -81,8 +81,16 @@ ignore_items = No
 
 ignore_unspecific = No
 # No: Transfer all Scenes from yWriter to Timeline. Events assigned to scenes having no specific date/time stamp
-#     get the default date plus the unspecific 'D', and 'H':'M' as start time.
+#     get the default date plus the unspecific 'D' as start date, and 'H':'M' as start time.
 # Yes: Only transfer Scenes with a specific date/time stamp from yWriter to Timeline.
+
+dhm_to_datetime = No
+# Yes: Convert yWriter unspecific D/H/M to specific date/time when synchronizing from Timeline.
+#      Use the date from default_date_time as a reference. Time is 'H':'M'.
+
+datetime_to_dhm = No
+# Yes: Convert yWriter spcific date/time to unspecific D/H/M when synchronizing from Timeline.
+#      Use the date from default_date_time as a reference. H, M are taken from the scene time.
 
 single_backup = Yes
 # Yes: Overwrite existing backup file. Extension = .bak
