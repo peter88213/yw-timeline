@@ -100,9 +100,26 @@ class SceneEvent(Scene):
         calculated from the scene duration.
         """
 
-        if self.lastsDays and self.lastsHours and self.lastsMinutes:
-            lastsDays = int(self.lastsDays)
-            lastsSeconds = (int(self.lastsHours) * 3600) + (int(self.lastsMinutes) * 60)
+        if self.endDateTime is not None and self.endDateTime > startDateTime:
+            endDateTime = self.endDateTime
+
+        elif self.lastsDays or self.lastsHours or self.lastsMinutes:
+
+            if self.lastsDays:
+                lastsDays = int(self.lastsDays)
+
+            else:
+                lastsDays = 0
+
+            if self.lastsHours:
+                lastsSeconds = int(self.lastsHours) * 3600
+
+            else:
+                lastsSeconds = 0
+
+            if self.lastsMinutes:
+                lastsSeconds += int(self.lastsMinutes) * 60
+
             sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
             sceneStart = datetime.fromisoformat(startDateTime)
             sceneEnd = sceneStart + sceneDuration
@@ -110,9 +127,6 @@ class SceneEvent(Scene):
 
             if startDateTime > endDateTime:
                 endDateTime = startDateTime
-
-        elif self.endDateTime is not None and self.endDateTime > startDateTime:
-            endDateTime = self.endDateTime
 
         else:
             endDateTime = startDateTime

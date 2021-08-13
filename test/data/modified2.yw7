@@ -10,7 +10,7 @@
     <FieldTitle2 />
     <FieldTitle3 />
     <FieldTitle4 />
-    <LastFullBackup>2021-08-10</LastFullBackup>
+    <LastFullBackup>2021-08-13</LastFullBackup>
     <WordTarget>0</WordTarget>
     <WordTargetStartDate>0001-01-01</WordTargetStartDate>
     <WordTargetEndDate>0001-01-01</WordTargetEndDate>
@@ -27,7 +27,7 @@
     <LaTeXHeaderFile />
     <MRUSpecificDate>2021-08-10</MRUSpecificDate>
     <MRUSpecificTime>19:36:00</MRUSpecificTime>
-    <LastViewedScID>6</LastViewedScID>
+    <LastViewedScID>5</LastViewedScID>
     <DeadlineDate1>0001-01-01</DeadlineDate1>
     <DeadlineDate2>0001-01-01</DeadlineDate2>
     <DeadlineDate3>0001-01-01</DeadlineDate3>
@@ -161,9 +161,12 @@
     <SCENE>
       <ID>5</ID>
       <Title><![CDATA[New Scene]]></Title>
+      <Fields>
+        <Field_UseExporterTags>0</Field_UseExporterTags>
+      </Fields>
       <BelongsToChID>1</BelongsToChID>
-      <SpecificDateMode>-1</SpecificDateMode>
-      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <LastsMinutes>20</LastsMinutes>
+      <LastsHours>1</LastsHours>
       <Field1>1</Field1>
       <Field2>1</Field2>
       <Field3>1</Field3>
@@ -177,7 +180,9 @@
 		</Locations>
       <Items>
 		</Items>
-      <SceneContent />
+      <SceneContent><![CDATA[]]></SceneContent>
+      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <SpecificDateMode>-1</SpecificDateMode>
     </SCENE>
     <SCENE>
       <ID>6</ID>
@@ -228,6 +233,11 @@
   <WCLog>
     <WC>
       <Date>2021-08-10</Date>
+      <Count>0</Count>
+      <TotalCount>0</TotalCount>
+    </WC>
+    <WC>
+      <Date>2021-08-13</Date>
       <Count>0</Count>
       <TotalCount>0</TotalCount>
     </WC>

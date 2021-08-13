@@ -80,7 +80,8 @@ ignore_items = No
 # Yes: Do not synchronize items with yWriter.
 
 ignore_unspecific = No
-# No: Transfer all Scenes from yWriter to Timeline. Events assigned to scenes having no specific date/time stamp get the default date/time.
+# No: Transfer all Scenes from yWriter to Timeline. Events assigned to scenes having no specific date/time stamp
+#     get the default date plus the unspecific 'D', and 'H':'M' as start time.
 # Yes: Only transfer Scenes with a specific date/time stamp from yWriter to Timeline.
 
 single_backup = Yes

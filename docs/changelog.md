@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.16.0 Beta - Feature complete
+
+Synchronize unspecific date/time in yWriter with specific date/time in Timeline.
+
+Based on PyWriter v3.16.1
+
 ### v0.14.0 Alpha - New feature
 
 Set the view range in new and synchronized timelines.

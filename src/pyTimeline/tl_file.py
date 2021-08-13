@@ -8,6 +8,7 @@ import os
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
+from datetime import date
 from datetime import timedelta
 
 from pywriter.model.novel import Novel
@@ -359,21 +360,48 @@ class TlFile(Novel):
                     else:
                         self.scenes[scId].time = '00:00:00'
 
-                    if source.scenes[scId].lastsMinutes is not None:
-                        self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
-
-                    if source.scenes[scId].lastsHours is not None:
-                        self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
-
-                    if source.scenes[scId].lastsDays is not None:
-                        self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
-
                 elif self.scenes[scId].startDate is not None:
 
                     # Restore two-figure year.
 
                     self.scenes[scId].date = self.scenes[scId].startDate
                     self.scenes[scId].time = self.scenes[scId].startTime
+
+                elif source.scenes[scId].date is None:
+
+                    # calculate date/time from day/hour/minute.
+
+                    try:
+                        sceneDay = int(source.scenes[scId].day)
+
+                    except:
+                        continue
+
+                    try:
+                        sceneHour = source.scenes[scId].hour
+
+                    except:
+                        continue
+
+                    try:
+                        sceneMinute = source.scenes[scId].minute
+
+                    except:
+                        continue
+
+                    self.scenes[scId].time = sceneHour.zfill(2) + ':' + sceneMinute.zfill(2) + ':00'
+                    sceneDelta = timedelta(days=sceneDay)
+                    defaultDate = self.defaultDateTime.split(' ')[0]
+                    self.scenes[scId].date = (date.fromisoformat(defaultDate) + sceneDelta).isoformat()
+
+                if source.scenes[scId].lastsMinutes is not None:
+                    self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
+
+                if source.scenes[scId].lastsHours is not None:
+                    self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
+
+                if source.scenes[scId].lastsDays is not None:
+                    self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
 
                 self.scenes[scId].isNotesScene = source.scenes[scId].isNotesScene
                 self.scenes[scId].isUnused = source.scenes[scId].isUnused
