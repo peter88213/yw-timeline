@@ -12,11 +12,8 @@ from pyTimeline.dt_helper import fix_iso_dt
 class ItemEvent(WorldElement):
     """Timeline ite, event representation.
     """
-
-    # Class variables (to be initialized externally).
-
-    defaultDateTime = None
-    itemMarker = None
+    defaultDateTime = '2021-07-26 00:00:00'
+    itemMarker = 'Item'
 
     def __init__(self):
         """Extend the superclass method, defining a container ID.

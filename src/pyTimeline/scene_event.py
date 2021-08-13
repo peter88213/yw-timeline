@@ -8,17 +8,13 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from datetime import timedelta
 from pywriter.model.scene import Scene
-from pyTimeline.dt_helper import fix_iso_dt
 
 
 class SceneEvent(Scene):
     """Timeline scene event representation.
     """
-
-    # Class variables (to be initialized externally).
-
-    defaultDateTime = None
-    sceneColor = None
+    defaultDateTime = '2021-07-26 00:00:00'
+    sceneColor = '170,240,160'
 
     def __init__(self):
         """Extend the superclass method, defining a container ID.

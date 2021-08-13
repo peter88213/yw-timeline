@@ -31,7 +31,6 @@ class TlFile(Novel):
     DESCRIPTION = 'Timeline'
     EXTENSION = '.timeline'
     SUFFIX = None
-    # To be extended by file format specific subclasses.
 
     def __init__(self, filePath, **kwargs):
         """Extend the superclass constructor, initializing instance variables
@@ -39,19 +38,22 @@ class TlFile(Novel):
         """
         Novel.__init__(self, filePath, **kwargs)
         self.tree = None
+
         self.sceneMarker = kwargs['scene_label']
         self.itemMarker = kwargs['item_category']
-        ItemEvent.itemMarker = kwargs['item_category']
         self.defaultDateTime = kwargs['default_date_time']
-        ItemEvent.defaultDateTime = kwargs['default_date_time']
-        SceneEvent.defaultDateTime = kwargs['default_date_time']
         self.sceneColor = kwargs['scene_color']
-        SceneEvent.sceneColor = kwargs['scene_color']
         self.itemColor = kwargs['item_color']
         self.ignoreItems = kwargs['ignore_items']
         self.ignoreUnspecific = kwargs['ignore_unspecific']
         self.dateTimeToDhm = kwargs['datetime_to_dhm']
         self.dhmToDateTime = kwargs['dhm_to_datetime']
+
+        ItemEvent.defaultDateTime = kwargs['default_date_time']
+        ItemEvent.itemMarker = kwargs['item_category']
+
+        SceneEvent.defaultDateTime = kwargs['default_date_time']
+        SceneEvent.sceneColor = kwargs['scene_color']
 
     def read(self):
         """Parse the file and store selected properties.
