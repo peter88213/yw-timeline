@@ -16,7 +16,7 @@ can be used to visualize the course of the narrative time in a
 ## Requirements
 
 - Windows.
-- [Python 3](https://www.python.org). Python 3.4 or more recent will work. However, Python 3.7 or above is highly recommended.
+- [Python 3.7 or above](https://www.python.org). 
 - [yWriter 7](http://spacejock.com/yWriter7.html). Recent versions 5 or 6 might also work if they save in .yw7 file format.
 - [Timeline 2.4](https://sourceforge.net/projects/thetimelineproj/). Versions below 2.4 do not support labels, which are necessary for synchronization with yWriter.
 
