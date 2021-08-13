@@ -268,7 +268,13 @@ class TlFile(Novel):
 
                 # Consider unspecific date/time in the target file.
 
-                if not isOutline and self.ywProject.scenes[scId].date is None:
+                if self.dateTimeToDhm and not self.dhmToDateTime:
+                    isUnspecific = True
+
+                elif self.dhmToDateTime and not self.dateTimeToDhm:
+                    isUnspecific = False
+
+                elif not isOutline and self.ywProject.scenes[scId].date is None:
                     isUnspecific = True
 
                 else:
