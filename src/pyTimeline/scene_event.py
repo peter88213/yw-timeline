@@ -4,14 +4,21 @@ Copyright (c) 2021 Peter Triesberger
 For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
+import xml.etree.ElementTree as ET
 from datetime import datetime
 from datetime import timedelta
 from pywriter.model.scene import Scene
+from pyTimeline.dt_helper import fix_iso_dt
 
 
 class SceneEvent(Scene):
     """Timeline scene event representation.
     """
+
+    # Class variables (to be initialized externally).
+
+    defaultDateTime = None
+    sceneColor = None
 
     def __init__(self):
         """Extend the superclass method, defining a container ID.
@@ -132,3 +139,97 @@ class SceneEvent(Scene):
             endDateTime = startDateTime
 
         return endDateTime
+
+    def build_subtree(self, xmlEvent, scId, dtMin, dtMax):
+        scIndex = 0
+
+        startDateTime = self.get_startDateTime(self.defaultDateTime)
+
+        try:
+            xmlEvent.find('start').text = startDateTime
+
+        except(AttributeError):
+            ET.SubElement(xmlEvent, 'start').text = startDateTime
+
+        if (not dtMin) or (startDateTime < dtMin):
+            dtMin = startDateTime
+
+        scIndex += 1
+
+        endDateTime = self.get_endDateTime(startDateTime)
+
+        try:
+            xmlEvent.find('end').text = endDateTime
+
+        except(AttributeError):
+            ET.SubElement(xmlEvent, 'end').text = endDateTime
+
+        if (not dtMax) or (endDateTime > dtMax):
+            dtMax = endDateTime
+
+        scIndex += 1
+
+        if not self.title:
+            self.title = 'Unnamed scene ID' + scId
+
+        try:
+            xmlEvent.find('text').text = self.title
+
+        except(AttributeError):
+            ET.SubElement(xmlEvent, 'text').text = self.title
+
+        scIndex += 1
+
+        if xmlEvent.find('progress') is None:
+            ET.SubElement(xmlEvent, 'progress').text = '0'
+
+        scIndex += 1
+
+        if xmlEvent.find('fuzzy') is None:
+            ET.SubElement(xmlEvent, 'fuzzy').text = 'False'
+
+        scIndex += 1
+
+        if xmlEvent.find('locked') is None:
+            ET.SubElement(xmlEvent, 'locked').text = 'False'
+
+        scIndex += 1
+
+        if xmlEvent.find('ends_today') is None:
+            ET.SubElement(xmlEvent, 'ends_today').text = 'False'
+
+        scIndex += 1
+
+        if self.desc is not None:
+
+            try:
+                xmlEvent.find('description').text = self.desc
+
+            except(AttributeError):
+
+                if xmlEvent.find('labels') is None:
+
+                    # Append the description.
+
+                    ET.SubElement(xmlEvent, 'description').text = self.desc
+
+                else:
+                    # Insert the description.
+
+                    if xmlEvent.find('category') is not None:
+                        scIndex += 1
+
+                    desc = ET.Element('description')
+                    desc.text = self.desc
+                    xmlEvent.insert(scIndex, desc)
+
+        elif xmlEvent.find('description') is not None:
+            xmlEvent.remove(xmlEvent.find('description'))
+
+        if xmlEvent.find('labels') is None:
+            ET.SubElement(xmlEvent, 'labels').text = 'ScID:' + scId
+
+        if xmlEvent.find('default_color') is None:
+            ET.SubElement(xmlEvent, 'default_color').text = self.sceneColor
+
+        return dtMin, dtMax

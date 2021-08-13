@@ -34,12 +34,19 @@ class TlFile(Novel):
     # To be extended by file format specific subclasses.
 
     def __init__(self, filePath, **kwargs):
+        """Extend the superclass constructor, initializing instance variables
+        and SceneEvent/ItemEvent class variables.
+        """
         Novel.__init__(self, filePath, **kwargs)
         self.tree = None
         self.sceneMarker = kwargs['scene_label']
         self.itemMarker = kwargs['item_category']
+        ItemEvent.itemMarker = kwargs['item_category']
         self.defaultDateTime = kwargs['default_date_time']
+        ItemEvent.defaultDateTime = kwargs['default_date_time']
+        SceneEvent.defaultDateTime = kwargs['default_date_time']
         self.sceneColor = kwargs['scene_color']
+        SceneEvent.sceneColor = kwargs['scene_color']
         self.itemColor = kwargs['item_color']
         self.ignoreItems = kwargs['ignore_items']
         self.ignoreUnspecific = kwargs['ignore_unspecific']
@@ -444,195 +451,6 @@ class TlFile(Novel):
         """Write selected properties to the file.
         """
 
-        def build_item_subtree(xmlEvent, itId, dtMin, dtMax):
-            item = self.items[itId]
-            scIndex = 0
-
-            if xmlEvent.find('start') is None:
-                ET.SubElement(xmlEvent, 'start').text = self.defaultDateTime
-
-            startDateTime = fix_iso_dt(xmlEvent.find('start').text)
-
-            if (not dtMin) or (startDateTime < dtMin):
-                dtMin = startDateTime
-
-            scIndex += 1
-
-            if xmlEvent.find('end') is None:
-                ET.SubElement(xmlEvent, 'end').text = self.defaultDateTime
-
-            endDateTime = fix_iso_dt(xmlEvent.find('end').text)
-
-            if (not dtMax) or (endDateTime > dtMax):
-                dtMax = endDateTime
-
-            scIndex += 1
-
-            if not item.title:
-                item.title = 'Unnamed item ID' + itId
-
-            try:
-                xmlEvent.find('text').text = item.title
-
-            except(AttributeError):
-                ET.SubElement(xmlEvent, 'text').text = item.title
-
-            scIndex += 1
-
-            if xmlEvent.find('progress') is None:
-                ET.SubElement(xmlEvent, 'progress').text = '0'
-
-            scIndex += 1
-
-            if xmlEvent.find('fuzzy') is None:
-                ET.SubElement(xmlEvent, 'fuzzy').text = 'False'
-
-            scIndex += 1
-
-            if xmlEvent.find('locked') is None:
-                ET.SubElement(xmlEvent, 'locked').text = 'False'
-
-            scIndex += 1
-
-            if xmlEvent.find('ends_today') is None:
-                ET.SubElement(xmlEvent, 'ends_today').text = 'False'
-
-            scIndex += 1
-
-            try:
-                xmlEvent.find('category').text = self.itemMarker
-
-            except:
-                ET.SubElement(xmlEvent, 'category').text = self.itemMarker
-
-            scIndex += 1
-
-            if item.desc is not None:
-
-                try:
-                    xmlEvent.find('description').text = item.desc
-
-                except(AttributeError):
-
-                    if xmlEvent.find('labels') is None:
-
-                        # Append the description.
-
-                        ET.SubElement(xmlEvent, 'description').text = item.desc
-
-                    else:
-                        # Insert the description.
-
-                        desc = ET.Element('description')
-                        desc.text = item.desc
-                        xmlEvent.insert(scIndex, desc)
-
-            elif xmlEvent.find('description') is not None:
-                xmlEvent.remove(xmlEvent.find('description'))
-
-            if xmlEvent.find('labels') is None:
-                ET.SubElement(xmlEvent, 'labels').text = 'ItemID:' + itId
-
-            if xmlEvent.find('default_color') is None:
-                ET.SubElement(xmlEvent, 'default_color').text = '192,192,192'
-
-            return dtMin, dtMax
-
-        def build_event_subtree(xmlEvent, scId, dtMin, dtMax):
-            scene = self.scenes[scId]
-            scIndex = 0
-
-            startDateTime = scene.get_startDateTime(self.defaultDateTime)
-
-            try:
-                xmlEvent.find('start').text = startDateTime
-
-            except(AttributeError):
-                ET.SubElement(xmlEvent, 'start').text = startDateTime
-
-            if (not dtMin) or (startDateTime < dtMin):
-                dtMin = startDateTime
-
-            scIndex += 1
-
-            endDateTime = scene.get_endDateTime(startDateTime)
-
-            try:
-                xmlEvent.find('end').text = endDateTime
-
-            except(AttributeError):
-                ET.SubElement(xmlEvent, 'end').text = endDateTime
-
-            if (not dtMax) or (endDateTime > dtMax):
-                dtMax = endDateTime
-
-            scIndex += 1
-
-            if not scene.title:
-                scene.title = 'Unnamed scene ID' + scId
-
-            try:
-                xmlEvent.find('text').text = scene.title
-
-            except(AttributeError):
-                ET.SubElement(xmlEvent, 'text').text = scene.title
-
-            scIndex += 1
-
-            if xmlEvent.find('progress') is None:
-                ET.SubElement(xmlEvent, 'progress').text = '0'
-
-            scIndex += 1
-
-            if xmlEvent.find('fuzzy') is None:
-                ET.SubElement(xmlEvent, 'fuzzy').text = 'False'
-
-            scIndex += 1
-
-            if xmlEvent.find('locked') is None:
-                ET.SubElement(xmlEvent, 'locked').text = 'False'
-
-            scIndex += 1
-
-            if xmlEvent.find('ends_today') is None:
-                ET.SubElement(xmlEvent, 'ends_today').text = 'False'
-
-            scIndex += 1
-
-            if scene.desc is not None:
-
-                try:
-                    xmlEvent.find('description').text = scene.desc
-
-                except(AttributeError):
-
-                    if xmlEvent.find('labels') is None:
-
-                        # Append the description.
-
-                        ET.SubElement(xmlEvent, 'description').text = scene.desc
-
-                    else:
-                        # Insert the description.
-
-                        if xmlEvent.find('category') is not None:
-                            scIndex += 1
-
-                        desc = ET.Element('description')
-                        desc.text = scene.desc
-                        xmlEvent.insert(scIndex, desc)
-
-            elif xmlEvent.find('description') is not None:
-                xmlEvent.remove(xmlEvent.find('description'))
-
-            if xmlEvent.find('labels') is None:
-                ET.SubElement(xmlEvent, 'labels').text = 'ScID:' + scId
-
-            if xmlEvent.find('default_color') is None:
-                ET.SubElement(xmlEvent, 'default_color').text = self.sceneColor
-
-            return dtMin, dtMax
-
         def set_view_range(dtMin, dtMax):
             """Return maximum/minimum timestamp defining the view range in Timeline.
             """
@@ -742,7 +560,7 @@ class TlFile(Novel):
 
                     if itId in self.items:
                         itIds.append(itId)
-                        dtMin, dtMax = build_item_subtree(event, itId, dtMin, dtMax)
+                        dtMin, dtMax = self.items[itId].build_subtree(event, itId, dtMin, dtMax)
 
                     else:
                         trash.append(event)
@@ -752,7 +570,7 @@ class TlFile(Novel):
 
                     if scId in srtScenes:
                         scIds.append(scId)
-                        dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
+                        dtMin, dtMax = self.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
 
                     else:
                         trash.append(event)
@@ -763,7 +581,7 @@ class TlFile(Novel):
 
                 if not scId in scIds:
                     event = ET.SubElement(events, 'event')
-                    dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
+                    dtMin, dtMax = self.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
 
             if not self.ignoreItems:
 
@@ -771,7 +589,7 @@ class TlFile(Novel):
 
                     if not itId in itIds:
                         event = ET.SubElement(events, 'event')
-                        dtMin, dtMax = build_item_subtree(event, itId, dtMin, dtMax)
+                        dtMin, dtMax = self.items[itId].build_subtree(event, itId, dtMin, dtMax)
 
             # Remove events that are assigned to missing scenes.
 
@@ -828,13 +646,13 @@ class TlFile(Novel):
 
             for scId in srtScenes:
                 event = ET.SubElement(events, 'event')
-                dtMin, dtMax = build_event_subtree(event, scId, dtMin, dtMax)
+                dtMin, dtMax = self.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
 
             if not self.ignoreItems:
 
                 for itId in self.items:
                     event = ET.SubElement(events, 'event')
-                    dtMin, dtMax = build_item_subtree(event, itId, dtMin, dtMax)
+                    dtMin, dtMax = self.items[itId].build_subtree(event, itId, dtMin, dtMax)
 
             # Set the view range.
 
