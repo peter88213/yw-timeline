@@ -8,7 +8,6 @@ import os
 import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
-from datetime import date
 from datetime import timedelta
 
 from pywriter.model.novel import Novel
@@ -55,6 +54,10 @@ class TlFile(Novel):
         SceneEvent.defaultDateTime = kwargs['default_date_time']
         SceneEvent.sceneColor = kwargs['scene_color']
 
+        self.ywProject = None
+        # The existing yWriter target project, if any.
+        # To be set by the calling converter class.
+
     def read(self):
         """Parse the file and store selected properties.
         """
@@ -73,16 +76,13 @@ class TlFile(Novel):
 
             return text
 
-        fileName, fileExtension = os.path.splitext(self.filePath)
-        ywFile = fileName + '.yw7'
-
-        if os.path.isfile(ywFile):
-            isOutline = False
-            doRewrite = False
-
-        else:
+        if self.ywProject is None:
             isOutline = True
             doRewrite = True
+
+        else:
+            isOutline = False
+            doRewrite = False
 
         try:
             self.tree = ET.parse(self.filePath)
@@ -262,18 +262,24 @@ class TlFile(Novel):
 
                 #--- Set date/time/duration.
 
-                try:
-                    startDateTime = fix_iso_dt(event.find('start').text)
-                    endDateTime = fix_iso_dt(event.find('end').text)
+                startDateTime = fix_iso_dt(event.find('start').text)
+                endDateTime = fix_iso_dt(event.find('end').text)
 
-                    if not startDateTime in scIdsByDate:
-                        scIdsByDate[startDateTime] = []
+                # Consider unspecific date/time in the target file.
+                '''
+                if not isOutline and self.ywProject.scenes[scId].date is None:
+                    isUnspecific = True
 
-                    scIdsByDate[startDateTime].append(scId)
-                    self.scenes[scId].set_date_time(startDateTime, endDateTime)
+                else:
+                    isUnspecific = False
+                '''
+                isUnspecific = False
+                self.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
 
-                except:
-                    pass
+                if not startDateTime in scIdsByDate:
+                    scIdsByDate[startDateTime] = []
+
+                scIdsByDate[startDateTime].append(scId)
 
         # Sort items by date/time
 
@@ -358,62 +364,7 @@ class TlFile(Novel):
                     self.scenes[scId].title = title
 
                 self.scenes[scId].desc = source.scenes[scId].desc
-
-                if source.scenes[scId].date is not None and source.scenes[scId].date != '0001-01-01':
-
-                    # The date is not "BC", so synchronize it.
-
-                    self.scenes[scId].date = source.scenes[scId].date
-
-                    if source.scenes[scId].time:
-                        self.scenes[scId].time = source.scenes[scId].time
-
-                    else:
-                        self.scenes[scId].time = '00:00:00'
-
-                elif self.scenes[scId].startDate is not None:
-
-                    # Restore two-figure year.
-
-                    self.scenes[scId].date = self.scenes[scId].startDate
-                    self.scenes[scId].time = self.scenes[scId].startTime
-
-                elif source.scenes[scId].date is None:
-
-                    # calculate date/time from day/hour/minute.
-
-                    try:
-                        sceneDay = int(source.scenes[scId].day)
-
-                    except:
-                        continue
-
-                    try:
-                        sceneHour = source.scenes[scId].hour
-
-                    except:
-                        continue
-
-                    try:
-                        sceneMinute = source.scenes[scId].minute
-
-                    except:
-                        continue
-
-                    self.scenes[scId].time = sceneHour.zfill(2) + ':' + sceneMinute.zfill(2) + ':00'
-                    sceneDelta = timedelta(days=sceneDay)
-                    defaultDate = self.defaultDateTime.split(' ')[0]
-                    self.scenes[scId].date = (date.fromisoformat(defaultDate) + sceneDelta).isoformat()
-
-                if source.scenes[scId].lastsMinutes is not None:
-                    self.scenes[scId].lastsMinutes = source.scenes[scId].lastsMinutes
-
-                if source.scenes[scId].lastsHours is not None:
-                    self.scenes[scId].lastsHours = source.scenes[scId].lastsHours
-
-                if source.scenes[scId].lastsDays is not None:
-                    self.scenes[scId].lastsDays = source.scenes[scId].lastsDays
-
+                self.scenes[scId].merge_date_time(source.scenes[scId])
                 self.scenes[scId].isNotesScene = source.scenes[scId].isNotesScene
                 self.scenes[scId].isUnused = source.scenes[scId].isUnused
                 self.scenes[scId].isTodoScene = source.scenes[scId].isTodoScene
@@ -676,7 +627,7 @@ class TlFile(Novel):
         return 'SUCCESS: "' + os.path.normpath(self.filePath) + '" written.'
 
     def convert_to_yw(self, text):
-        """Return text, converted from source format to yw7 markup.
+        """Return text, converted from source format to ywProject markup.
         """
         if text is not None:
 
@@ -689,7 +640,7 @@ class TlFile(Novel):
         return text
 
     def convert_from_yw(self, text):
-        """Return text, converted from yw7 markup to target format.
+        """Return text, converted from ywProject markup to target format.
         """
         if text is not None:
 

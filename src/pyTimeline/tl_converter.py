@@ -38,6 +38,7 @@ class TlConverter(YwCnvUi):
             targetFile = Yw7File(fileName + Yw7File.EXTENSION, **kwargs)
 
             if targetFile.file_exists():
+                sourceFile.ywProject = targetFile
                 targetFile.back_up(singleBackup)
                 self.import_to_yw(sourceFile, targetFile)
 

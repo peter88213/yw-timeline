@@ -5,6 +5,7 @@ For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
 import xml.etree.ElementTree as ET
+from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from pywriter.model.scene import Scene
@@ -21,16 +22,23 @@ class SceneEvent(Scene):
         """
         Scene.__init__(self)
         self.contId = None
-        self.startDate = None
-        self.startTime = None
+        self.startDateTime = None
         self.endDateTime = None
 
-    def set_date_time(self, startDateTime, endDateTime):
+    def set_date_time(self, startDateTime, endDateTime, isUnspecific):
         """Set date/time and, if applicable, duration.
         Because yWriter can not process two-figure years, 
         they are saved for Timeline use and replaced with 
         a 'default negative date' for yWriter use.
         """
+
+        # Save instance variables for Timeline use.
+
+        self.startDateTime = startDateTime
+        self.endDateTime = endDateTime
+
+        # Save instance variables for yWriter use.
+
         dtIsValid = True
         # The date/time combination is within the range yWriter can process.
 
@@ -52,8 +60,6 @@ class SceneEvent(Scene):
 
             self.date = '-0001-01-01'
             self.time = '00:00:00'
-            self.startDate = dt[0]
-            self.startTime = dt[1]
             dtIsValid = False
             # Two-figure year.
 
@@ -74,94 +80,119 @@ class SceneEvent(Scene):
             self.lastsHours = str(lastsHours)
             self.lastsMinutes = str(lastsMinutes)
 
-        else:
-
-            # Save scene end date/time for Timeline use.
-
-            self.endDateTime = endDateTime
-
-    def get_startDateTime(self, defaultDateTime):
-        """Return the event's start date/time stamp for Timeline use.
+    def merge_date_time(self, source):
+        """Get date/time related variables from a yWriter-generated source scene.
         """
 
-        if self.date is not None:
-            startDateTime = self.date + ' '
+        #--- Set start date/time.
 
-            if not self.time:
-                startDateTime += '00:00:00'
+        if source.date is not None and source.date != '0001-01-01':
+
+            # The date is not "BC", so synchronize it.
+
+            if source.time:
+                self.startDateTime = source.date + ' ' + source.time
 
             else:
-                startDateTime += self.time
+                self.startDateTime = source.date + ' 00:00:00'
+
+        elif source.date is None:
+
+            # calculate startDate/startTime from day/hour/minute.
+
+            if source.day:
+                dayInt = int(source.day)
+
+            else:
+                dayInt = 0
+
+            if source.hour:
+                hourStr = source.hour
+
+            else:
+                hourStr = '00'
+
+            if source.minute:
+                minuteStr = source.minute
+
+            else:
+                minuteStr = '00'
+
+            startTime = hourStr.zfill(2) + ':' + minuteStr.zfill(2) + ':00'
+            sceneDelta = timedelta(days=dayInt)
+            defaultDate = self.defaultDateTime.split(' ')[0]
+            startDate = (date.fromisoformat(defaultDate) + sceneDelta).isoformat()
+            self.startDateTime = startDate + ' ' + startTime
+
+        elif self.startDateTime is None:
+            self.startDateTime = self.defaultDateTime
 
         else:
-            startDateTime = defaultDateTime
 
-        return startDateTime
+            # The date is "BC", so do not synchronize.
 
-    def get_endDateTime(self, startDateTime):
-        """Return the event's end date/time stamp for Timeline use,
-        calculated from the scene duration.
-        """
+            pass
 
-        if self.endDateTime is not None and self.endDateTime > startDateTime:
-            endDateTime = self.endDateTime
+        #--- Set end date/time.
 
-        elif self.lastsDays or self.lastsHours or self.lastsMinutes:
+        if source.date is not None and source.date == '0001-01-01':
 
-            if self.lastsDays:
-                lastsDays = int(self.lastsDays)
+            # The year is two-figure, so do not synchronize.
+
+            if self.endDateTime is None:
+                self.endDateTime = self.startDateTime
+
+        else:
+
+            # Calculate end date from source scene duration.
+
+            if source.lastsDays:
+                lastsDays = int(source.lastsDays)
 
             else:
                 lastsDays = 0
 
-            if self.lastsHours:
-                lastsSeconds = int(self.lastsHours) * 3600
+            if source.lastsHours:
+                lastsSeconds = int(source.lastsHours) * 3600
 
             else:
                 lastsSeconds = 0
 
-            if self.lastsMinutes:
-                lastsSeconds += int(self.lastsMinutes) * 60
+            if source.lastsMinutes:
+                lastsSeconds += int(source.lastsMinutes) * 60
 
             sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
-            sceneStart = datetime.fromisoformat(startDateTime)
+            sceneStart = datetime.fromisoformat(self.startDateTime)
             sceneEnd = sceneStart + sceneDuration
-            endDateTime = sceneEnd.isoformat(' ')
+            self.endDateTime = sceneEnd.isoformat(' ')
 
-            if startDateTime > endDateTime:
-                endDateTime = startDateTime
+        # Tribute to defensive programming.
 
-        else:
-            endDateTime = startDateTime
-
-        return endDateTime
+        if self.startDateTime > self.endDateTime:
+            self.endDateTime = self.startDateTime
 
     def build_subtree(self, xmlEvent, scId, dtMin, dtMax):
         scIndex = 0
 
-        startDateTime = self.get_startDateTime(self.defaultDateTime)
-
         try:
-            xmlEvent.find('start').text = startDateTime
+            xmlEvent.find('start').text = self.startDateTime
 
         except(AttributeError):
-            ET.SubElement(xmlEvent, 'start').text = startDateTime
+            ET.SubElement(xmlEvent, 'start').text = self.startDateTime
 
-        if (not dtMin) or (startDateTime < dtMin):
-            dtMin = startDateTime
+        if (not dtMin) or (self.startDateTime < dtMin):
+            dtMin = self.startDateTime
 
         scIndex += 1
 
-        endDateTime = self.get_endDateTime(startDateTime)
-
         try:
-            xmlEvent.find('end').text = endDateTime
+            xmlEvent.find('end').text = self.endDateTime
 
         except(AttributeError):
-            ET.SubElement(xmlEvent, 'end').text = endDateTime
+            ET.SubElement(xmlEvent, 'end').text = self.endDateTime
 
-        if (not dtMax) or (endDateTime > dtMax):
-            dtMax = endDateTime
+        if (not dtMax) or (self.endDateTime > dtMax):
+            dtMax = self.endDateTime
 
         scIndex += 1
 
