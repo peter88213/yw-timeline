@@ -19,36 +19,36 @@ INI_FILE = 'yw-timeline.ini'
 
 YW_CONTEXT_MENU = '''Windows Registry Editor Version 5.00
 
-[HKEY_CURRENT_USER\Software\Classes\\yWriter7\\shell\\Export to Timeline]
+[HKEY_CURRENT_USER\SOFTWARE\Classes\\yWriter7\\shell\\Export to Timeline]
 
-[HKEY_CURRENT_USER\Software\Classes\\yWriter7\\shell\\Export to Timeline\\command]
+[HKEY_CURRENT_USER\SOFTWARE\Classes\\yWriter7\\shell\\Export to Timeline\\command]
 @="\\"${PYTHON}\\" \\"${SCRIPT}\\" \\"%1\\""
 
 [HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.timeline]
-@="Timeline"
+@="TimelineProject"
 
-[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\Timeline]
+[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
 @="Timeline Project"
 
-[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\Timeline\\DefaultIcon]
+[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject\\DefaultIcon]
 @="C:\\\\Program Files (x86)\\\\Timeline\\\\timeline.exe,0"
 
-[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\Timeline\\shell\\open]
+[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject\\shell\\open]
 
-[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\Timeline\\shell\\open\\command]
+[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject\\shell\\open\\command]
 @="\\"C:\\\\Program Files (x86)\\\\Timeline\\\\timeline.exe\\" \\"%1\\""
 
-[HKEY_CURRENT_USER\Software\Classes\\timeline_auto_file\\shell\\Export to yWriter]
+[HKEY_CURRENT_USER\SOFTWARE\Classes\\TimelineProject\\shell\\Export to yWriter]
 
-[HKEY_CURRENT_USER\Software\Classes\\timeline_auto_file\\shell\\Export to yWriter\\command]
+[HKEY_CURRENT_USER\SOFTWARE\Classes\\TimelineProject\\shell\\Export to yWriter\\command]
 @="\\"${PYTHON}\\" \\"${SCRIPT}\\" \\"%1\\""
 '''
 
 RESET_CONTEXT_MENU = '''Windows Registry Editor Version 5.00
 
-[-HKEY_CURRENT_USER\\Software\\Classes\\yWriter7\\shell\Export to Timeline]
-[-HKEY_CURRENT_USER\\Software\\Classes\\.timeline]
-[-HKEY_CURRENT_USER\\Software\\Classes\\Timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\yWriter7\\shell\Export to Timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
 '''
 
 
