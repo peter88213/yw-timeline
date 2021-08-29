@@ -37,7 +37,7 @@ OPTIONS = dict(
 )
 
 
-def run(sourcePath, silentMode=True):
+def run(sourcePath, silentMode=True, installDir=''):
 
     if silentMode:
         ui = Ui('')
@@ -55,7 +55,6 @@ def run(sourcePath, silentMode=True):
     else:
         sourceDir += '/'
 
-    installDir = os.getenv('APPDATA').replace('\\', '/') + '/pyWriter/' + APPNAME + '/config/'
     iniFileName = APPNAME + '.ini'
     iniFiles = [installDir + iniFileName, sourceDir + iniFileName]
 
@@ -87,5 +86,5 @@ if __name__ == '__main__':
                         help='suppress error messages and the request to confirm overwriting')
 
     args = parser.parse_args()
-
-    run(args.sourcePath, args.silent)
+    installDir = os.getenv('APPDATA').replace('\\', '/') + '/pyWriter/' + APPNAME + '/config/'
+    run(args.sourcePath, args.silent, installDir)
