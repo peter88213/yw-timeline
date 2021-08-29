@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.16.1 Bugfix release
+
+- Fix a bug causing an exception when a new item is added to a scene.
+
+Based on PyWriter v3.18.1
+
 ### v0.16.0 Beta - Feature complete
 
 Synchronize unspecific date/time in yWriter with specific date/time in Timeline.
