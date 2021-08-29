@@ -8,7 +8,7 @@ Published under the MIT License (https://opensource.org/licenses/mit-license.php
 from shutil import copyfile
 import os
 import unittest
-import _yw_timeline
+import yw_timeline_
 
 
 # Test environment
@@ -93,14 +93,14 @@ class NormalOperation(unittest.TestCase):
     def test_tl_to_new_yw(self):
         copyfile(NORMAL_TL, TEST_TL)
         os.chdir(TEST_EXEC_PATH)
-        _yw_timeline.run(TEST_TL, silentMode=True)
+        yw_timeline_.run(TEST_TL, silentMode=True)
         self.assertEqual(read_file(TEST_YW7), read_file(NORMAL_YW7))
 
     def test_modified_yw_to_tl(self):
         copyfile(NORMAL_TL, TEST_TL)
         copyfile(MODIFIED_YW7, TEST_YW7)
         os.chdir(TEST_EXEC_PATH)
-        _yw_timeline.run(TEST_YW7, silentMode=True)
+        yw_timeline_.run(TEST_YW7, silentMode=True)
         self.assertEqual(read_file(TEST_TL), read_file(MODIFIED_TL))
         self.assertEqual(read_file(BACKUP_TL), read_file(NORMAL_TL))
 
@@ -108,14 +108,14 @@ class NormalOperation(unittest.TestCase):
         copyfile(MODIFIED2_TL, TEST_TL)
         copyfile(MODIFIED_YW7, TEST_YW7)
         os.chdir(TEST_EXEC_PATH)
-        _yw_timeline.run(TEST_TL, silentMode=True)
+        yw_timeline_.run(TEST_TL, silentMode=True)
         self.assertEqual(read_file(TEST_YW7), read_file(MODIFIED2_YW7))
         self.assertEqual(read_file(BACKUP_YW7), read_file(MODIFIED_YW7))
 
     def test_modified_yw_to_new_tl(self):
         copyfile(MODIFIED_YW7, TEST_YW7)
         os.chdir(TEST_EXEC_PATH)
-        _yw_timeline.run(TEST_YW7, silentMode=True)
+        yw_timeline_.run(TEST_YW7, silentMode=True)
         self.assertEqual(read_file(TEST_TL), read_file(NEW_TL))
 
     def tearDown(self):
