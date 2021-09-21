@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.18.0 Update for Timeline 2.5
+
+- Adapt the Timeline XML file structure. Downward compatible with Timeline 2.4.
+
+Based on PyWriter v3.24.3
+
 ### v0.16.1 Bugfix release
 
 - Fix a bug causing an exception when a new item is added to a scene.

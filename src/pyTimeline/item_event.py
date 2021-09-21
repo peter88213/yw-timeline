@@ -68,6 +68,12 @@ class ItemEvent(WorldElement):
 
         scIndex += 1
 
+        if xmlEvent.find('fuzzy_start') is not None:
+            scIndex += 1
+
+        if xmlEvent.find('fuzzy_end') is not None:
+            scIndex += 1
+
         if xmlEvent.find('locked') is None:
             ET.SubElement(xmlEvent, 'locked').text = 'False'
 
