@@ -24,18 +24,23 @@ TEST_EXEC_PATH = TEST_PATH + '/yw7/'
 NORMAL_YW7 = TEST_DATA_PATH + 'normal.yw7'
 NORMAL_TL = TEST_DATA_PATH + 'normal.timeline'
 OUTLINE_TL = TEST_DATA_PATH + 'outline.timeline'
+REWRITTEN_TL = TEST_DATA_PATH + 'rewritten.timeline'
 MODIFIED_YW7 = TEST_DATA_PATH + 'modified.yw7'
 MODIFIED2_YW7 = TEST_DATA_PATH + 'modified2.yw7'
 MODIFIED_TL = TEST_DATA_PATH + 'modified.timeline'
 MODIFIED2_TL = TEST_DATA_PATH + 'modified2.timeline'
 NEW_TL = TEST_DATA_PATH + 'new.timeline'
-INI_FILE = 'yw-timeline.ini'
+DATE_TIME_TO_DHM_INI = TEST_DATA_PATH + 'dateTimeToDhm.ini'
+DATE_TIME_TO_DHM_YW7 = TEST_DATA_PATH + 'dateTimeToDhm.yw7'
+DHM_TO_DATE_TIME_INI = TEST_DATA_PATH + 'dhmToDateTime.ini'
+DHM_TO_DATE_TIME_YW7 = TEST_DATA_PATH + 'dhmToDateTime.yw7'
 
 # Test data
 TEST_YW7 = TEST_EXEC_PATH + 'yw7 Sample Project.yw7'
 TEST_TL = TEST_EXEC_PATH + 'yw7 Sample Project.timeline'
 BACKUP_TL = TEST_TL + '.bak'
 BACKUP_YW7 = TEST_YW7 + '.bak'
+INI_FILE = 'yw-timeline.ini'
 
 
 def read_file(inputFile):
@@ -96,7 +101,7 @@ class NormalOperation(unittest.TestCase):
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_TL, silentMode=True)
         self.assertEqual(read_file(TEST_YW7), read_file(NORMAL_YW7))
-        self.assertEqual(read_file(TEST_TL), read_file(NORMAL_TL))
+        self.assertEqual(read_file(TEST_TL), read_file(REWRITTEN_TL))
 
     def test_modified_yw_to_tl(self):
         copyfile(NORMAL_TL, TEST_TL)
@@ -119,6 +124,22 @@ class NormalOperation(unittest.TestCase):
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_YW7, silentMode=True)
         self.assertEqual(read_file(TEST_TL), read_file(NEW_TL))
+
+    def test_dateTimeToDhm(self):
+        copyfile(NORMAL_YW7, TEST_YW7)
+        copyfile(DATE_TIME_TO_DHM_INI, TEST_EXEC_PATH + INI_FILE)
+        os.chdir(TEST_EXEC_PATH)
+        yw_timeline_.run(TEST_YW7, silentMode=True)
+        yw_timeline_.run(TEST_TL, silentMode=True)
+        self.assertEqual(read_file(TEST_YW7), read_file(DATE_TIME_TO_DHM_YW7))
+
+    def test_dhmToDateTime(self):
+        copyfile(DATE_TIME_TO_DHM_YW7, TEST_YW7)
+        copyfile(DHM_TO_DATE_TIME_INI, TEST_EXEC_PATH + INI_FILE)
+        os.chdir(TEST_EXEC_PATH)
+        yw_timeline_.run(TEST_YW7, silentMode=True)
+        yw_timeline_.run(TEST_TL, silentMode=True)
+        self.assertEqual(read_file(TEST_YW7), read_file(DHM_TO_DATE_TIME_YW7))
 
     def tearDown(self):
         remove_all_testfiles()

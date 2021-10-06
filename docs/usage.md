@@ -94,7 +94,7 @@ dhm_to_datetime = No
 #      Use the date from default_date_time as a reference.
 #      Time is 'H':'M'.
 # Precondition:
-#      ignore_items = No AND datetime_to_dhm = No
+#      datetime_to_dhm = No
 
 datetime_to_dhm = No
 
@@ -103,7 +103,7 @@ datetime_to_dhm = No
 #      default_date_time as a reference. H, M are taken from
 #      the scene time.
 # Precondition:
-#      ignore_items = No AND dhm_to_datetime = No
+#      dhm_to_datetime = No
 
 single_backup = Yes
 

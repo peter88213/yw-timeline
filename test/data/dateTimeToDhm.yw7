@@ -15,11 +15,12 @@
       <WordCount>0</WordCount>
       <LetterCount>0</LetterCount>
       <Status>1</Status>
-      <SpecificDateTime>2016-12-26 14:11:16</SpecificDateTime>
-      <SpecificDateMode>-1</SpecificDateMode>
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
       <LastsMinutes>0</LastsMinutes>
+      <Day>-1673</Day>
+      <Hour>14</Hour>
+      <Minute>11</Minute>
     </SCENE>
     <SCENE>
       <ID>2</ID>
@@ -30,11 +31,12 @@
       <WordCount>0</WordCount>
       <LetterCount>0</LetterCount>
       <Status>1</Status>
-      <SpecificDateTime>0166-05-12 09:33:00</SpecificDateTime>
-      <SpecificDateMode>-1</SpecificDateMode>
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
       <LastsMinutes>0</LastsMinutes>
+      <Day>-677600</Day>
+      <Hour>09</Hour>
+      <Minute>33</Minute>
     </SCENE>
     <SCENE>
       <ID>3</ID>
@@ -45,8 +47,12 @@
       <WordCount>0</WordCount>
       <LetterCount>0</LetterCount>
       <Status>1</Status>
-      <SpecificDateTime>0001-01-01 00:00:00</SpecificDateTime>
-      <SpecificDateMode>-1</SpecificDateMode>
+      <Day>0</Day>
+      <Hour>00</Hour>
+      <Minute>00</Minute>
+      <LastsDays>0</LastsDays>
+      <LastsHours>0</LastsHours>
+      <LastsMinutes>0</LastsMinutes>
     </SCENE>
     <SCENE>
       <ID>4</ID>
@@ -56,8 +62,12 @@
       <WordCount>0</WordCount>
       <LetterCount>0</LetterCount>
       <Status>1</Status>
-      <SpecificDateTime>0001-01-01 00:00:00</SpecificDateTime>
-      <SpecificDateMode>-1</SpecificDateMode>
+      <Day>0</Day>
+      <Hour>00</Hour>
+      <Minute>00</Minute>
+      <LastsDays>0</LastsDays>
+      <LastsHours>0</LastsHours>
+      <LastsMinutes>0</LastsMinutes>
     </SCENE>
     <SCENE>
       <ID>5</ID>
@@ -67,8 +77,12 @@
       <WordCount>0</WordCount>
       <LetterCount>0</LetterCount>
       <Status>1</Status>
-      <SpecificDateTime>0001-01-01 00:00:00</SpecificDateTime>
-      <SpecificDateMode>-1</SpecificDateMode>
+      <Day>0</Day>
+      <Hour>00</Hour>
+      <Minute>00</Minute>
+      <LastsDays>0</LastsDays>
+      <LastsHours>0</LastsHours>
+      <LastsMinutes>0</LastsMinutes>
     </SCENE>
   </SCENES>
   <CHAPTERS>

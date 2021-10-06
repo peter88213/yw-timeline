@@ -133,7 +133,7 @@
       <Desc><![CDATA[Das ist die <dritte> Szene.]]></Desc>
       <BelongsToChID>1</BelongsToChID>
       <SpecificDateMode>-1</SpecificDateMode>
-      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <SpecificDateTime>0001-01-01 00:00:00</SpecificDateTime>
       <Field1>1</Field1>
       <Field2>1</Field2>
       <Field3>1</Field3>
@@ -154,7 +154,7 @@
       <Title><![CDATA[Die vierte Szene]]></Title>
       <BelongsToChID>1</BelongsToChID>
       <SpecificDateMode>-1</SpecificDateMode>
-      <SpecificDateTime>-0001-01-01 00:00:00</SpecificDateTime>
+      <SpecificDateTime>0001-01-01 00:00:00</SpecificDateTime>
       <Field1>1</Field1>
       <Field2>1</Field2>
       <Field3>1</Field3>

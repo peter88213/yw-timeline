@@ -39,7 +39,7 @@
       <fuzzy>False</fuzzy>
       <locked>False</locked>
       <ends_today>False</ends_today>
-      <labels>Scene</labels>
+      <labels>ScID:4</labels>
       <default_color>170,240,160</default_color>
     </event>
     <event>
@@ -85,7 +85,7 @@
       <fuzzy>False</fuzzy>
       <locked>False</locked>
       <ends_today>False</ends_today>
-      <labels>Scene</labels>
+      <labels>ScID:1</labels>
       <default_color>170,240,160</default_color>
     </event>
     <event>

@@ -73,12 +73,10 @@ class TlFile(Novel):
 
         if self.ywProject is None:
             isOutline = True
-            doRewrite = True
 
         else:
             self.ywProject.read()
             isOutline = False
-            doRewrite = False
 
         try:
             self.tree = ET.parse(self.filePath)
@@ -98,8 +96,8 @@ class TlFile(Novel):
                 labels = event.find('labels').text
                 sceneMatch = re.search('ScID\:([0-9]+)', labels)
 
-                if self.sceneMarker in labels:
-                    sceneMarker = self.sceneMarker
+                if isOutline and sceneMatch is None:
+                    sceneMatch = re.search(self.sceneMarker, labels)
 
             if sceneMatch is None:
                 continue
@@ -183,9 +181,7 @@ class TlFile(Novel):
                 for scId in scList:
                     self.chapters[chId].srtScenes.append(scId)
 
-        if doRewrite:
-
-            # Rewrite the timeline with item/scene IDs inserted.
+            # Rewrite the timeline with scene IDs inserted.
 
             try:
                 self.tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
@@ -348,7 +344,7 @@ class TlFile(Novel):
             trash = []
             scIds = []
 
-            # Update events that are assigned to scenes or items.
+            # Update events that are assigned to scenes.
 
             for event in events.iter('event'):
 
