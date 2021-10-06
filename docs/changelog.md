@@ -8,6 +8,14 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.20.0 Beta release
+
+- Abandon "item" processing to make the configuration clearer and the code more maintainable.
+- Change the default value for invalid date from "-0001-01-01" to
+"0001-01-01" in order to avoid isoformat errors.
+
+Based on PyWriter v3.24.3
+
 ### v0.18.0 Update for Timeline 2.5
 
 - Adapt the Timeline XML file structure. Downward compatible with Timeline 2.4.
