@@ -69,6 +69,8 @@ class TlFile(Novel):
 
             return text
 
+        #--- Parse the Timeline file.
+
         if self.ywProject is None:
             isOutline = True
             doRewrite = True
@@ -89,38 +91,31 @@ class TlFile(Novel):
         scIdsByDate = {}
 
         for event in root.iter('event'):
-            isScene = False
             scId = None
             sceneMatch = None
-            labels = ''
 
             if event.find('labels') is not None:
                 labels = event.find('labels').text
                 sceneMatch = re.search('ScID\:([0-9]+)', labels)
 
-            if sceneMatch is not None:
-                isScene = True
-                sceneCount += 1
-                sceneMarker = sceneMatch.group()
-
-            else:
-                continue
-
-            if isOutline:
-
                 if self.sceneMarker in labels:
                     sceneMarker = self.sceneMarker
-                    isScene = True
-                    sceneCount += 1
 
-                if isScene:
-                    scId = str(sceneCount)
-                    event.find('labels').text = labels.replace(sceneMarker, 'ScID:' + scId)
-                    self.scenes[scId] = SceneEvent()
-                    self.scenes[scId].status = 1
-                    # Set scene status = "Outline".
+            if sceneMatch is None:
+                continue
 
-            elif isScene:
+            # The event is labeled as a scene.
+
+            if isOutline:
+                sceneCount += 1
+                sceneMarker = sceneMatch.group()
+                scId = str(sceneCount)
+                event.find('labels').text = labels.replace(sceneMarker, 'ScID:' + scId)
+                self.scenes[scId] = SceneEvent()
+                self.scenes[scId].status = 1
+                # Set scene status = "Outline".
+
+            else:
 
                 try:
                     scId = sceneMatch.group(1)
@@ -129,48 +124,46 @@ class TlFile(Novel):
                 except:
                     continue
 
-            if isScene:
+            try:
+                title = event.find('text').text
+                title = remove_contId(self.scenes[scId], title)
+                title = self.convert_to_yw(title)
+                self.scenes[scId].title = title
 
-                try:
-                    title = event.find('text').text
-                    title = remove_contId(self.scenes[scId], title)
-                    title = self.convert_to_yw(title)
-                    self.scenes[scId].title = title
+            except:
+                self.scenes[scId].title = 'Scene ' + scId
 
-                except:
-                    self.scenes[scId].title = 'Scene ' + scId
+            try:
+                self.scenes[scId].desc = event.find('description').text
 
-                try:
-                    self.scenes[scId].desc = event.find('description').text
+            except:
+                pass
 
-                except:
-                    pass
+            #--- Set date/time/duration.
 
-                #--- Set date/time/duration.
+            startDateTime = fix_iso_dt(event.find('start').text)
+            endDateTime = fix_iso_dt(event.find('end').text)
 
-                startDateTime = fix_iso_dt(event.find('start').text)
-                endDateTime = fix_iso_dt(event.find('end').text)
+            # Consider unspecific date/time in the target file.
 
-                # Consider unspecific date/time in the target file.
+            if self.dateTimeToDhm and not self.dhmToDateTime:
+                isUnspecific = True
 
-                if self.dateTimeToDhm and not self.dhmToDateTime:
-                    isUnspecific = True
+            elif self.dhmToDateTime and not self.dateTimeToDhm:
+                isUnspecific = False
 
-                elif self.dhmToDateTime and not self.dateTimeToDhm:
-                    isUnspecific = False
+            elif not isOutline and self.ywProject.scenes[scId].date is None:
+                isUnspecific = True
 
-                elif not isOutline and self.ywProject.scenes[scId].date is None:
-                    isUnspecific = True
+            else:
+                isUnspecific = False
 
-                else:
-                    isUnspecific = False
+            self.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
 
-                self.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
+            if not startDateTime in scIdsByDate:
+                scIdsByDate[startDateTime] = []
 
-                if not startDateTime in scIdsByDate:
-                    scIdsByDate[startDateTime] = []
-
-                scIdsByDate[startDateTime].append(scId)
+            scIdsByDate[startDateTime].append(scId)
 
         # Sort scenes by date/time
 

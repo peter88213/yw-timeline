@@ -65,11 +65,6 @@ scene_label = Scene
 # Events with this label become scenes in a newly created 
 # yWriter project. 
 
-item_category = Item
-
-# Events assigned to this category become items in the
-# Writer project.
-
 default_date_time = 2021-07-26 00:00:00
 
 # Date/time stamp for imported yWriter scenes without
@@ -81,16 +76,7 @@ scene_color = 170,240,160
 
 # Color for events imported as scenes from yWriter.
 
-item_color = 160,230,250
-
-# Color for events that are assigned to the "item" category.
-
 [OPTIONS]
-
-ignore_items = No
-
-# No:  Synchronize items with yWriter.
-# Yes: Do not synchronize items with yWriter.
 
 ignore_unspecific = No
 
@@ -145,13 +131,6 @@ Just delete your global and local configuration files.
 
 ### On the yWriter side
 
-#### Items
-- Each item is synchronized with Timeline. Items appear in Timeline as events of the "Item" category. 
-- You can add and remove "Item" events in yWriter. 
-- Changes to the item short name affect the event text during synchronization.
-- Changes to the item description affect the event description during synchronization.
-
-#### Scenes
 - Only normal scenes are synchronized with Timeline, or exported to Timeline. Unused scenes, "Notes" scenes, and "Todo" scenes will not show up in the timeline.
 - Optionally, scenes with an unspecific time stamp (day, hours, minutes) are not transferred to the timeline.
 - Changes to the scene date/time affect the event start date/time during synchronization.
@@ -163,15 +142,6 @@ Just delete your global and local configuration files.
 
 ### On the Timeline side
 
-#### Items
-- Each event of the "Item" category is synchronized with yWriter. Such events appear in yWriter as items. Although the date/time stamps of these special events are not visible in yWriter, they determine the order in yWriter's item list.
-- An item ID is a string looking like "ItemID:1". It is auto-generated and must not be changed manually.
-- An "Item category" event can not be a "Scene" event at the same time. When creating a new yWriter project from a timeline, the "Item" category has priority over the "Scene" label.
-- You can add and remove "Item" events in Timeline. 
-- Changes to the event text affect the item short name during synchronization.
-- Changes to the event description affect the item description during synchronization.
-
-#### Scenes
 - A scene ID is a string looking like "ScID:1". It is auto-generated and must not be changed manually.
 - Only events with a label containing the string "Scene" (user input) or a scene ID (auto-generated) are exported as scenes to a new yWriter project.
 - When generating a new yWriter project from a timeline the first time, "Scene" labels are replaced with scene ID labels.

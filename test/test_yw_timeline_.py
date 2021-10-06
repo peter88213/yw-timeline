@@ -23,6 +23,7 @@ TEST_EXEC_PATH = TEST_PATH + '/yw7/'
 # To be placed in TEST_DATA_PATH:
 NORMAL_YW7 = TEST_DATA_PATH + 'normal.yw7'
 NORMAL_TL = TEST_DATA_PATH + 'normal.timeline'
+OUTLINE_TL = TEST_DATA_PATH + 'outline.timeline'
 MODIFIED_YW7 = TEST_DATA_PATH + 'modified.yw7'
 MODIFIED2_YW7 = TEST_DATA_PATH + 'modified2.yw7'
 MODIFIED_TL = TEST_DATA_PATH + 'modified.timeline'
@@ -91,10 +92,11 @@ class NormalOperation(unittest.TestCase):
         copyfile(TEST_DATA_PATH + INI_FILE, TEST_EXEC_PATH + INI_FILE)
 
     def test_tl_to_new_yw(self):
-        copyfile(NORMAL_TL, TEST_TL)
+        copyfile(OUTLINE_TL, TEST_TL)
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_TL, silentMode=True)
         self.assertEqual(read_file(TEST_YW7), read_file(NORMAL_YW7))
+        self.assertEqual(read_file(TEST_TL), read_file(NORMAL_TL))
 
     def test_modified_yw_to_tl(self):
         copyfile(NORMAL_TL, TEST_TL)
