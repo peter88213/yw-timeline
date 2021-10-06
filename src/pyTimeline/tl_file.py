@@ -15,7 +15,6 @@ from pywriter.model.chapter import Chapter
 from pywriter.yw.xml_indent import indent
 
 from pyTimeline.scene_event import SceneEvent
-from pyTimeline.item_event import ItemEvent
 from pyTimeline.dt_helper import fix_iso_dt
 
 
@@ -33,23 +32,17 @@ class TlFile(Novel):
 
     def __init__(self, filePath, **kwargs):
         """Extend the superclass constructor, initializing instance variables
-        and SceneEvent/ItemEvent class variables.
+        and SceneEvent class variables.
         """
         Novel.__init__(self, filePath, **kwargs)
         self.tree = None
 
         self.sceneMarker = kwargs['scene_label']
-        self.itemMarker = kwargs['item_category']
         self.defaultDateTime = kwargs['default_date_time']
         self.sceneColor = kwargs['scene_color']
-        self.itemColor = kwargs['item_color']
-        self.ignoreItems = kwargs['ignore_items']
         self.ignoreUnspecific = kwargs['ignore_unspecific']
         self.dateTimeToDhm = kwargs['datetime_to_dhm']
         self.dhmToDateTime = kwargs['dhm_to_datetime']
-
-        ItemEvent.defaultDateTime = kwargs['default_date_time']
-        ItemEvent.itemMarker = kwargs['item_category']
 
         SceneEvent.defaultDateTime = kwargs['default_date_time']
         SceneEvent.sceneColor = kwargs['scene_color']
@@ -92,65 +85,20 @@ class TlFile(Novel):
             return 'ERROR: Can not process "' + os.path.normpath(self.filePath) + '".'
 
         root = self.tree.getroot()
-
-        # Find all itemIDs.
-
-        existingItemIds = []
-
-        for event in root.iter('event'):
-
-            try:
-                category = event.find('category').text
-
-                if self.itemMarker in category:
-                    labels = event.find('labels').text
-                    itemId = re.search('ItemID\:([0-9]+)', labels).group(1)
-                    existingItemIds.append(itemId)
-
-            except:
-                pass
-
         sceneCount = 0
-        itemCount = 0
         scIdsByDate = {}
-        itIdsByDate = {}
 
         for event in root.iter('event'):
             isScene = False
-            isItem = False
             scId = None
             sceneMatch = None
-            itemMatch = None
             labels = ''
 
             if event.find('labels') is not None:
                 labels = event.find('labels').text
-                itemMatch = re.search('ItemID\:([0-9]+)', labels)
                 sceneMatch = re.search('ScID\:([0-9]+)', labels)
 
-            if event.find('category') is not None:
-                category = event.find('category').text
-
-                if not self.ignoreItems and self.itemMarker in category:
-                    isItem = True
-                    itemCount += 1
-
-                    if sceneMatch is not None:
-                        labels = labels.replace(sceneMatch.group(), '')
-                        event.find('labels').text = labels
-                        doRewrite = True
-
-                elif sceneMatch is not None:
-                    isScene = True
-                    sceneCount += 1
-                    sceneMarker = sceneMatch.group()
-
-            elif not self.ignoreItems and itemMatch is not None:
-                labels = labels.replace(itemMatch.group(), '')
-                event.find('labels').text = labels
-                doRewrite = True
-
-            elif sceneMatch is not None:
+            if sceneMatch is not None:
                 isScene = True
                 sceneCount += 1
                 sceneMarker = sceneMatch.group()
@@ -164,18 +112,6 @@ class TlFile(Novel):
                     sceneMarker = self.sceneMarker
                     isScene = True
                     sceneCount += 1
-
-                elif isItem:
-                    itId = str(itemCount)
-                    self.items[itId] = ItemEvent()
-
-                    if event.find('labels') is None:
-                        label = ET.Element('labels')
-                        label.text = 'ItemID:' + itId
-                        event.insert(9, label)
-
-                    else:
-                        event.find('labels').text = 'ItemID:' + itId
 
                 if isScene:
                     scId = str(sceneCount)
@@ -193,58 +129,7 @@ class TlFile(Novel):
                 except:
                     continue
 
-            elif isItem:
-
-                try:
-                    itId = itemMatch.group(1)
-
-                except:
-                    i = itemCount
-
-                    while str(i) in existingItemIds:
-                        i += 1
-
-                    itId = str(i)
-                    existingItemIds.append(itId)
-
-                    if event.find('labels') is None:
-                        label = ET.Element('labels')
-                        label.text = 'ItemID:' + itId
-                        event.insert(9, label)
-
-                    doRewrite = True
-
-                self.items[itId] = ItemEvent()
-
-            if isItem:
-
-                try:
-                    title = event.find('text').text
-                    title = remove_contId(self.items[itId], title)
-                    title = self.convert_to_yw(title)
-                    self.items[itId].title = title
-
-                except:
-                    self.items[itId].title = self.itemMarker + ' ' + itId
-
-                try:
-                    self.items[itId].desc = event.find('description').text
-
-                except:
-                    pass
-
-                try:
-                    startDateTime = fix_iso_dt(event.find('start').text)
-
-                    if not startDateTime in itIdsByDate:
-                        itIdsByDate[startDateTime] = []
-
-                    itIdsByDate[startDateTime].append(itId)
-
-                except:
-                    pass
-
-            elif isScene:
+            if isScene:
 
                 try:
                     title = event.find('text').text
@@ -286,15 +171,6 @@ class TlFile(Novel):
                     scIdsByDate[startDateTime] = []
 
                 scIdsByDate[startDateTime].append(scId)
-
-        # Sort items by date/time
-
-        srtItems = sorted(itIdsByDate.items())
-
-        for dt, itList in srtItems:
-
-            for itId in itList:
-                self.srtItems.append(itId)
 
         # Sort scenes by date/time
 
@@ -381,28 +257,6 @@ class TlFile(Novel):
 
             if not scId in source.scenes:
                 del self.scenes[scId]
-
-        for itId in source.srtItems:
-
-            if not itId in self.items:
-                self.items[itId] = ItemEvent()
-
-            if source.items[itId].title:
-                title = source.items[itId].title
-                title = self.convert_from_yw(title)
-                title = add_contId(self.items[itId], title)
-                self.items[itId].title = title
-
-            self.items[itId].desc = source.items[itId].desc
-
-        items = list(self.items)
-
-        for itId in items:
-
-            if not itId in source.items:
-                del self.items[itId]
-
-        self.srtItems = list(self.items)
 
         return 'SUCCESS'
 
@@ -500,7 +354,6 @@ class TlFile(Novel):
             events = root.find('events')
             trash = []
             scIds = []
-            itIds = []
 
             # Update events that are assigned to scenes or items.
 
@@ -508,23 +361,12 @@ class TlFile(Novel):
 
                 if event.find('labels') is not None:
                     labels = event.find('labels').text
-                    itemMatch = re.search('ItemID\:([0-9]+)', labels)
                     sceneMatch = re.search('ScID\:([0-9]+)', labels)
 
                 else:
                     continue
 
-                if not self.ignoreItems and itemMatch is not None:
-                    itId = itemMatch.group(1)
-
-                    if itId in self.items:
-                        itIds.append(itId)
-                        dtMin, dtMax = self.items[itId].build_subtree(event, itId, dtMin, dtMax)
-
-                    else:
-                        trash.append(event)
-
-                elif sceneMatch is not None:
+                if sceneMatch is not None:
                     scId = sceneMatch.group(1)
 
                     if scId in srtScenes:
@@ -542,39 +384,10 @@ class TlFile(Novel):
                     event = ET.SubElement(events, 'event')
                     dtMin, dtMax = self.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
 
-            if not self.ignoreItems:
-
-                for itId in self.items:
-
-                    if not itId in itIds:
-                        event = ET.SubElement(events, 'event')
-                        dtMin, dtMax = self.items[itId].build_subtree(event, itId, dtMin, dtMax)
-
             # Remove events that are assigned to missing scenes.
 
             for event in trash:
                 events.remove(event)
-
-            if not self.ignoreItems:
-
-                # Add "Item" category, if missing.
-
-                hasItemCategory = False
-                categories = root.find('categories')
-
-                for cat in categories.iter('category'):
-
-                    if self.itemMarker in cat.find('name').text:
-                        hasItemCategory = True
-                        break
-
-                if not hasItemCategory:
-                    item = ET.SubElement(categories, 'category')
-                    ET.SubElement(item, 'name').text = self.itemMarker
-                    ET.SubElement(item, 'color').text = self.itemColor
-                    ET.SubElement(item, 'progress_color').text = '255,153,153'
-                    ET.SubElement(item, 'done_color').text = '255,153,153'
-                    ET.SubElement(item, 'font_color').text = '0,0,0'
 
             # Set the view range.
 
@@ -592,26 +405,11 @@ class TlFile(Novel):
             ET.SubElement(root, 'version').text = '2.4.0 (3f207fbb63f0 2021-04-07)'
             ET.SubElement(root, 'timetype').text = 'gregoriantime'
             categories = ET.SubElement(root, 'categories')
-
-            if not self.ignoreItems:
-                item = ET.SubElement(categories, 'category')
-                ET.SubElement(item, 'name').text = self.itemMarker
-                ET.SubElement(item, 'color').text = self.itemColor
-                ET.SubElement(item, 'progress_color').text = '255,153,153'
-                ET.SubElement(item, 'done_color').text = '255,153,153'
-                ET.SubElement(item, 'font_color').text = '0,0,0'
-
             events = ET.SubElement(root, 'events')
 
             for scId in srtScenes:
                 event = ET.SubElement(events, 'event')
                 dtMin, dtMax = self.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
-
-            if not self.ignoreItems:
-
-                for itId in self.items:
-                    event = ET.SubElement(events, 'event')
-                    dtMin, dtMax = self.items[itId].build_subtree(event, itId, dtMin, dtMax)
 
             # Set the view range.
 

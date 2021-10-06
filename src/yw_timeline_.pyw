@@ -23,13 +23,10 @@ APPNAME = 'yw-timeline'
 
 SETTINGS = dict(
     scene_label='Scene',
-    item_category='Item',
     default_date_time='2021-07-26 00:00:00',
     scene_color='170,240,160',
-    item_color='160,230,250',
 )
 OPTIONS = dict(
-    ignore_items=False,
     ignore_unspecific=False,
     dhm_to_datetime=False,
     datetime_to_dhm=False,

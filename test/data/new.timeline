@@ -2,15 +2,7 @@
 <timeline>
   <version>2.4.0 (3f207fbb63f0 2021-04-07)</version>
   <timetype>gregoriantime</timetype>
-  <categories>
-    <category>
-      <name>Item</name>
-      <color>160,230,250</color>
-      <progress_color>255,153,153</progress_color>
-      <done_color>255,153,153</done_color>
-      <font_color>0,0,0</font_color>
-    </category>
-  </categories>
+  <categories />
   <events>
     <event>
       <start>2021-08-06 12:05:00</start>
@@ -80,32 +72,6 @@
       <description>And now, for something completely different.</description>
       <labels>ScID:6</labels>
       <default_color>170,240,160</default_color>
-    </event>
-    <event>
-      <start>2021-07-26 00:00:00</start>
-      <end>2021-07-26 00:00:00</end>
-      <text>Bird</text>
-      <progress>0</progress>
-      <fuzzy>False</fuzzy>
-      <locked>False</locked>
-      <ends_today>False</ends_today>
-      <category>Item</category>
-      <description>This bird is not dead.</description>
-      <labels>ItemID:1</labels>
-      <default_color>192,192,192</default_color>
-    </event>
-    <event>
-      <start>2021-07-26 00:00:00</start>
-      <end>2021-07-26 00:00:00</end>
-      <text>The ministry of silly walk</text>
-      <progress>0</progress>
-      <fuzzy>False</fuzzy>
-      <locked>False</locked>
-      <ends_today>False</ends_today>
-      <category>Item</category>
-      <description>The place to be.</description>
-      <labels>ItemID:2</labels>
-      <default_color>192,192,192</default_color>
     </event>
   </events>
   <view>

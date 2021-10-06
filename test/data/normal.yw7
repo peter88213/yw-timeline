@@ -4,14 +4,7 @@
     <Ver>7</Ver>
   </PROJECT>
   <LOCATIONS />
-  <ITEMS>
-    <ITEM>
-      <ID>1</ID>
-      <Title><![CDATA[Bird]]></Title>
-      <Desc><![CDATA[This bird is not dead.]]></Desc>
-      <SortOrder>1</SortOrder>
-    </ITEM>
-  </ITEMS>
+  <ITEMS />
   <CHARACTERS />
   <SCENES>
     <SCENE>

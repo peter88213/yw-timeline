@@ -98,7 +98,6 @@
       <ends_today>False</ends_today>
       <category>Item</category>
       <description>This bird is not dead.</description>
-      <labels>ItemID:1</labels>
       <default_color>192,192,192</default_color>
     </event>
     <event>
@@ -112,19 +111,6 @@
       <description>And now, for something completely different.</description>
       <labels>ScID:6</labels>
       <default_color>170,240,160</default_color>
-    </event>
-    <event>
-      <start>2021-07-26 00:00:00</start>
-      <end>2021-07-26 00:00:00</end>
-      <text>The ministry of silly walk</text>
-      <progress>0</progress>
-      <fuzzy>False</fuzzy>
-      <locked>False</locked>
-      <ends_today>False</ends_today>
-      <category>Item</category>
-      <description>The place to be.</description>
-      <labels>ItemID:2</labels>
-      <default_color>192,192,192</default_color>
     </event>
   </events>
   <view>

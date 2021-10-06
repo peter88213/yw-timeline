@@ -10,7 +10,7 @@ Synchronize yWriter with Timeline.
 
 The included installation script prompts you to create a shortcut on the desktop. 
 - If you drag a Timeline project onto it and drop it, either a new yWriter project is generated or an existing one is synchronized. 
-- If you drag a yWriter project and drop it on the icon, a new timeline will be generated or an existing one will be synchronized. 
+- If you drag a yWriter project and drop it on the icon, a new timeline is generated or an existing one is synchronized. 
 
 ### Command line usage
 
