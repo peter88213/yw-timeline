@@ -14,9 +14,6 @@ from pywriter.model.scene import Scene
 class SceneEvent(Scene):
     """Timeline scene event representation.
     """
-    NULL_DATE = '0001-01-01'
-    NULL_TIME = '00:00:00'
-
     defaultDateTime = '2021-07-26 00:00:00'
     sceneColor = '170,240,160'
 
@@ -61,8 +58,8 @@ class SceneEvent(Scene):
 
             # Substitute date/time, so yWriter would not prefix them with '19' or '20'.
 
-            self.date = self.NULL_DATE
-            self.time = self.NULL_TIME
+            self.date = Scene.NULL_DATE
+            self.time = Scene.NULL_TIME
             dtIsValid = False
             # Two-figure year.
 
@@ -114,7 +111,7 @@ class SceneEvent(Scene):
 
         #--- Set start date/time.
 
-        if source.date is not None and source.date != self.NULL_DATE:
+        if source.date is not None and source.date != Scene.NULL_DATE:
 
             # The date is not "BC", so synchronize it.
 
@@ -163,7 +160,7 @@ class SceneEvent(Scene):
 
         #--- Set end date/time.
 
-        if source.date is not None and source.date == self.NULL_DATE:
+        if source.date is not None and source.date == Scene.NULL_DATE:
 
             # The year is two-figure, so do not synchronize.
 
