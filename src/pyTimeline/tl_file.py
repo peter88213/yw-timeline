@@ -54,20 +54,20 @@ class TlFile(Novel):
     def read(self):
         """Parse the file and store selected properties.
         """
-        def remove_contId(text):
+        def remove_contId(event, text):
             """If text comes with a Container ID, remove it 
             and store it in the contId property. 
             """
-            contId = None
 
             if text:
                 match = re.match('([\(\[][0-9]+[\)\]])', text)
 
                 if match:
                     contId = match.group()
+                    event.contId = contId
                     text = text.split(contId, 1)[1]
 
-            return text, contId
+            return text
 
         #--- Parse the Timeline file.
 
@@ -124,7 +124,7 @@ class TlFile(Novel):
 
             try:
                 title = event.find('text').text
-                title, self.scenes[scId].contId = remove_contId(title)
+                title = remove_contId(self.scenes[scId], title)
                 title = self.convert_to_yw(title)
                 self.scenes[scId].title = title
 
