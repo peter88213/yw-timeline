@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.20.1 Beta release
+
+- Fix a bug where events lose or change their category or container on sync.
+
+Based on PyWriter v3.26.1
+
 ### v0.20.0 Beta release
 
 - Abandon "item" processing to make the configuration clearer and the code more maintainable.

@@ -31,6 +31,7 @@ class TlConverter(YwCnvUi):
             sourceFile = Yw7File(sourcePath, **kwargs)
             targetFile = TlFile(fileName + TlFile.EXTENSION, **kwargs)
             targetFile.back_up(singleBackup)
+            targetFile.ywProject = sourceFile
             self.export_from_yw(sourceFile, targetFile)
 
         elif fileExtension == TlFile.EXTENSION:
