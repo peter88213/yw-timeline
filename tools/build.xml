@@ -18,6 +18,8 @@
 	</target>
 
 	<target name="test" description="unit tests">
+		<copy file="${test}/test_yw_timeline_.py" tofile="${test}/test_yw_timeline.py" />
+		<replace encoding="utf-8" file="${test}/test_yw_timeline.py" token="yw_timeline_" value="yw_timeline" />
 		<exec executable="python" failonerror="true">
 		    <arg value="${test}/test_yw_timeline.py"/>
 		</exec>
@@ -53,6 +55,7 @@
 	<target name="clean" description="clean up">
 		
 		<delete file="${test}/yw_timeline.pyw" />
+		<delete file="${test}/test_yw_timeline.py" />
 		
 	</target>
 
