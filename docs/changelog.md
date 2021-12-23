@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.20.3 Enable non-Windows operation 
+
+- Catch an exception that is thrown when evaluating a Windows environment variable under a non-Windows OS.
+
+Based on PyWriter v3.28.1
+
 ### v0.20.2 Beta release
 
 - Undo a change made just for debugging.

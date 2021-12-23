@@ -83,5 +83,11 @@ if __name__ == '__main__':
                         help='suppress error messages and the request to confirm overwriting')
 
     args = parser.parse_args()
-    installDir = os.getenv('APPDATA').replace('\\', '/') + '/pyWriter/' + APPNAME + '/config/'
+
+    try:
+        installDir = os.getenv('APPDATA').replace('\\', '/') + '/pyWriter/' + APPNAME + '/config/'
+
+    except:
+        installDir = ''
+
     run(args.sourcePath, args.silent, installDir)
