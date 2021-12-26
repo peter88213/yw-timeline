@@ -75,7 +75,7 @@ def update_reg(installPath):
 
 def run():
     """Install the yw-timeline script and extend the yWriter context menu."""
-    installPath = str(Path.home()).replace('\\', '/') + '/PyWriter/yw-timeline'
+    installPath = str(Path.home()).replace('\\', '/') + '/.pywriter/yw-timeline'
 
     try:
         with os.scandir(installPath) as files:
