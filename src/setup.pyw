@@ -11,6 +11,8 @@ import os
 import sys
 from string import Template
 from shutil import copyfile
+from pathlib import Path
+
 
 APP = 'yw-timeline.pyw'
 INI_PATH = '/config/'
@@ -73,7 +75,7 @@ def update_reg(installPath):
 
 def run():
     """Install the yw-timeline script and extend the yWriter context menu."""
-    installPath = os.getenv('APPDATA').replace('\\', '/') + '/PyWriter/yw-timeline'
+    installPath = str(Path.home()).replace('\\', '/') + '/PyWriter/yw-timeline'
 
     try:
         with os.scandir(installPath) as files:
