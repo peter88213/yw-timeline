@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v0.20.4 Support non-Windows OS
+
+- Move installation and configuration to another location (see instructions for use).
+
+Based on PyWriter v3.28.1
+
 ### v0.20.3 Enable non-Windows operation 
 
 - Catch an exception that is thrown when evaluating a Windows environment variable under a non-Windows OS.

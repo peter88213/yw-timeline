@@ -39,7 +39,7 @@ You can override the default settings by providing a configuration file. Be alwa
 ### Global configuration
 
 An optional global configuration file can be placed in the configuration directory in your user profile. It is applied to any project. Its entries override yw-timeline's built-in constants. This is the path:
-`c:\Users\<user name>\AppData\Roaming\PyWriter\yw-timeline\config\yw-timeline.ini`
+`c:\Users\<user name>\.pywriter\yw-timeline\config\yw-timeline.ini`
   
 The **install.bat** installation script installs a sample configuration file containing yw-timeline's default values. You can modify or delete it. 
 
@@ -175,7 +175,7 @@ D/H/M refers to the default date/time stamp that can be set in the configuration
 
 ## Installation path
 
-The **install.bat** installation script installs *yw-timeline.pyw* in the user profile. This is the installation path: 
+The **install.bat** installation script installs *yw-timeline.pyw* in the user profile. This is the installation path on Windows: 
 
-`c:\Users\<user name>\AppData\Roaming\PyWriter\yw-timeline`
+`c:\Users\<user name>\.pywriter\yw-timeline`
     
