@@ -24,7 +24,7 @@ can be used to visualize the course of the narrative time in a
 
 - Unzip the downloaded zipfile "yw-timeline_v0.20.4.zip" into a new folder.
 - Move into this new folder and launch **setup.pyw**. This installs the script for the local user.
-- Create a shortcut on the desktop.
+- Create a shortcut on the desktop when asked.
 - Open "README.md" for usage instructions.
 
 ### Note for Linux users

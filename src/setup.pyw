@@ -7,17 +7,31 @@ Copyright (c) 2021 Peter Triesberger
 For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
-import os
 import sys
-from string import Template
+import os
 from shutil import copyfile
 from pathlib import Path
+from tkinter import messagebox
+from string import Template
 
 
-APP = 'yw-timeline.pyw'
+APPNAME = 'yw-timeline'
+
+APP = APPNAME + '.pyw'
+INI_FILE = APPNAME + '.ini'
 INI_PATH = '/config/'
 SAMPLE_PATH = 'sample/'
-INI_FILE = 'yw-timeline.ini'
+MESSAGE = '''The $Appname program is installed here:
+$Apppath
+
+Now you might want to create a shortcut on your desktop.  
+
+On Windows, open the installation folder clicking "Ok", hold down the Alt key on your keyboard, and then drag and drop $Appname.pyw to your desktop.
+
+On Linux, create a launcher on your desktop. With xfce for instance, the launcher's command may look like this:
+python3 '$Apppath' %F
+'''
+
 
 YW_CONTEXT_MENU = '''Windows Registry Editor Version 5.00
 
@@ -73,28 +87,60 @@ def update_reg(installPath):
              Template(RESET_CONTEXT_MENU), {})
 
 
-def run():
-    """Install the yw-timeline script and extend the yWriter context menu."""
-    installPath = str(Path.home()).replace('\\', '/') + '/.pywriter/yw-timeline'
-    os.makedirs(installPath + '/config', exist_ok=True)
+def run(pywriterPath):
+    """Install the script."""
 
-    with os.scandir(installPath) as files:
+    # Create a general PyWriter installation directory, if necessary.
+
+    os.makedirs(pywriterPath, exist_ok=True)
+    installDir = pywriterPath + APPNAME
+    cnfDir = installDir + INI_PATH
+
+    try:
+        # Move an existing installation to the new place, if necessary.
+
+        oldInstDir = os.getenv('APPDATA').replace('\\', '/') + '/pyWriter/' + APPNAME
+        os.replace(oldInstDir, installDir)
+
+    except:
+        pass
+
+    os.makedirs(cnfDir, exist_ok=True)
+
+    # Delete the old version, but retain configuration, if any.
+
+    with os.scandir(installDir) as files:
 
         for file in files:
 
             if not 'config' in file.name:
                 os.remove(file)
 
-    update_reg(installPath)
+    # Install the new version.
 
-    copyfile(APP, installPath + '/' + APP)
-    print(os.path.normpath(installPath + '/' + APP) + ' copied.')
+    copyfile(APP, installDir + '/' + APP)
 
-    if not os.path.isfile(installPath + INI_PATH + INI_FILE):
-        copyfile(SAMPLE_PATH + INI_FILE, installPath + INI_PATH + INI_FILE)
+    # Install a configuration file, if needed.
 
-    os.startfile(os.path.normpath(installPath))
+    try:
+        if not os.path.isfile(cnfDir + INI_FILE):
+            copyfile(SAMPLE_PATH + INI_FILE, cnfDir + INI_FILE)
+
+    except:
+        pass
+
+    # Generate registry entries for the context menu.
+
+    update_reg(installDir)
+
+    # Display a message and optionally open the installation folder for shortcut creation.
+
+    mapping = {'Appname': APPNAME, 'Apppath': installDir + '/' + APP}
+
+    if messagebox.askokcancel(APPNAME, Template(MESSAGE).safe_substitute(mapping)):
+        os.startfile(os.path.normpath(installDir))
 
 
 if __name__ == '__main__':
-    run()
+    pywriterPath = str(Path.home()).replace('\\', '/') + '/.pywriter/'
+    run(pywriterPath)
