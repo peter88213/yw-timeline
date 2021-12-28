@@ -13,7 +13,6 @@ can be used to visualize the course of the narrative time in a
  
 ## Requirements
 
-- Windows.
 - [Python 3.7 or above](https://www.python.org). 
 - [yWriter 7](http://spacejock.com/yWriter7.html). Recent versions 5 or 6 might also work if they save in .yw7 file format.
 - [Timeline 2.4 or 2.5](https://sourceforge.net/projects/thetimelineproj/). Versions below 2.4 do not support labels, which are necessary for synchronization with yWriter.
@@ -24,9 +23,15 @@ can be used to visualize the course of the narrative time in a
 [Download the latest release (version 0.20.4)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v0.20.4.zip)
 
 - Unzip the downloaded zipfile "yw-timeline_v0.20.4.zip" into a new folder.
-- Move into this new folder and launch **install.bat**. This installs the script for the local user.
-- Create a shortcut on the desktop when asked.
+- Move into this new folder and launch **setup.pyw**. This installs the script for the local user.
+- Create a shortcut on the desktop.
 - Open "README.md" for usage instructions.
+
+### Note for Linux users
+
+Please make sure that your Python3 installation has the *tkinter* module. On Ubuntu, for example, it is not available out of the box and must be installed via a separate package. 
+
+------------------------------------------------------------------
 
 [Changelog](changelog)
 

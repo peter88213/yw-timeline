@@ -25,38 +25,37 @@
 		</exec>
 	</target>
 
-	<target name="dist" description="generate the distribution">
-		
+	<target name="dist" description="generate the distribution">		
 		<delete dir="${build}" />
 		<delete dir="${dist}" />
 		<mkdir dir="${build}" />
 		<mkdir dir="${dist}" />
 		<mkdir dir="${build}/${release-name}" />
-
-		<copy todir="${build}/${release-name}/sample"> 
-			<fileset dir="../sample" />
-		</copy>
-		
-		<copy file="./install.bat" todir="${build}/${release-name}" />
 		
 		<copy file="${test}/yw_timeline.pyw" tofile="${build}/${release-name}/yw-timeline.pyw" />
 		<replace encoding="utf-8" file="${build}/${release-name}/yw-timeline.pyw" token="@release" value="${release}" />
-
+		
+		<copy file="${src}/setup.pyw" todir="${build}/${release-name}" />		
+		
+		<fixcrlf encoding="utf-8" eol="lf" srcdir="${build}/${release-name}" includes="**/*.pyw" />
+		
 		<copy file="../LICENSE" todir="${build}/${release-name}" />
+		
 		<copy file="${docs}/usage.md" tofile="${build}/${release-name}/README.md" />
-
+		
+		<copy todir="${build}/${release-name}/sample"> 
+			<fileset dir="../sample" />
+		</copy>		
+			
 		<zip destfile="${dist}/${release-name}.zip" basedir="${build}/${release-name}" />
-
+		
 		<copy file="${docs}/template/index.md" overwrite="True" todir="${docs}" />
 		<replace encoding="utf-8" file="${docs}/index.md" token="0.99.0" value="${release}" />
-
 	</target>
 
-	<target name="clean" description="clean up">
-		
+	<target name="clean" description="clean up">		
 		<delete file="${test}/yw_timeline.pyw" />
-		<delete file="${test}/test_yw_timeline.py" />
-		
+		<delete file="${test}/test_yw_timeline.py" />		
 	</target>
 
 </project>

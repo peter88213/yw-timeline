@@ -76,30 +76,14 @@ def update_reg(installPath):
 def run():
     """Install the yw-timeline script and extend the yWriter context menu."""
     installPath = str(Path.home()).replace('\\', '/') + '/.pywriter/yw-timeline'
+    os.makedirs(installPath + '/config', exist_ok=True)
 
-    try:
-        with os.scandir(installPath) as files:
+    with os.scandir(installPath) as files:
 
-            for file in files:
+        for file in files:
 
-                if not 'config' in file.name:
-                    os.remove(file)
-
-    except:
-
-        try:
-            os.mkdir(installPath)
-            print(os.path.normpath(installPath) + ' created.')
-
-        except:
-            pass
-
-    try:
-        os.mkdir(installPath + '/config')
-        print(os.path.normpath(installPath + '/config') + ' created.')
-
-    except:
-        pass
+            if not 'config' in file.name:
+                os.remove(file)
 
     update_reg(installPath)
 
