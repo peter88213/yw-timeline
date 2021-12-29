@@ -17,7 +17,6 @@ from string import Template
 
 try:
     from tkinter import *
-    from tkinter import messagebox
 
 except ModuleNotFoundError:
     print('The tkinter module is missing. Please install the tk support package for your python3 version.')
@@ -153,7 +152,7 @@ def install(pywriterPath):
 
         oldInstDir = os.getenv('APPDATA').replace('\\', '/') + '/pyWriter/' + APPNAME
         os.replace(oldInstDir, installDir)
-        output('Moving ' + oldInstDir + ' to ' + installDir)
+        output('Moving "' + oldInstDir + '" to "' + installDir + '"')
 
     except:
         pass
@@ -168,25 +167,31 @@ def install(pywriterPath):
 
             if not 'config' in file.name:
                 os.remove(file)
-                output('Removing ' + file.name)
+                output('Removing "' + file.name + '"')
 
     # Install the new version.
 
     copyfile(APP, installDir + '/' + APP)
-    output('Copying ' + APP)
+    output('Copying "' + APP + '"')
 
     # Make the script executable under Linux.
 
     st = os.stat(installDir + '/' + APP)
     os.chmod(installDir + '/' + APP, st.st_mode | stat.S_IEXEC)
 
-    # Install a configuration file, if needed.
+    # Install configuration files, if needed.
 
     try:
-        if not os.path.isfile(cnfDir + INI_FILE):
-            copyfile(SAMPLE_PATH + INI_FILE, cnfDir + INI_FILE)
-            output('Copying ' + INI_FILE)
+        with os.scandir(SAMPLE_PATH) as files:
 
+            for file in files:
+
+                if not os.path.isfile(cnfDir + file.name):
+                    copyfile(SAMPLE_PATH + file.name, cnfDir + file.name)
+                    output('Copying "' + file.name + '"')
+
+                else:
+                    output('Keeping "' + file.name + '"')
     except:
         pass
 
@@ -210,7 +215,7 @@ if __name__ == '__main__':
 
     # Open a tk window.
 
-    root.geometry("800x500")
+    root.geometry("800x600")
     root.title('Install ' + APPNAME + VERSION)
     header = Label(root, text='')
     header.pack(padx=5, pady=5)
