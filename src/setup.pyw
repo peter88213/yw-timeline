@@ -1,3 +1,4 @@
+#!/usr/bin/env python3
 """Install the yw-timeline script and set up the registry files
 for extending the yWriter and Timeline context menus. 
 
