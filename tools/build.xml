@@ -35,6 +35,8 @@
 		<replace encoding="utf-8" file="${build}/${release-name}/yw-timeline.pyw" token="@release" value="${release}" />
 		
 		<copy file="${src}/setup.pyw" todir="${build}/${release-name}" />		
+		<replace encoding="utf-8" file="${build}/${release-name}/setup.pyw" token="@release" value="${release}" />
+
 		<copy file="../LICENSE" todir="${build}/${release-name}" />	
 		<copy file="${docs}/usage.md" tofile="${build}/${release-name}/README.md" />
 		

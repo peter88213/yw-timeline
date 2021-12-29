@@ -9,24 +9,39 @@ Published under the MIT License (https://opensource.org/licenses/mit-license.php
 """
 import sys
 import os
+import stat
 from shutil import copyfile
 from pathlib import Path
-from tkinter import messagebox
 from string import Template
+
+
+try:
+    from tkinter import *
+    from tkinter import messagebox
+
+except ModuleNotFoundError:
+    print('The tkinter module is missing. Please install the tk support package for your python3 version.')
+    sys.exit(1)
 
 
 APPNAME = 'yw-timeline'
 
+VERSION = ' @release'
 APP = APPNAME + '.pyw'
 INI_FILE = APPNAME + '.ini'
 INI_PATH = '/config/'
 SAMPLE_PATH = 'sample/'
-MESSAGE = '''The $Appname program is installed here:
-$Apppath
+SUCCESS_MESSAGE = '''
 
+$Appname is installed here:
+
+$Apppath'''
+
+SHORTCUT_MESSAGE = '''
 Now you might want to create a shortcut on your desktop.  
 
-On Windows, open the installation folder clicking "Ok", hold down the Alt key on your keyboard, and then drag and drop $Appname.pyw to your desktop.
+On Windows, open the installation folder, hold down the Alt key on your keyboard, 
+and then drag and drop $Appname.pyw to your desktop.
 
 On Linux, create a launcher on your desktop. With xfce for instance, the launcher's command may look like this:
 python3 '$Apppath' %F
@@ -67,6 +82,15 @@ RESET_CONTEXT_MENU = '''Windows Registry Editor Version 5.00
 [-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
 '''
 
+root = Tk()
+processInfo = Label(root, text='')
+message = []
+
+
+def output(text):
+    message.append(text)
+    processInfo.config(text=('\n').join(message))
+
 
 def update_reg(installPath):
 
@@ -76,7 +100,7 @@ def update_reg(installPath):
         with open(filePath, 'w', encoding='utf-8') as f:
             f.write(template.safe_substitute(mapping))
 
-        print(os.path.normpath(filePath) + ' written.')
+        output('Creating ' + os.path.normpath(filePath))
 
     python = sys.executable.replace('\\', '\\\\')
     script = installPath.replace('/', '\\\\') + '\\\\' + APP
@@ -87,7 +111,29 @@ def update_reg(installPath):
              Template(RESET_CONTEXT_MENU), {})
 
 
-def run(pywriterPath):
+def open_folder(installDir):
+    """Open an installation folder window in the file manager.
+    """
+
+    try:
+        os.startfile(os.path.normpath(installDir))
+        # Windows
+    except:
+
+        try:
+            os.system('xdg-open "%s"' % os.path.normpath(installDir))
+            # Linux
+        except:
+
+            try:
+                os.system('open "%s"' % os.path.normpath(installDir))
+                # Mac
+
+            except:
+                pass
+
+
+def install(pywriterPath):
     """Install the script."""
 
     # Create a general PyWriter installation directory, if necessary.
@@ -96,11 +142,18 @@ def run(pywriterPath):
     installDir = pywriterPath + APPNAME
     cnfDir = installDir + INI_PATH
 
+    if os.path.isfile(installDir + '/' + APP):
+        simpleUpdate = True
+
+    else:
+        simpleUpdate = False
+
     try:
         # Move an existing installation to the new place, if necessary.
 
         oldInstDir = os.getenv('APPDATA').replace('\\', '/') + '/pyWriter/' + APPNAME
         os.replace(oldInstDir, installDir)
+        output('Moving ' + oldInstDir + ' to ' + installDir)
 
     except:
         pass
@@ -115,16 +168,24 @@ def run(pywriterPath):
 
             if not 'config' in file.name:
                 os.remove(file)
+                output('Removing ' + file.name)
 
     # Install the new version.
 
     copyfile(APP, installDir + '/' + APP)
+    output('Copying ' + APP)
+
+    # Make the script executable under Linux.
+
+    st = os.stat(installDir + '/' + APP)
+    os.chmod(installDir + '/' + APP, st.st_mode | stat.S_IEXEC)
 
     # Install a configuration file, if needed.
 
     try:
         if not os.path.isfile(cnfDir + INI_FILE):
             copyfile(SAMPLE_PATH + INI_FILE, cnfDir + INI_FILE)
+            output('Copying ' + INI_FILE)
 
     except:
         pass
@@ -133,14 +194,42 @@ def run(pywriterPath):
 
     update_reg(installDir)
 
-    # Display a message and optionally open the installation folder for shortcut creation.
+    # Display a success message.
 
     mapping = {'Appname': APPNAME, 'Apppath': installDir + '/' + APP}
 
-    if messagebox.askokcancel(APPNAME, Template(MESSAGE).safe_substitute(mapping)):
-        os.startfile(os.path.normpath(installDir))
+    output(Template(SUCCESS_MESSAGE).safe_substitute(mapping))
+
+    # Ask for shortcut creation.
+
+    if not simpleUpdate:
+        output(Template(SHORTCUT_MESSAGE).safe_substitute(mapping))
 
 
 if __name__ == '__main__':
+
+    # Open a tk window.
+
+    root.geometry("800x500")
+    root.title('Install ' + APPNAME + VERSION)
+    header = Label(root, text='')
+    header.pack(padx=5, pady=5)
+
+    # Prepare the messaging area.
+
+    processInfo.pack(padx=5, pady=5)
+
+    # Run the installation.
+
     pywriterPath = str(Path.home()).replace('\\', '/') + '/.pywriter/'
-    run(pywriterPath)
+    install(pywriterPath)
+
+    # Show options: open installation folders or quit.
+
+    root.openButton = Button(text="Open installation folder", command=lambda: open_folder(pywriterPath + APPNAME))
+    root.openButton.config(height=1, width=30)
+    root.openButton.pack(padx=5, pady=5)
+    root.quitButton = Button(text="Quit", command=quit)
+    root.quitButton.config(height=1, width=30)
+    root.quitButton.pack(padx=5, pady=5)
+    root.mainloop()
