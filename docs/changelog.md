@@ -8,7 +8,7 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
-### v3.20.5 Create backup when overwriting
+### v0.20.5 Create backup when overwriting
 
 - Create registry files on setup only under Windows.
 - Remove the "single backup" option.
