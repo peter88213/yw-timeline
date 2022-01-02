@@ -37,9 +37,9 @@ DHM_TO_DATE_TIME_YW7 = TEST_DATA_PATH + 'dhmToDateTime.yw7'
 
 # Test data
 TEST_YW7 = TEST_EXEC_PATH + 'yw7 Sample Project.yw7'
+TEST_YW_BAK = TEST_YW7 + '.bak'
 TEST_TL = TEST_EXEC_PATH + 'yw7 Sample Project.timeline'
-BACKUP_TL = TEST_TL + '.bak'
-BACKUP_YW7 = TEST_YW7 + '.bak'
+TEST_TL_BAK = TEST_TL + '.bak'
 INI_FILE = 'yw-timeline.ini'
 
 
@@ -72,12 +72,12 @@ def remove_all_testfiles():
         pass
 
     try:
-        os.remove(BACKUP_TL)
+        os.remove(TEST_TL_BAK)
     except:
         pass
 
     try:
-        os.remove(BACKUP_YW7)
+        os.remove(TEST_YW_BAK)
     except:
         pass
 
@@ -109,7 +109,7 @@ class NormalOperation(unittest.TestCase):
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_YW7, silentMode=True)
         self.assertEqual(read_file(TEST_TL), read_file(MODIFIED_TL))
-        self.assertEqual(read_file(BACKUP_TL), read_file(NORMAL_TL))
+        self.assertEqual(read_file(TEST_TL_BAK), read_file(NORMAL_TL))
 
     def test_modified2_tl_to_yw(self):
         copyfile(MODIFIED2_TL, TEST_TL)
@@ -117,7 +117,7 @@ class NormalOperation(unittest.TestCase):
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_TL, silentMode=True)
         self.assertEqual(read_file(TEST_YW7), read_file(MODIFIED2_YW7))
-        self.assertEqual(read_file(BACKUP_YW7), read_file(MODIFIED_YW7))
+        self.assertEqual(read_file(TEST_YW_BAK), read_file(MODIFIED_YW7))
 
     def test_modified_yw_to_new_tl(self):
         copyfile(MODIFIED_YW7, TEST_YW7)

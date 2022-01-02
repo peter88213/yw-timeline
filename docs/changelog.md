@@ -8,6 +8,13 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v3.20.5 Create backup when overwriting
+
+- Create registry files on setup only under Windows.
+- Remove the "single backup" option.
+
+Based on PyWriter v3.30.0
+
 ### v0.20.4 Support non-Windows OS
 
 - Move installation and configuration to another location (see instructions for use).

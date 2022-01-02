@@ -1,6 +1,6 @@
 """Provide a Timeline project file representation.
 
-Copyright (c) 2021 Peter Triesberger
+Copyright (c) 2022 Peter Triesberger
 For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
@@ -183,11 +183,14 @@ class TlFile(Novel):
 
             # Rewrite the timeline with scene IDs inserted.
 
+            os.replace(self.filePath, self.filePath + '.bak')
+
             try:
                 self.tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
 
-            except(PermissionError):
-                return 'ERROR: "' + os.path.normpath(self.filePath) + '" is write protected.'
+            except:
+                os.replace(self.filePath + '.bak', self.filePath)
+                return 'ERROR: Cannot write "' + os.path.normpath(self.filePath) + '".'
 
         return 'SUCCESS: Timeline read in.'
 
@@ -203,7 +206,7 @@ class TlFile(Novel):
 
             return text
 
-        if self.file_exists():
+        if os.path.isfile(self.filePath):
             message = self.read()
             # initialize data
 
@@ -411,11 +414,22 @@ class TlFile(Novel):
         indent(root)
         self.tree = ET.ElementTree(root)
 
+        if os.path.isfile(self.filePath):
+            os.replace(self.filePath, self.filePath + '.bak')
+            backedUp = True
+
+        else:
+            backedUp = False
+
         try:
             self.tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
 
-        except(PermissionError):
-            return 'ERROR: "' + os.path.normpath(self.filePath) + '" is write protected.'
+        except:
+
+            if backedUp:
+                os.replace(self.filePath + '.bak', self.filePath)
+
+            return 'ERROR: Cannot write "' + os.path.normpath(self.filePath) + '".'
 
         return 'SUCCESS: "' + os.path.normpath(self.filePath) + '" written.'
 

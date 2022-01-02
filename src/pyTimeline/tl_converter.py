@@ -1,6 +1,6 @@
 """Provide a converter class for yWriter and Timeline.
 
-Copyright (c) 2021 Peter Triesberger
+Copyright (c) 2022 Peter Triesberger
 For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
@@ -19,7 +19,6 @@ class TlConverter(YwCnvUi):
         Override the superclass method.
         """
         self.newFile = None
-        singleBackup = kwargs['single_backup']
 
         if not os.path.isfile(sourcePath):
             self.ui.set_info_how('ERROR: File "' + os.path.normpath(sourcePath) + '" not found.')
@@ -30,7 +29,6 @@ class TlConverter(YwCnvUi):
         if fileExtension == Yw7File.EXTENSION:
             sourceFile = Yw7File(sourcePath, **kwargs)
             targetFile = TlFile(fileName + TlFile.EXTENSION, **kwargs)
-            targetFile.back_up(singleBackup)
             targetFile.ywProject = sourceFile
             self.export_from_yw(sourceFile, targetFile)
 
@@ -38,9 +36,8 @@ class TlConverter(YwCnvUi):
             sourceFile = TlFile(sourcePath, **kwargs)
             targetFile = Yw7File(fileName + Yw7File.EXTENSION, **kwargs)
 
-            if targetFile.file_exists():
+            if os.path.isfile(fileName + Yw7File.EXTENSION):
                 sourceFile.ywProject = targetFile
-                targetFile.back_up(singleBackup)
                 self.import_to_yw(sourceFile, targetFile)
 
             else:

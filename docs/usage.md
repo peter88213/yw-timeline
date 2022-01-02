@@ -118,12 +118,6 @@ datetime_to_dhm = No
 # Precondition:
 #      dhm_to_datetime = No
 
-single_backup = Yes
-
-# Yes: Overwrite existing backup file. Extension = .bak
-# No:  Create a new, numbered backup file.
-#      Extension = .bkxxxx
-
 ```
 
 
