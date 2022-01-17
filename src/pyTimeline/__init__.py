@@ -1,4 +1,4 @@
-"""Modules for processing Timeline project files.
+"""Package for processing Timeline project files.
 
 Modules:
 
