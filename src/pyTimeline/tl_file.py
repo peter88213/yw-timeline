@@ -34,7 +34,7 @@ class TlFile(Novel):
         """Extend the superclass constructor, initializing instance variables
         and SceneEvent class variables.
         """
-        Novel.__init__(self, filePath, **kwargs)
+        super().__init__(filePath, **kwargs)
         self.tree = None
 
         self.sceneMarker = kwargs['scene_label']

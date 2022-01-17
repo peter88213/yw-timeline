@@ -20,7 +20,7 @@ class SceneEvent(Scene):
     def __init__(self):
         """Extend the superclass method, defining a container ID.
         """
-        Scene.__init__(self)
+        super().__init__()
         self.contId = None
         self.startDateTime = None
         self.endDateTime = None
