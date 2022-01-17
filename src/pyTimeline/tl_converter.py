@@ -16,7 +16,6 @@ class TlConverter(YwCnvUi):
 
     def run(self, sourcePath, **kwargs):
         """Create source and target objects and run conversion.
-        Override the superclass method.
         """
         self.newFile = None
 
