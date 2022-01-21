@@ -12,6 +12,20 @@ After installation, create a shortcut on the desktop.
 - If you drag a Timeline project onto it and drop it, either a new yWriter project is generated or an existing one is synchronized. 
 - If you drag a yWriter project and drop it on the icon, a new timeline is generated or an existing one is synchronized. 
 
+### Context menu (Windows only)
+
+Under Windows, you optionally can launch *yw-timeline* via context menu.
+
+After installation, you can add the context menu entries by double-clicking  `add_context_menu.reg`. 
+You may be asked for approval to modify the Windows registry. Please accept.
+
+- On right-clicking a *.yw7* file, an *Export to Timeline* option appears.
+- On right-clicking a *.timeline* file, an *Export to yWritere* option appears.
+
+You can remove the context menu entries by double-clicking  `rem_context_menu.reg`.
+
+Please note that these context menus depend on the currently installed Python version. After a major Python update you may need to run the setup program again and renew the registry entries.
+
 ### Command line usage
 
 Alternatively, you can
