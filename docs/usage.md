@@ -20,7 +20,7 @@ After installation, you can add the context menu entries by double-clicking  `ad
 You may be asked for approval to modify the Windows registry. Please accept.
 
 - On right-clicking a *.yw7* file, an *Export to Timeline* option appears.
-- On right-clicking a *.timeline* file, an *Export to yWritere* option appears.
+- On right-clicking a *.timeline* file, an *Export to yWriter* option appears.
 
 You can remove the context menu entries by double-clicking  `rem_context_menu.reg`.
 
