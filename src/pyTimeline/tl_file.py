@@ -83,7 +83,7 @@ class TlFile(Novel):
             self.tree = ET.parse(self.filePath)
 
         except:
-            return f'{ERROR}: Can not process "' + os.path.normpath(self.filePath) + '".'
+            return f'{ERROR}Can not process "' + os.path.normpath(self.filePath) + '".'
 
         root = self.tree.getroot()
         sceneCount = 0
@@ -191,9 +191,9 @@ class TlFile(Novel):
 
             except:
                 os.replace(self.filePath + '.bak', self.filePath)
-                return f'{ERROR}: Cannot write "' + os.path.normpath(self.filePath) + '".'
+                return f'{ERROR}Cannot write "' + os.path.normpath(self.filePath) + '".'
 
-        return 'SUCCESS: Timeline read in.'
+        return 'Timeline read in.'
 
     def merge(self, source):
         """Copy required attributes of the timeline object.
@@ -251,7 +251,7 @@ class TlFile(Novel):
             if not scId in source.scenes:
                 del self.scenes[scId]
 
-        return 'SUCCESS'
+        return 'Timeline updated from novel data.'
 
     def write(self):
         """Write selected properties to the file.
@@ -430,9 +430,9 @@ class TlFile(Novel):
             if backedUp:
                 os.replace(self.filePath + '.bak', self.filePath)
 
-            return f'{ERROR}: Cannot write "' + os.path.normpath(self.filePath) + '".'
+            return f'{ERROR}Cannot write "' + os.path.normpath(self.filePath) + '".'
 
-        return 'SUCCESS: "' + os.path.normpath(self.filePath) + '" written.'
+        return '"' + os.path.normpath(self.filePath) + '" written.'
 
     def convert_to_yw(self, text):
         """Return text, converted from source format to ywProject markup.
