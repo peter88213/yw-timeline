@@ -50,10 +50,10 @@ def run(sourcePath, silentMode=True, installDir=''):
         sourceDir = './'
 
     else:
-        sourceDir += '/'
+        sourceDir = f'{sourceDir}/'
 
-    iniFileName = APPNAME + '.ini'
-    iniFiles = [installDir + iniFileName, sourceDir + iniFileName]
+    iniFileName = f'{APPNAME}.ini'
+    iniFiles = [f'{installDir}{iniFileName}', f'{sourceDir}{iniFileName}']
 
     configuration = Configuration(SETTINGS, OPTIONS)
 
@@ -85,7 +85,8 @@ if __name__ == '__main__':
     args = parser.parse_args()
 
     try:
-        installDir = str(Path.home()).replace('\\', '/') + '/.pywriter/' + APPNAME + '/config/'
+        homeDir = str(Path.home()).replace('\\', '/')
+        installDir = f'{homeDir}/.pywriter/{APPNAME}/config/'
 
     except:
         installDir = ''
