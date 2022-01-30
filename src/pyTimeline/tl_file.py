@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from datetime import timedelta
 
+from pywriter.pywriter_globals import ERROR
 from pywriter.model.novel import Novel
 from pywriter.model.chapter import Chapter
 from pywriter.yw.xml_indent import indent
@@ -82,7 +83,7 @@ class TlFile(Novel):
             self.tree = ET.parse(self.filePath)
 
         except:
-            return 'ERROR: Can not process "' + os.path.normpath(self.filePath) + '".'
+            return f'{ERROR}: Can not process "' + os.path.normpath(self.filePath) + '".'
 
         root = self.tree.getroot()
         sceneCount = 0
@@ -190,7 +191,7 @@ class TlFile(Novel):
 
             except:
                 os.replace(self.filePath + '.bak', self.filePath)
-                return 'ERROR: Cannot write "' + os.path.normpath(self.filePath) + '".'
+                return f'{ERROR}: Cannot write "' + os.path.normpath(self.filePath) + '".'
 
         return 'SUCCESS: Timeline read in.'
 
@@ -210,7 +211,7 @@ class TlFile(Novel):
             message = self.read()
             # initialize data
 
-            if message.startswith('ERROR'):
+            if message.startswith(ERROR):
                 return message
 
         self.chapters = {}
@@ -429,7 +430,7 @@ class TlFile(Novel):
             if backedUp:
                 os.replace(self.filePath + '.bak', self.filePath)
 
-            return 'ERROR: Cannot write "' + os.path.normpath(self.filePath) + '".'
+            return f'{ERROR}: Cannot write "' + os.path.normpath(self.filePath) + '".'
 
         return 'SUCCESS: "' + os.path.normpath(self.filePath) + '" written.'
 
