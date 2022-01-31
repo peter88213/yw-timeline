@@ -14,8 +14,8 @@ import inliner
 
 SRC = '../src/'
 BUILD = '../test/'
-SOURCE_FILE = 'yw_timeline_.pyw'
-TARGET_FILE = BUILD + 'yw_timeline.pyw'
+SOURCE_FILE = f'{SRC}yw_timeline_.pyw'
+TARGET_FILE = f'{BUILD}yw_timeline.pyw'
 
 
 def main():
