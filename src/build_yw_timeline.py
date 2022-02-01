@@ -10,6 +10,8 @@ For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
 import os
+import sys 
+sys.path.insert(0, f'{os.getcwd()}/../../PyWriter/src')
 import inliner
 
 SRC = '../src/'
@@ -19,18 +21,8 @@ TARGET_FILE = f'{BUILD}yw_timeline.pyw'
 
 
 def main():
-    os.chdir(SRC)
-
-    try:
-        os.remove(TARGET_FILE)
-
-    except:
-        pass
-
-    inliner.run(SOURCE_FILE,
-                TARGET_FILE, 'pyTimeline', '../src/')
-    inliner.run(TARGET_FILE,
-                TARGET_FILE, 'pywriter', '../../PyWriter/src/')
+    inliner.run(SOURCE_FILE, TARGET_FILE, 'pyTimeline', '../src/')
+    inliner.run(TARGET_FILE, TARGET_FILE, 'pywriter', '../../PyWriter/src/')
     print('Done.')
 
 
