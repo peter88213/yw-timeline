@@ -38,12 +38,10 @@ class TlFile(Novel):
         super().__init__(filePath, **kwargs)
         self._tree = None
 
-        self.sceneMarker = kwargs['scene_label']
-        self.defaultDateTime = kwargs['default_date_time']
-        self.sceneColor = kwargs['scene_color']
-        self.ignoreUnspecific = kwargs['ignore_unspecific']
-        self.dateTimeToDhm = kwargs['datetime_to_dhm']
-        self.dhmToDateTime = kwargs['dhm_to_datetime']
+        self._sceneMarker = kwargs['scene_label']
+        self._ignoreUnspecific = kwargs['ignore_unspecific']
+        self._dateTimeToDhm = kwargs['datetime_to_dhm']
+        self._dhmToDateTime = kwargs['dhm_to_datetime']
 
         SceneEvent.defaultDateTime = kwargs['default_date_time']
         SceneEvent.sceneColor = kwargs['scene_color']
@@ -98,7 +96,7 @@ class TlFile(Novel):
                 sceneMatch = re.search('ScID\:([0-9]+)', labels)
 
                 if isOutline and sceneMatch is None:
-                    sceneMatch = re.search(self.sceneMarker, labels)
+                    sceneMatch = re.search(self._sceneMarker, labels)
 
             if sceneMatch is None:
                 continue
@@ -145,10 +143,10 @@ class TlFile(Novel):
 
             # Consider unspecific date/time in the target file.
 
-            if self.dateTimeToDhm and not self.dhmToDateTime:
+            if self._dateTimeToDhm and not self._dhmToDateTime:
                 isUnspecific = True
 
-            elif self.dhmToDateTime and not self.dateTimeToDhm:
+            elif self._dhmToDateTime and not self._dateTimeToDhm:
                 isUnspecific = False
 
             elif not isOutline and self.ywProject.scenes[scId].date is None:
@@ -223,7 +221,7 @@ class TlFile(Novel):
 
             for scId in source.chapters[chId].srtScenes:
 
-                if self.ignoreUnspecific and source.scenes[scId].date is None and source.scenes[scId].time is None:
+                if self._ignoreUnspecific and source.scenes[scId].date is None and source.scenes[scId].time is None:
                     # Skip scenes with unspecific date/time stamps.
                     continue
 

@@ -22,8 +22,8 @@ class SceneEvent(Scene):
         """
         super().__init__()
         self.contId = None
-        self.startDateTime = None
-        self.endDateTime = None
+        self._startDateTime = None
+        self._endDateTime = None
 
     def set_date_time(self, startDateTime, endDateTime, isUnspecific):
         """Set date/time and, if applicable, duration.
@@ -34,8 +34,8 @@ class SceneEvent(Scene):
 
         # Save instance variables for Timeline use.
 
-        self.startDateTime = startDateTime
-        self.endDateTime = endDateTime
+        self._startDateTime = startDateTime
+        self._endDateTime = endDateTime
 
         # Save instance variables for yWriter use.
 
@@ -116,10 +116,10 @@ class SceneEvent(Scene):
             # The date is not "BC", so synchronize it.
 
             if source.time:
-                self.startDateTime = source.date + ' ' + source.time
+                self._startDateTime = source.date + ' ' + source.time
 
             else:
-                self.startDateTime = source.date + ' 00:00:00'
+                self._startDateTime = source.date + ' 00:00:00'
 
         elif source.date is None:
 
@@ -147,10 +147,10 @@ class SceneEvent(Scene):
             sceneDelta = timedelta(days=dayInt)
             defaultDate = self.defaultDateTime.split(' ')[0]
             startDate = (date.fromisoformat(defaultDate) + sceneDelta).isoformat()
-            self.startDateTime = startDate + ' ' + startTime
+            self._startDateTime = startDate + ' ' + startTime
 
-        elif self.startDateTime is None:
-            self.startDateTime = self.defaultDateTime
+        elif self._startDateTime is None:
+            self._startDateTime = self.defaultDateTime
 
         else:
 
@@ -164,8 +164,8 @@ class SceneEvent(Scene):
 
             # The year is two-figure, so do not synchronize.
 
-            if self.endDateTime is None:
-                self.endDateTime = self.startDateTime
+            if self._endDateTime is None:
+                self._endDateTime = self._startDateTime
 
         else:
 
@@ -187,37 +187,37 @@ class SceneEvent(Scene):
                 lastsSeconds += int(source.lastsMinutes) * 60
 
             sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
-            sceneStart = datetime.fromisoformat(self.startDateTime)
+            sceneStart = datetime.fromisoformat(self._startDateTime)
             sceneEnd = sceneStart + sceneDuration
-            self.endDateTime = sceneEnd.isoformat(' ')
+            self._endDateTime = sceneEnd.isoformat(' ')
 
         # Tribute to defensive programming.
 
-        if self.startDateTime > self.endDateTime:
-            self.endDateTime = self.startDateTime
+        if self._startDateTime > self._endDateTime:
+            self._endDateTime = self._startDateTime
 
     def build_subtree(self, xmlEvent, scId, dtMin, dtMax):
         scIndex = 0
 
         try:
-            xmlEvent.find('start').text = self.startDateTime
+            xmlEvent.find('start').text = self._startDateTime
 
         except(AttributeError):
-            ET.SubElement(xmlEvent, 'start').text = self.startDateTime
+            ET.SubElement(xmlEvent, 'start').text = self._startDateTime
 
-        if (not dtMin) or (self.startDateTime < dtMin):
-            dtMin = self.startDateTime
+        if (not dtMin) or (self._startDateTime < dtMin):
+            dtMin = self._startDateTime
 
         scIndex += 1
 
         try:
-            xmlEvent.find('end').text = self.endDateTime
+            xmlEvent.find('end').text = self._endDateTime
 
         except(AttributeError):
-            ET.SubElement(xmlEvent, 'end').text = self.endDateTime
+            ET.SubElement(xmlEvent, 'end').text = self._endDateTime
 
-        if (not dtMax) or (self.endDateTime > dtMax):
-            dtMax = self.endDateTime
+        if (not dtMax) or (self._endDateTime > dtMax):
+            dtMax = self._endDateTime
 
         scIndex += 1
 
