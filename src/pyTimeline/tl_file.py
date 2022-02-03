@@ -36,7 +36,7 @@ class TlFile(Novel):
         and SceneEvent class variables.
         """
         super().__init__(filePath, **kwargs)
-        self.tree = None
+        self._tree = None
 
         self.sceneMarker = kwargs['scene_label']
         self.defaultDateTime = kwargs['default_date_time']
@@ -80,12 +80,12 @@ class TlFile(Novel):
             isOutline = False
 
         try:
-            self.tree = ET.parse(self.filePath)
+            self._tree = ET.parse(self.filePath)
 
         except:
             return f'{ERROR}Can not process "' + os.path.normpath(self.filePath) + '".'
 
-        root = self.tree.getroot()
+        root = self._tree.getroot()
         sceneCount = 0
         scIdsByDate = {}
 
@@ -126,7 +126,7 @@ class TlFile(Novel):
             try:
                 title = event.find('text').text
                 title = remove_contId(self.scenes[scId], title)
-                title = self.convert_to_yw(title)
+                title = self._convert_to_yw(title)
                 self.scenes[scId].title = title
 
             except:
@@ -187,7 +187,7 @@ class TlFile(Novel):
             os.replace(self.filePath, self.filePath + '.bak')
 
             try:
-                self.tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
+                self._tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
 
             except:
                 os.replace(self.filePath + '.bak', self.filePath)
@@ -234,7 +234,7 @@ class TlFile(Novel):
 
                 if source.scenes[scId].title:
                     title = source.scenes[scId].title
-                    title = self.convert_from_yw(title)
+                    title = self._convert_from_yw(title)
                     title = add_contId(self.scenes[scId], title)
                     self.scenes[scId].title = title
 
@@ -339,11 +339,11 @@ class TlFile(Novel):
 
                 srtScenes.append(scId)
 
-        if self.tree is not None:
+        if self._tree is not None:
 
-            #--- Update an existing XML tree.
+            #--- Update an existing XML _tree.
 
-            root = self.tree.getroot()
+            root = self._tree.getroot()
             events = root.find('events')
             trash = []
             scIds = []
@@ -392,7 +392,7 @@ class TlFile(Novel):
 
         else:
 
-            #--- Create a new XML tree.
+            #--- Create a new XML _tree.
 
             root = ET.Element('timeline')
             ET.SubElement(root, 'version').text = '2.4.0 (3f207fbb63f0 2021-04-07)'
@@ -413,7 +413,7 @@ class TlFile(Novel):
             ET.SubElement(period, 'end').text = dtMax
 
         indent(root)
-        self.tree = ET.ElementTree(root)
+        self._tree = ET.ElementTree(root)
 
         if os.path.isfile(self.filePath):
             os.replace(self.filePath, self.filePath + '.bak')
@@ -423,7 +423,7 @@ class TlFile(Novel):
             backedUp = False
 
         try:
-            self.tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
+            self._tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
 
         except:
 
@@ -434,7 +434,7 @@ class TlFile(Novel):
 
         return '"' + os.path.normpath(self.filePath) + '" written.'
 
-    def convert_to_yw(self, text):
+    def _convert_to_yw(self, text):
         """Return text, converted from source format to ywProject markup.
         """
         if text is not None:
@@ -447,7 +447,7 @@ class TlFile(Novel):
 
         return text
 
-    def convert_from_yw(self, text):
+    def _convert_from_yw(self, text):
         """Return text, converted from ywProject markup to target format.
         """
         if text is not None:
