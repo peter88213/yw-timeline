@@ -445,7 +445,7 @@ class TlFile(Novel):
 
         return text
 
-    def _convert_from_yw(self, text):
+    def _convert_from_yw(self, text, quick=False):
         """Return text, converted from ywProject markup to target format.
         """
         if text is not None:
