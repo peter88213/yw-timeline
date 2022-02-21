@@ -15,8 +15,8 @@ from pywriter.model.novel import Novel
 from pywriter.model.chapter import Chapter
 from pywriter.yw.xml_indent import indent
 
-from pyTimeline.scene_event import SceneEvent
-from pyTimeline.dt_helper import fix_iso_dt
+from ywtimelinelib.scene_event import SceneEvent
+from ywtimelinelib.dt_helper import fix_iso_dt
 
 
 class TlFile(Novel):

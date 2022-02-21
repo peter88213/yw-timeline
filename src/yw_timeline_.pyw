@@ -15,7 +15,7 @@ from pywriter.ui.ui import Ui
 from pywriter.ui.ui_tk import UiTk
 from pywriter.config.configuration import Configuration
 
-from pyTimeline.tl_converter import TlConverter
+from ywtimelinelib.tl_converter import TlConverter
 
 
 SUFFIX = ''

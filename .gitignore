@@ -1,6 +1,4 @@
-/src/__pycache__/
-/src/pyTimeline/__pycache__/
-/test/__pycache__/
 /test/yw7/
 /build/
 /Timeline-snippets/
+*.pyc

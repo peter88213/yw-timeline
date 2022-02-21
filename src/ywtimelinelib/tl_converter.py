@@ -9,7 +9,7 @@ import os
 from pywriter.pywriter_globals import ERROR
 from pywriter.converter.yw_cnv_ui import YwCnvUi
 from pywriter.yw.yw7_file import Yw7File
-from pyTimeline.tl_file import TlFile
+from ywtimelinelib.tl_file import TlFile
 
 
 class TlConverter(YwCnvUi):
