@@ -8,10 +8,10 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
-### v1.0.0 Public release
+### v1.0.0
 
-- Rework the error messaging system.
-- Refactor.
+- Rework the user interface. 
+- Refactor the code.
 
 Based on PyWriter v5.0.0
 
