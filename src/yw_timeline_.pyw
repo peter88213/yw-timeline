@@ -30,7 +30,7 @@ OPTIONS = dict(
 )
 
 
-def run(sourcePath, silentMode=True, installDir=''):
+def run(sourcePath, silentMode=True, installDir='.'):
     if silentMode:
         ui = Ui('')
     else:
@@ -39,11 +39,9 @@ def run(sourcePath, silentMode=True, installDir=''):
     #--- Try to get persistent configuration data
     sourceDir = os.path.dirname(sourcePath)
     if not sourceDir:
-        sourceDir = './'
-    else:
-        sourceDir = f'{sourceDir}/'
+        sourceDir = '.'
     iniFileName = f'{APPNAME}.ini'
-    iniFiles = [f'{installDir}{iniFileName}', f'{sourceDir}{iniFileName}']
+    iniFiles = [f'{installDir}/{iniFileName}', f'{sourceDir}/{iniFileName}']
     configuration = Configuration(SETTINGS, OPTIONS)
     for iniFile in iniFiles:
         configuration.read(iniFile)
@@ -69,7 +67,7 @@ if __name__ == '__main__':
     args = parser.parse_args()
     try:
         homeDir = str(Path.home()).replace('\\', '/')
-        installDir = f'{homeDir}/.pywriter/{APPNAME}/config/'
+        installDir = f'{homeDir}/.pywriter/{APPNAME}/config'
     except:
-        installDir = ''
+        installDir = '.'
     run(args.sourcePath, args.silent, installDir)
