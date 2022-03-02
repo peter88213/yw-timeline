@@ -42,10 +42,30 @@ class TlFile(Novel):
         Positional arguments:
             filePath -- str: path to the file represented by the Novel instance.
             
-        Optional arguments:
-            kwargs -- keyword arguments to be used by subclasses.            
+        Required keyword arguments:
+            scene_label -- str: event label marking "scene" events.
+            ignore_unspecific -- bool: ignore yWriter scenes with unspecific date/time. 
+            datetime_to_dhm -- bool: convert yWriter specific date/time to unspecific D/H/M.
+            dhm_to_datetime -- bool: convert yWriter unspecific D/H/M to specific date/time.
+            default_date_time -- str: date/time stamp for undated yWriter scenes.
+            scene_color -- str: color for events imported as scenes from yWriter.
         
-        Extend the superclass constructor.
+        If ignore_unspecific is True, only transfer Scenes with a specific 
+            date/time stamp from yWriter to Timeline.
+        If ignore_unspecific is False, transfer all Scenes from yWriter to Timeline. 
+            Events assigned to scenes having no specific date/time stamp
+            get the default date plus the unspecific 'D' as start date, 
+            and 'H':'M' as start time.
+            
+        If datetime_to_dhm is True, convert yWriter specific date/time to unspecific D/H/M
+            when synchronizing from Timeline. Use the date from default_date_time as a reference. 
+            H, M are taken from the scene time. Precondition: dhm_to_datetime is False.
+        
+        If dhm_to_datetime is True, convert yWriter unspecific D/H/M to specific date/time
+            when synchronizing from Timeline. Use the date from default_date_time as a reference.
+            Time is 'H':'M'. Precondition: datetime_to_dhm is False.
+            
+        Extends the superclass constructor.
         """
         super().__init__(filePath, **kwargs)
         self._tree = None
