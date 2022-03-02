@@ -60,11 +60,21 @@ class TlFile(Novel):
         # To be set by the calling converter class.
 
     def read(self):
-        """Parse the file and store selected properties.
+        """Parse the file and get the instance variables.
+        
+        Return a message beginning with the ERROR constant in case of error.
+        Overrides the superclass method.
         """
         def remove_contId(event, text):
-            """If text comes with a Container ID, remove it 
-            and store it in the contId property. 
+            """Separate container ID from event title.
+            
+            Positional arguments:
+                event -- SceneEvent to update.
+                text -- str: event title.         
+            
+            If text comes with a Container ID, remove it 
+            and store it in the event.contId instance variable.
+            Return the stripped string.
             """
             if text:
                 match = re.match('([\(\[][0-9]+[\)\]])', text)
@@ -73,6 +83,7 @@ class TlFile(Novel):
                     event.contId = contId
                     text = text.split(contId, 1)[1]
             return text
+        
         #--- Parse the Timeline file.
         if self.ywProject is None:
             isOutline = True
@@ -172,8 +183,7 @@ class TlFile(Novel):
         
         Return a message beginning with the ERROR constant in case of error.
         Overrides the superclass method.
-        """
-        
+        """        
         def add_contId(event, text):
             """If event has a container ID, add it to text."""
             if event.contId is not None:
@@ -221,7 +231,6 @@ class TlFile(Novel):
         Return a message beginning with the ERROR constant in case of error.
         Overrides the superclass method.
         """
-
         def set_view_range(dtMin, dtMax):
             """Return maximum/minimum timestamp defining the view range in Timeline.
             
