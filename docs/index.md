@@ -2,7 +2,7 @@ The [Timeline Project](http://thetimelineproj.sourceforge.net/) application
 can be used to visualize the course of the narrative time in a 
 [yWriter](http://spacejock.com/yWriter7.html) project.
 
-[![Screenshot: Example](Screenshots/screen01.png)](Screenshots/screen01.png)
+[![Screenshot: Example](Screenshots/screen01.png)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/docs/Screenshots/screen01.png)
 ## Features
 
 - Generate a *yWriter* project from an outline created with *Timeline*.
@@ -21,9 +21,9 @@ can be used to visualize the course of the narrative time in a
 
 ## Download and install
 
-[Download the latest release (version 1.0.0)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v1.0.0.zip)
+[Download the latest release (version 1.0.1)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v1.0.1.zip)
 
-- Unzip the downloaded zipfile "yw-timeline_v1.0.0.zip" into a new folder.
+- Unzip the downloaded zipfile "yw-timeline_v1.0.1.zip" into a new folder.
 - Move into this new folder and launch **setup.pyw**. This installs the script for the local user.
 - Create a shortcut on the desktop when asked.
 - Open "README.md" for usage instructions.
