@@ -12,10 +12,20 @@ from ywtimelinelib.tl_file import TlFile
 
 
 class TlConverter(YwCnvUi):
-    """A converter class for yWriter and Timeline."""
+    """A converter class for yWriter and Timeline.
+    
+    Public methods:
+        run(sourcePath, **kwargs) -- create source and target objects and run conversion.
+    """
 
     def run(self, sourcePath, **kwargs):
         """Create source and target objects and run conversion.
+
+        Positional arguments: 
+            sourcePath -- str: the source file path.
+
+        The direction of the conversion is determined by the source file type.
+        Only yWriter project files and Timeline files are accepted.
         """
         self.newFile = None
         if not os.path.isfile(sourcePath):
