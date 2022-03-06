@@ -12,7 +12,7 @@ See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/pr
 
 - Improve code and documentation quality.
 
-Based on PyWriter v5.0.2
+Based on PyWriter v5.0.3
 
 ### v1.0.0
 
