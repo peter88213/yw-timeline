@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="yw-timeline" basedir=".">
-	<property name="version" value="1.1.0" />
+	<property name="version" value="1.1.1" />
 	<property name="test-app" value="yw_timeline" />
 	<property name="novelyst-plugin" value="yw_timeline_novelyst" />
 	
@@ -17,9 +17,6 @@
 		<exec executable="python" failonerror="true">
 		    <arg value="${source-path}/build_${test-app}.py"/>
 		</exec>
-	</target>
-
-	<target name="build novelyst plugin" description="inline all library modules">
 		<delete file="${test-path}/${novelyst-plugin}.py" />
 		<exec executable="python" failonerror="true">
 		    <arg value="${source-path}/build_${novelyst-plugin}.py"/>
