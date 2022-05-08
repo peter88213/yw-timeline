@@ -1,7 +1,6 @@
 """Timeline sync plugin for novelyst.
 
-Version @release
-Compatibility: novelyst v0.4.2 API 
+Compatibility: novelyst v0.6.0 API 
 Requires Python 3.6+
 Copyright (c) 2022 Peter Triesberger
 For further information see https://github.com/peter88213/aeon2yw
@@ -19,11 +18,12 @@ from ywtimelinelib.tl_file import TlFile
 from ywtimelinelib.tl_converter import TlConverter
 
 APPLICATION = 'Timeline'
+PLUGIN = f'{APPLICATION} plugin v@release'
 INI_FILENAME = 'yw-timeline.ini'
 INI_FILEPATH = '.pywriter/yw-timeline/config'
 
 
-class TlSync():
+class Plugin():
     """Plugin class for synchronization with Timeline.
     
     Public methods:
@@ -110,7 +110,7 @@ class TlSync():
                     message = 'Cannot determine file date.'
             else:
                 message = (f'No {APPLICATION} file available for this project.')
-            messagebox.showinfo(self._ui.ywPrj.title, message)
+            messagebox.showinfo(PLUGIN, message)
 
     def _import_to_yw(self):
         """Update yWriter from timeline.

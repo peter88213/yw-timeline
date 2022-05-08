@@ -189,17 +189,6 @@ def install(pywriterPath):
             os.makedirs(pluginDir, exist_ok=True)
             copyfile(plugin, f'{pluginDir}/{plugin}')
             output(f'Copying "{plugin}"')
-            packageFile = f'{pluginDir}/__init__.py'
-            if not os.path.isfile(packageFile):
-                with open(packageFile, 'w') as f:
-                    f.write('plugins = []')
-                    output(f'Creating "{packageFile}"')
-            with open(packageFile, 'r') as f:
-                text = f.read()
-                if not REGISTER_PLUGIN in text:
-                    text += REGISTER_PLUGIN
-                    with open(packageFile, 'w') as f:
-                        f.write(text)
 
     # Display a success message.
     mapping = {'Appname': APPNAME, 'Apppath': f'{installDir}/{APP}'}
