@@ -20,6 +20,13 @@ except ModuleNotFoundError:
     print('The tkinter module is missing. Please install the tk support package for your python3 version.')
     sys.exit(1)
 
+REGISTER_PLUGIN = '''
+try:
+    from yw_timeline_novelyst import TlSync
+    plugins.append(TlSync)
+except:
+    pass
+'''
 
 APPNAME = 'yw-timeline'
 VERSION = ' @release'
@@ -100,8 +107,8 @@ def make_context_menu(installPath):
     instPath = installPath.replace('/', '\\\\')
     script = f'{instPath}\\\\{APP}'
     mapping = dict(PYTHON=python, SCRIPT=script)
-    save_reg_file(installPath + '/add_context_menu.reg',Template(SET_CONTEXT_MENU), mapping)
-    save_reg_file(installPath + '/rem_context_menu.reg',Template(RESET_CONTEXT_MENU), {})
+    save_reg_file(installPath + '/add_context_menu.reg', Template(SET_CONTEXT_MENU), mapping)
+    save_reg_file(installPath + '/rem_context_menu.reg', Template(RESET_CONTEXT_MENU), {})
 
 
 def open_folder(installDir):
@@ -169,9 +176,31 @@ def install(pywriterPath):
     except:
         pass
 
-    # Generate registry entries for the context menu (Windows only).
+    #--- Generate registry entries for the context menu (Windows only).
     if os.name == 'nt':
         make_context_menu(installDir)
+
+    #--- Install a novelyst plugin if novelyst is installed.
+    plugin = 'yw_timeline_novelyst.py'
+    if os.path.isfile(f'./{plugin}'):
+        novelystDir = f'{pywriterPath}novelyst'
+        if os.path.isdir(novelystDir):
+            pluginDir = f'{novelystDir}/plugin'
+            output(f'Installing novelyst plugin at "{os.path.normpath(pluginDir)}"')
+            os.makedirs(pluginDir, exist_ok=True)
+            copyfile(plugin, f'{pluginDir}/{plugin}')
+            output(f'Copying "{plugin}"')
+            packageFile = f'{pluginDir}/__init__.py'
+            if not os.path.isfile(packageFile):
+                with open(packageFile, 'w') as f:
+                    f.write('plugins = []')
+                    output(f'Creating "{packageFile}"')
+            with open(packageFile, 'r') as f:
+                text = f.read()
+                if not APPNAME in text:
+                    text += REGISTER_PLUGIN
+                    with open(packageFile, 'w') as f:
+                        f.write(text)
 
     # Display a success message.
     mapping = {'Appname': APPNAME, 'Apppath': f'{installDir}/{APP}'}

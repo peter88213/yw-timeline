@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="yw-timeline" basedir=".">
-	<property name="version" value="1.0.1" />
+	<property name="version" value="1.1.0" />
 	<property name="test-app" value="yw_timeline" />
+	<property name="novelyst-plugin" value="yw_timeline_novelyst" />
 	
 	<property name="source-path" location="../src" />
 	<property name="test-path" location="../test" />
@@ -15,6 +16,13 @@
 		<delete file="${test-path}/${test-app}.pyw" />
 		<exec executable="python" failonerror="true">
 		    <arg value="${source-path}/build_${test-app}.py"/>
+		</exec>
+	</target>
+
+	<target name="build novelyst plugin" description="inline all library modules">
+		<delete file="${test-path}/${novelyst-plugin}.py" />
+		<exec executable="python" failonerror="true">
+		    <arg value="${source-path}/build_${novelyst-plugin}.py"/>
 		</exec>
 	</target>
 
@@ -35,6 +43,9 @@
 		
 		<copy file="${test-path}/${test-app}.pyw" tofile="${build-path}/${release}/${application}.pyw" />
 		<replace encoding="utf-8" file="${build-path}/${release}/${application}.pyw" token="@release" value="${version}" />
+		
+		<copy file="${test-path}/${novelyst-plugin}.py" tofile="${build-path}/${release}/${novelyst-plugin}.py" />
+		<replace encoding="utf-8" file="${build-path}/${release}/${novelyst-plugin}.py" token="@release" value="${version}" />
 		
 		<copy file="${source-path}/setup.pyw" todir="${build-path}/${release}" />		
 		<replace encoding="utf-8" file="${build-path}/${release}/setup.pyw" token="@release" value="${version}" />
@@ -57,6 +68,7 @@
 	<target name="clean" description="clean up">		
 		<delete file="${test-path}/${test-app}.pyw" />
 		<delete file="${test-path}/test_${test-app}.py" />		
+		<delete file="${test-path}/${novelyst-plugin}.py" />
 	</target>
 
 </project>
