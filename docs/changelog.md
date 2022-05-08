@@ -8,6 +8,13 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+
+### v1.0.2 Bugfix release
+
+- Fix a bug where characters and locations and items are multiplied when exporting to yWriter
+
+Based on PyWriter v5.6.0
+
 ### v1.0.1
 
 - Improve code and documentation quality.

@@ -56,18 +56,6 @@
       <Desc><![CDATA[The place to be.]]></Desc>
       <SortOrder>2</SortOrder>
     </ITEM>
-    <ITEM>
-      <ID>1</ID>
-      <Title><![CDATA[Bird]]></Title>
-      <Desc><![CDATA[This bird is not dead.]]></Desc>
-      <SortOrder>3</SortOrder>
-    </ITEM>
-    <ITEM>
-      <ID>2</ID>
-      <Title><![CDATA[The ministry of silly walk]]></Title>
-      <Desc><![CDATA[The place to be.]]></Desc>
-      <SortOrder>4</SortOrder>
-    </ITEM>
   </ITEMS>
   <CHARACTERS>
 	</CHARACTERS>
