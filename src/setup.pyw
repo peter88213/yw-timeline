@@ -20,13 +20,6 @@ except ModuleNotFoundError:
     print('The tkinter module is missing. Please install the tk support package for your python3 version.')
     sys.exit(1)
 
-REGISTER_PLUGIN = '''try:
-    from yw_timeline_novelyst import TlSync
-    plugins.append(TlSync)
-except:
-    pass
-'''
-
 APPNAME = 'yw-timeline'
 VERSION = ' @release'
 APP = f'{APPNAME}.pyw'
@@ -34,10 +27,9 @@ INI_FILE = f'{APPNAME}.ini'
 INI_PATH = '/config/'
 SAMPLE_PATH = 'sample/'
 SUCCESS_MESSAGE = '''
-
 $Appname is installed here:
-
-$Apppath'''
+$Apppath
+'''
 
 SHORTCUT_MESSAGE = '''
 Now you might want to create a shortcut on your desktop.  
@@ -179,17 +171,6 @@ def install(pywriterPath):
     if os.name == 'nt':
         make_context_menu(installDir)
 
-    #--- Install a novelyst plugin if novelyst is installed.
-    plugin = 'yw_timeline_novelyst.py'
-    if os.path.isfile(f'./{plugin}'):
-        novelystDir = f'{pywriterPath}novelyst'
-        if os.path.isdir(novelystDir):
-            pluginDir = f'{novelystDir}/plugin'
-            output(f'Installing novelyst plugin at "{os.path.normpath(pluginDir)}"')
-            os.makedirs(pluginDir, exist_ok=True)
-            copyfile(plugin, f'{pluginDir}/{plugin}')
-            output(f'Copying "{plugin}"')
-
     # Display a success message.
     mapping = {'Appname': APPNAME, 'Apppath': f'{installDir}/{APP}'}
     output(Template(SUCCESS_MESSAGE).safe_substitute(mapping))
@@ -197,6 +178,21 @@ def install(pywriterPath):
     # Ask for shortcut creation.
     if not simpleUpdate:
         output(Template(SHORTCUT_MESSAGE).safe_substitute(mapping))
+
+
+def install_plugin(pywriterPath):
+    """Install a novelyst plugin if novelyst is installed."""
+    plugin = f'yw_timeline_novelyst.py'
+    if os.path.isfile(f'./{plugin}'):
+        novelystDir = f'{pywriterPath}novelyst'
+        pluginDir = f'{novelystDir}/plugin'
+        output(f'Installing novelyst plugin at "{os.path.normpath(pluginDir)}"')
+        os.makedirs(pluginDir, exist_ok=True)
+        copyfile(plugin, f'{pluginDir}/{plugin}')
+        output(f'Copying "{plugin}"')
+    else:
+        output('Error: novelyst plugin file not found.')
+    root.pluginButton['state'] = DISABLED
 
 
 if __name__ == '__main__':
@@ -212,10 +208,17 @@ if __name__ == '__main__':
 
     # Run the installation.
     homePath = str(Path.home()).replace('\\', '/')
-    install(f'{homePath}/.pywriter/')
+    pywriterPath = f'{homePath}/.pywriter/'
+    install(pywriterPath)
+
+    novelystDir = f'{pywriterPath}novelyst'
+    if os.path.isdir(novelystDir):
+        root.pluginButton = Button(text="Install the novelyst plugin", command=lambda: install_plugin(pywriterPath))
+        root.pluginButton.config(height=1, width=30)
+        root.pluginButton.pack(padx=5, pady=5)
 
     # Show options: open installation folders or quit.
-    root.openButton = Button(text="Open installation folder", command=lambda: open_folder(f'{homePath}/.pywriter/{APPNAME}'))
+    root.openButton = Button(text="Open installation folder", command=lambda: open_folder(f'{pywriterPath}{APPNAME}'))
     root.openButton.config(height=1, width=30)
     root.openButton.pack(padx=5, pady=5)
     root.quitButton = Button(text="Quit", command=quit)

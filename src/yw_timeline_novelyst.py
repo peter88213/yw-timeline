@@ -1,5 +1,6 @@
 """Timeline sync plugin for novelyst.
 
+Version @release
 Compatibility: novelyst v0.6.0 API 
 Requires Python 3.6+
 Copyright (c) 2022 Peter Triesberger
