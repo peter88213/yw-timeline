@@ -9,7 +9,8 @@ can be used to visualize the course of the narrative time in a
 - Generate a *Timeline* project from a *yWriter* project.
 - Synchronize *yWriter* scenes with corresponding *Timeline* events in both directions.
 - When synchronizing a yWriter project with a timeline, optionally change unspecific scene "Day/Hour/Minute" to specific "date/time" and vice versa.
-- Launch via drag/drop or Windows context menu. 
+- Launch via drag/drop or Windows context menu.
+- Optionally, a [novelyst](https://peter88213.github.io/novelyst/) plugin can be installed.
 
  
 ## Requirements
@@ -21,9 +22,9 @@ can be used to visualize the course of the narrative time in a
 
 ## Download and install
 
-[Download the latest release (version 1.1.3)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v1.1.3.zip)
+[Download the latest release (version 1.2.0)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v1.2.0.zip)
 
-- Unzip the downloaded zipfile "yw-timeline_v1.1.3.zip" into a new folder.
+- Unzip the downloaded zipfile "yw-timeline_v1.2.0.zip" into a new folder.
 - Move into this new folder and launch **setup.pyw**. This installs the script for the local user.
 - Create a shortcut on the desktop when asked.
 - Open "README.md" for usage instructions.

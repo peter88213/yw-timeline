@@ -8,6 +8,11 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v1.2.0
+
+- Provide a novelyst plugin.
+
+Based on PyWriter v5.6.1
 
 ### v1.0.2 Bugfix release
 
