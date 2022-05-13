@@ -15,8 +15,8 @@ from datetime import datetime
 from pywriter.pywriter_globals import ERROR
 from pywriter.config.configuration import Configuration
 from pywriter.file.doc_open import open_document
+from pywriter.converter.yw_cnv_ui import YwCnvUi
 from ywtimelinelib.tl_file import TlFile
-from ywtimelinelib.tl_converter import TlConverter
 
 APPLICATION = 'Timeline'
 PLUGIN = f'{APPLICATION} plugin v@release'
@@ -49,8 +49,9 @@ class Plugin():
         Positional arguments:
             ui -- reference to the NovelystTk instance of the application.
         """
-        self._exporter = TlConverter
         self._ui = ui
+        self._converter = YwCnvUi()
+        self._converter.ui = ui
 
         # Create a submenu
         self._pluginMenu = tk.Menu(self._ui.mainMenu, title='my title', tearoff=0)
@@ -92,7 +93,10 @@ class Plugin():
                 action = 'create'
             if self._ui.ask_yes_no(f'Save the project and {action} the timeline?'):
                 self._ui.save_project()
-                self._run(self._ui.ywPrj.filePath)
+                kwargs = self._get_configuration(self._ui.ywPrj.filePath)
+                targetFile = TlFile(timelinePath, **kwargs)
+                targetFile.ywProject = self._ui.ywPrj
+                self._converter.export_from_yw(self._ui.ywPrj, targetFile)
 
     def _info(self):
         """Show information about the Timeline file."""
@@ -121,12 +125,17 @@ class Plugin():
             if os.path.isfile(timelinePath):
                 if self._ui.ask_yes_no('Save the project and update from timeline?'):
                     self._ui.save_project()
-                    self._run(timelinePath)
+                    kwargs = self._get_configuration(timelinePath)
+                    sourceFile = TlFile(timelinePath, **kwargs)
+                    sourceFile.ywProject = self._ui.ywPrj
+                    self._converter.import_to_yw(sourceFile, self._ui.ywPrj)
+                    message = self._ui.infoHowText
                     self._ui.reload_project()
+                    self._ui.set_info_how(message)
             else:
                 self._ui.set_info_how(f'{ERROR}No {APPLICATION} file available for this project.')
 
-    def _run(self, sourcePath):
+    def _get_configuration(self, sourcePath):
         #--- Try to get persistent configuration data
         sourceDir = os.path.dirname(sourcePath)
         if not sourceDir:
@@ -140,10 +149,8 @@ class Plugin():
         configuration = Configuration(self.SETTINGS, self.OPTIONS)
         for iniFile in iniFiles:
             configuration.read(iniFile)
-        kwargs = {'suffix': ''}
+        kwargs = {}
         kwargs.update(configuration.settings)
         kwargs.update(configuration.options)
-        converter = TlConverter()
-        converter.ui = self._ui
-        converter.run(sourcePath, **kwargs)
+        return kwargs
 
