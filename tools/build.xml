@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="yw-timeline" basedir=".">
-	<property name="version" value="1.2.2" />
+	<property name="version" value="1.2.3" />
 	<property name="test-app" value="yw_timeline" />
 	<property name="novelyst-plugin" value="yw_timeline_novelyst" />
 	

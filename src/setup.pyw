@@ -152,8 +152,11 @@ def install(pywriterPath):
     output(f'Copying "{APP}"')
 
     # Make the script executable under Linux.
-    st = os.stat(f'{installDir}/{APP}')
-    os.chmod(f'{installDir}/{APP}', st.st_mode | stat.S_IEXEC)
+    try:
+        st = os.stat(f'{installDir}/{APP}')
+        os.chmod(f'{installDir}/{APP}', st.st_mode | stat.S_IEXEC)
+    except:
+        pass
 
     # Install configuration files, if needed.
     try:
@@ -209,8 +212,10 @@ if __name__ == '__main__':
     # Run the installation.
     homePath = str(Path.home()).replace('\\', '/')
     pywriterPath = f'{homePath}/.pywriter/'
-    install(pywriterPath)
-
+    try:
+        install(pywriterPath)
+    except Exception as ex:
+        output(str(ex))
     novelystDir = f'{pywriterPath}novelyst'
     if os.path.isdir(novelystDir):
         root.pluginButton = Button(text="Install the novelyst plugin", command=lambda: install_plugin(pywriterPath))
