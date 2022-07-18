@@ -57,20 +57,6 @@ The path of the yWriter/Timeline project file.
 
 `--silent`  suppress error messages and the request to confirm overwriting
 
-### Context menu (Windows only)
-
-Under Windows, you optionally can launch *yw-timeline* via context menu.
-
-After installation, you can add the context menu entries by double-clicking  `add_context_menu.reg`. 
-You may be asked for approval to modify the Windows registry. Please accept.
-
-- On right-clicking a *.yw7* file, an *Export to Timeline* option appears.
-- On right-clicking a *.timeline* file, an *Export to yWritere* option appears.
-
-You can remove the context menu entries by double-clicking  `rem_context_menu.reg`.
-
-Please note that these context menus depend on the currently installed Python version. After a major Python update you may need to run the setup program again and renew the registry entries.
-
 ## Custom configuration
 
 You can override the default settings by providing a configuration file. Be always aware that faulty entries may cause program errors or unreadable Timeline projects. If you change a configuration inbetween, previously synchronized projects might no longer match. 
