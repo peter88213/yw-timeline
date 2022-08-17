@@ -1,0 +1,75 @@
+# yw-timeline Dictionary (English-German)
+# Copyright (C) 2022 Peter Triesberger
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: unknown\n"
+"POT-Creation-Date: 2022-08-17 21:36:48\n"
+"PO-Revision-Date: 2022-08-17 21:36:55\n"
+"Last-Translator: Peter Triesberger\n"
+"Language: de\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+
+msgid "Action canceled by user"
+msgstr "Vorgang vom Benutzer abgebrochen"
+
+msgid "Can not process file"
+msgstr "Kann Datei nicht verarbeiten"
+
+msgid "Cannot write file"
+msgstr "Kann Datei nicht schreiben"
+
+msgid "Create a yWriter project file from {0}\nNew project: \"{1}\""
+msgstr "Erzeuge eine yWriter-Projektdatei aus {0}.n\nNeues Projekt: \"{1}\""
+
+msgid "File already exists"
+msgstr "Datei existiert bereits"
+
+msgid "File not found"
+msgstr "Datei nicht gefunden"
+
+msgid "File type is not supported"
+msgstr "Dateityp wird nicht unterstützt"
+
+msgid "File written"
+msgstr "Datei gespeichert"
+
+msgid "Input: {0} \"{1}\"\nOutput: {2} \"{3}\""
+msgstr "Quelle: {0} \"{1}\"\nZiel: {2} \"{3}\""
+
+msgid "New Chapter"
+msgstr "Neues Kapitel"
+
+msgid "New Part"
+msgstr "Neuer Teil"
+
+msgid "New Scene"
+msgstr "Neue Szene"
+
+msgid "New scenes created during conversion."
+msgstr "Während der Konvertierung wurden neue Szenen erzeugt"
+
+msgid "Novel"
+msgstr "Roman"
+
+msgid "Open"
+msgstr "Öffnen"
+
+msgid "Overwrite existing file \"{}\"?"
+msgstr "Bestehende Datei \"{}\" überschreiben?"
+
+msgid "Quit"
+msgstr "Beenden"
+
+msgid "WARNING"
+msgstr "WARNUNG"
+
+msgid "yWriter 7 project"
+msgstr "yWriter 7-Projekt"
+
+msgid "yWriter seems to be open. Please close first"
+msgstr "yWriter scheint offen zu sein. Bitte schließen"
+

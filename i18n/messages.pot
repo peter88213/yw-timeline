@@ -1,0 +1,75 @@
+# yw-timeline Dictionary
+# Copyright (C) 2022 Peter Triesberger
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: unknown\n"
+"POT-Creation-Date: 2022-08-17 21:36:48\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: LANGUAGE\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: PyWriter pgettext.py 0.3\n"
+
+
+msgid "Action canceled by user"
+msgstr ""
+
+msgid "Can not process file"
+msgstr ""
+
+msgid "Cannot write file"
+msgstr ""
+
+msgid "Create a yWriter project file from {0}\nNew project: \"{1}\""
+msgstr ""
+
+msgid "File already exists"
+msgstr ""
+
+msgid "File not found"
+msgstr ""
+
+msgid "File type is not supported"
+msgstr ""
+
+msgid "File written"
+msgstr ""
+
+msgid "Input: {0} \"{1}\"\nOutput: {2} \"{3}\""
+msgstr ""
+
+msgid "New Chapter"
+msgstr ""
+
+msgid "New Part"
+msgstr ""
+
+msgid "New Scene"
+msgstr ""
+
+msgid "New scenes created during conversion."
+msgstr ""
+
+msgid "Novel"
+msgstr ""
+
+msgid "Open"
+msgstr ""
+
+msgid "Overwrite existing file \"{}\"?"
+msgstr ""
+
+msgid "Quit"
+msgstr ""
+
+msgid "WARNING"
+msgstr ""
+
+msgid "yWriter 7 project"
+msgstr ""
+
+msgid "yWriter seems to be open. Please close first"
+msgstr ""
