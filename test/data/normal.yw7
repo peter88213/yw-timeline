@@ -76,6 +76,8 @@
       <ID>1</ID>
       <SortOrder>1</SortOrder>
       <Title><![CDATA[Chapter 1]]></Title>
+      <ChapterType>0</ChapterType>
+      <Type>0</Type>
       <Scenes>
         <ScID>3</ScID>
         <ScID>5</ScID>
