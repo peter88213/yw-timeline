@@ -85,6 +85,7 @@ class TlFile(Novel):
         Return a message beginning with the ERROR constant in case of error.
         Overrides the superclass method.
         """
+
         def remove_contId(event, text):
             """Separate container ID from event title.
             
@@ -103,7 +104,7 @@ class TlFile(Novel):
                     event.contId = contId
                     text = text.split(contId, 1)[1]
             return text
-        
+
         #--- Parse the Timeline file.
         if self.ywProject is None:
             isOutline = True
@@ -203,7 +204,8 @@ class TlFile(Novel):
         
         Return a message beginning with the ERROR constant in case of error.
         Overrides the superclass method.
-        """        
+        """
+
         def add_contId(event, text):
             """If event has a container ID, add it to text."""
             if event.contId is not None:
@@ -236,9 +238,7 @@ class TlFile(Novel):
                     self.scenes[scId].title = title
                 self.scenes[scId].desc = source.scenes[scId].desc
                 self.scenes[scId].merge_date_time(source.scenes[scId])
-                self.scenes[scId].isNotesScene = source.scenes[scId].isNotesScene
-                self.scenes[scId].isUnused = source.scenes[scId].isUnused
-                self.scenes[scId].isTodoScene = source.scenes[scId].isTodoScene
+                self.scenes[scId].scType = source.scenes[scId].scType
         scenes = list(self.scenes)
         for scId in scenes:
             if not scId in source.scenes:
@@ -251,6 +251,7 @@ class TlFile(Novel):
         Return a message beginning with the ERROR constant in case of error.
         Overrides the superclass method.
         """
+
         def set_view_range(dtMin, dtMax):
             """Return maximum/minimum timestamp defining the view range in Timeline.
             
@@ -303,16 +304,8 @@ class TlFile(Novel):
         srtScenes = []
         for chId in self.srtChapters:
             for scId in self.chapters[chId].srtScenes:
-                if self.scenes[scId].isNotesScene:
-                    continue
-
-                if self.scenes[scId].isUnused:
-                    continue
-
-                if self.scenes[scId].isTodoScene:
-                    continue
-
-                srtScenes.append(scId)
+                if self.scenes[scId].scType == 0:
+                    srtScenes.append(scId)
         if self._tree is not None:
             #--- Update an existing XML _tree.
             root = self._tree.getroot()
