@@ -90,7 +90,7 @@ def make_context_menu(installPath):
 
     def save_reg_file(filePath, template, mapping):
         """Save a registry file."""
-        with open(filePath, 'w', encoding='utf-8') as f:
+        with open(filePath, 'w') as f:
             f.write(template.safe_substitute(mapping))
         output(f'Creating "{os.path.normpath(filePath)}"')
 
@@ -202,7 +202,7 @@ if __name__ == '__main__':
     scriptPath = os.path.abspath(sys.argv[0])
     scriptDir = os.path.dirname(scriptPath)
     os.chdir(scriptDir)
-    
+
     # Open a tk window.
     root.geometry("800x600")
     root.title(f'Install {APPNAME}{VERSION}')
