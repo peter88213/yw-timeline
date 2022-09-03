@@ -11,14 +11,29 @@ Published under the MIT License (https://opensource.org/licenses/mit-license.php
 import sys
 import os
 import stat
+from shutil import copytree
 from shutil import copyfile
+from shutil import rmtree
 from pathlib import Path
 from string import Template
+import gettext
+import locale
 try:
     from tkinter import *
 except ModuleNotFoundError:
     print('The tkinter module is missing. Please install the tk support package for your python3 version.')
     sys.exit(1)
+
+# Initialize localization.
+LOCALE_PATH = f'{os.path.dirname(sys.argv[0])}/locale/'
+CURRENT_LANGUAGE = locale.getdefaultlocale()[0][:2]
+try:
+    t = gettext.translation('reg', LOCALE_PATH, languages=[CURRENT_LANGUAGE])
+    _ = t.gettext
+except:
+
+    def _(message):
+        return message
 
 APPNAME = 'yw-timeline'
 VERSION = ' @release'
@@ -41,12 +56,14 @@ On Linux, create a launcher on your desktop. With xfce for instance, the launche
 python3 '$Apppath' %F
 '''
 
-SET_CONTEXT_MENU = '''Windows Registry Editor Version 5.00
+SET_CONTEXT_MENU = f'''Windows Registry Editor Version 5.00
 
-[HKEY_CURRENT_USER\SOFTWARE\Classes\\yWriter7\\shell\\Export to Timeline]
+[-HKEY_CURRENT_USER\SOFTWARE\Classes\\yWriter7\\shell\\Export to Timeline]
 
-[HKEY_CURRENT_USER\SOFTWARE\Classes\\yWriter7\\shell\\Export to Timeline\\command]
-@="\\"${PYTHON}\\" \\"${SCRIPT}\\" \\"%1\\""
+[HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
+
+[HKEY_CURRENT_USER\SOFTWARE\Classes\\yWriter7\\shell\\{_('Export to Timeline')}\\command]
+@="\\"$PYTHON\\" \\"$SCRIPT\\" \\"%1\\""
 
 [HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.timeline]
 @="TimelineProject"
@@ -62,15 +79,16 @@ SET_CONTEXT_MENU = '''Windows Registry Editor Version 5.00
 [HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject\\shell\\open\\command]
 @="\\"C:\\\\Program Files (x86)\\\\Timeline\\\\timeline.exe\\" \\"%1\\""
 
-[HKEY_CURRENT_USER\SOFTWARE\Classes\\TimelineProject\\shell\\Export to yWriter]
+[HKEY_CURRENT_USER\SOFTWARE\Classes\\TimelineProject\\shell\\{_('Export to yWriter')}]
 
-[HKEY_CURRENT_USER\SOFTWARE\Classes\\TimelineProject\\shell\\Export to yWriter\\command]
-@="\\"${PYTHON}\\" \\"${SCRIPT}\\" \\"%1\\""
+[HKEY_CURRENT_USER\SOFTWARE\Classes\\TimelineProject\\shell\\{_('Export to yWriter')}\\command]
+@="\\"$PYTHON\\" \\"$SCRIPT\\" \\"%1\\""
 '''
 
-RESET_CONTEXT_MENU = '''Windows Registry Editor Version 5.00
+RESET_CONTEXT_MENU = f'''Windows Registry Editor Version 5.00
 
 [-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\yWriter7\\shell\Export to Timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\yWriter7\\shell\{_('Export to Timeline')}]
 [-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.timeline]
 [-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
 '''
@@ -141,6 +159,9 @@ def install(pywriterPath):
         pass
     os.makedirs(cnfDir, exist_ok=True)
 
+    # Delete existing localization files.
+    rmtree(f'{installDir}/locale', ignore_errors=True)
+
     # Delete the old version, but retain configuration, if any.
     with os.scandir(installDir) as files:
         for file in files:
@@ -150,6 +171,10 @@ def install(pywriterPath):
     # Install the new version.
     copyfile(APP, f'{installDir}/{APP}')
     output(f'Copying "{APP}"')
+
+    # Install the localization files.
+    copytree('locale', f'{installDir}/locale')
+    output(f'Copying "locale"')
 
     # Make the script executable under Linux.
     try:
@@ -195,6 +220,11 @@ def install_plugin(pywriterPath):
         output(f'Copying "{plugin}"')
     else:
         output('Error: novelyst plugin file not found.')
+
+    # Install the localization files.
+    copytree('plugin_locale', f'{novelystDir}/locale', dirs_exist_ok=True)
+    output(f'Copying "plugin_locale"')
+
     root.pluginButton['state'] = DISABLED
 
 

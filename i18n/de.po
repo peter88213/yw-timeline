@@ -3,9 +3,9 @@
 #
 msgid ""
 msgstr ""
-"Project-Id-Version: unknown\n"
-"POT-Creation-Date: 2022-08-17 21:36:48\n"
-"PO-Revision-Date: 2022-08-17 21:36:55\n"
+"Project-Id-Version: 1.4.0\n"
+"POT-Creation-Date: 2022-09-03 15:56:37\n"
+"PO-Revision-Date: 2022-09-03 15:56:37\n"
 "Last-Translator: Peter Triesberger\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
@@ -19,11 +19,20 @@ msgstr "Vorgang vom Benutzer abgebrochen"
 msgid "Can not process file"
 msgstr "Kann Datei nicht verarbeiten"
 
+msgid "Cannot determine file date."
+msgstr "Das Dateidatum ist nicht zu ermitteln."
+
 msgid "Cannot write file"
 msgstr "Kann Datei nicht schreiben"
 
 msgid "Create a yWriter project file from {0}\nNew project: \"{1}\""
-msgstr "Erzeuge eine yWriter-Projektdatei aus {0}.n\nNeues Projekt: \"{1}\""
+msgstr "Erzeuge eine yWriter-Projektdatei aus {0}\nNeues Projekt: \"{1}\""
+
+msgid "Create or update the timeline"
+msgstr "Die Zeitleiste erzeugen oder aktualisieren"
+
+msgid "Edit the timeline"
+msgstr "Die Zeitleiste bearbeiten"
 
 msgid "File already exists"
 msgstr "Datei existiert bereits"
@@ -36,6 +45,9 @@ msgstr "Dateityp wird nicht unterstützt"
 
 msgid "File written"
 msgstr "Datei gespeichert"
+
+msgid "Information"
+msgstr "Information"
 
 msgid "Input: {0} \"{1}\"\nOutput: {2} \"{3}\""
 msgstr "Quelle: {0} \"{1}\"\nZiel: {2} \"{3}\""
@@ -50,7 +62,10 @@ msgid "New Scene"
 msgstr "Neue Szene"
 
 msgid "New scenes created during conversion."
-msgstr "Während der Konvertierung wurden neue Szenen erzeugt"
+msgstr "Während der Konvertierung wurden neue Szenen erzeugt."
+
+msgid "No {0} file available for this project."
+msgstr "Keine {0}-Datei für dieses Projekt vorhanden."
 
 msgid "Novel"
 msgstr "Roman"
@@ -64,12 +79,42 @@ msgstr "Bestehende Datei \"{}\" überschreiben?"
 msgid "Quit"
 msgstr "Beenden"
 
+msgid "Save the project and update it?"
+msgstr "Projekt speichern und aktualisieren?"
+
+msgid "Save the project and {} the timeline?"
+msgstr "Projekt sichern und die Zeitleiste {}?"
+
+msgid "Synchronize Timeline and yWriter"
+msgstr "Timeline und yWriter synchronisieren"
+
+msgid "Update the project"
+msgstr "Das Projekt aktualisieren"
+
 msgid "WARNING"
 msgstr "WARNUNG"
+
+msgid "create"
+msgstr "erzeugen"
+
+msgid "newer"
+msgstr "neuer"
+
+msgid "older"
+msgstr "älter"
+
+msgid "update"
+msgstr "aktualisieren"
 
 msgid "yWriter 7 project"
 msgstr "yWriter 7-Projekt"
 
 msgid "yWriter seems to be open. Please close first"
 msgstr "yWriter scheint offen zu sein. Bitte schließen"
+
+msgid "{0} file is {1} than the yWriter project.\n (last saved on {2})"
+msgstr "{0}-Datei ist {1} als das yWriter-Projekt.\n (zuletzt gespeichert: {2})"
+
+msgid "{0}No {1} file available for this project."
+msgstr "{0}Keine {1}-Datei für dieses Projekt verfügbar."
 

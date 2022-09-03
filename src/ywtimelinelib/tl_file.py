@@ -9,7 +9,7 @@ import re
 import xml.etree.ElementTree as ET
 from datetime import datetime
 from datetime import timedelta
-from pywriter.pywriter_globals import ERROR
+from pywriter.pywriter_globals import *
 from pywriter.model.novel import Novel
 from pywriter.model.chapter import Chapter
 from pywriter.yw.xml_indent import indent
@@ -114,7 +114,7 @@ class TlFile(Novel):
         try:
             self._tree = ET.parse(self.filePath)
         except:
-            return f'{ERROR}Can not process "{os.path.normpath(self.filePath)}".'
+            return f'{ERROR}{_("Can not process file")}: "{os.path.normpath(self.filePath)}".'
         root = self._tree.getroot()
         sceneCount = 0
         scIdsByDate = {}
@@ -192,7 +192,7 @@ class TlFile(Novel):
                 self._tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
             except:
                 os.replace(f'{self.filePath}.bak', self.filePath)
-                return f'{ERROR}Cannot write "{os.path.normpath(self.filePath)}".'
+                return f'{ERROR}{_("Cannot write file")}: "{os.path.normpath(self.filePath)}".'
 
         return 'Timeline read in.'
 
@@ -259,6 +259,10 @@ class TlFile(Novel):
                 dtMin -- str: lower date/time limit.
                 dtMax -- str: upper date/time limit.
             """
+            if dtMin is None:
+                dtMin = SceneEvent.defaultDateTime
+            if dtMax is None:
+                dtMax = dtMin
             TIME_LIMIT = '0100-01-01 00:00:00'
             # This is used to create a time interval outsides the processible time range.
             SEC_PER_DAY = 24 * 3600
@@ -373,9 +377,9 @@ class TlFile(Novel):
         except:
             if backedUp:
                 os.replace(f'{self.filePath}.bak', self.filePath)
-            return f'{ERROR}Cannot write "{os.path.normpath(self.filePath)}".'
+            return f'{ERROR}{_("Cannot write file")}: "{os.path.normpath(self.filePath)}".'
 
-        return f'"{os.path.normpath(self.filePath)}" written.'
+        return f'{_("File written")}: "{os.path.normpath(self.filePath)}".'
 
     def _convert_to_yw(self, text):
         """Unmask brackets in yWriter scene titles.

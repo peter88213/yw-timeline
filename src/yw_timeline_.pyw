@@ -10,11 +10,11 @@ Published under the MIT License (https://opensource.org/licenses/mit-license.php
 import os
 import argparse
 from pathlib import Path
+from pywriter.pywriter_globals import *
 from pywriter.ui.ui import Ui
 from pywriter.ui.ui_tk import UiTk
 from pywriter.config.configuration import Configuration
 from ywtimelinelib.tl_converter import TlConverter
-
 
 SUFFIX = ''
 APPNAME = 'yw-timeline'
@@ -34,7 +34,7 @@ def run(sourcePath, silentMode=True, installDir='.'):
     if silentMode:
         ui = Ui('')
     else:
-        ui = UiTk('Synchronize yWriter with Timeline @release')
+        ui = UiTk(f'{_("Synchronize Timeline and yWriter")} @release')
 
     #--- Try to get persistent configuration data
     sourceDir = os.path.dirname(sourcePath)

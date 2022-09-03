@@ -1,24 +1,22 @@
 """Generate a template file (pot) for message translation.
 
+This script is for the Windows Explorer context menu
+as specified by the ".reg" file to generate. 
+
 For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
 import os
 import sys
-import build_yw_timeline as build_application
-import build_yw_timeline_novelyst as build_plugin
 sys.path.insert(0, f'{os.getcwd()}/../../PyWriter/src')
 import pgettext
 
 APP = 'yw-timeline'
-POT_FILE = '../i18n/messages.pot'
+POT_FILE = '../i18n/reg.pot'
+SETUP_SCRIPT = '../src/setup.pyw'
 
 
 def make_pot(version='unknown'):
-    # Generate a complete script.
-    build_application.main()
-    # Generate a complete plugin.
-    build_plugin.main()
 
     # Generate a pot file from the script.
     if os.path.isfile(POT_FILE):
@@ -26,20 +24,18 @@ def make_pot(version='unknown'):
         backedUp = True
     else:
         backedUp = False
+    pot = pgettext.PotFile(POT_FILE, app=APP, appVersion=version)
+    pot.scan_file(SETUP_SCRIPT)
+    print(f'Writing "{pot.filePath}"...\n')
     try:
-        pot = pgettext.PotFile(POT_FILE, app=APP, appVersion=version)
-        pot.scan_file(build_application.TARGET_FILE)
-        pot.scan_file(build_plugin.TARGET_FILE)
-        print(f'Writing "{pot.filePath}"...\n')
         pot.write_pot()
+        return True
 
     except:
         if backedUp:
             os.replace(f'{POT_FILE}.bak', POT_FILE)
         print('WARNING: Cannot write pot file.')
         return False
-
-    return True
 
 
 if __name__ == '__main__':

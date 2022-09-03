@@ -8,6 +8,14 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v1.4.0 
+
+- Handle the exception occurring when converting a yWriter project with no scene.
+- Add internationalization according to GNU coding standards.
+- Provide German localization.
+
+Based on PyWriter v7.2.1
+
 ### v1.2.4 Update setup script
 
 - Change the working dir to the script dir on startup in order to avoid "file not found" error.
