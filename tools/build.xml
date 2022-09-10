@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project name="yw-timeline" basedir=".">
-	<property name="version" value="1.4.0" />
+	<property name="version" value="1.4.1" />
 	<property name="test-app" value="yw_timeline" />
 	<property name="novelyst-plugin" value="yw_timeline_novelyst" />
 	
@@ -64,6 +64,10 @@
 		
 		<copy todir="${build-path}/${release}/plugin_locale"> 
 			<fileset dir="${i18n-path}/plugin_locale" />
+		</copy>
+		
+		<copy todir="${build-path}/${release}/icons"> 
+			<fileset dir="${source-path}/icons" />
 		</copy>
 		
 		<zip destfile="${dist-path}/${release}.zip" basedir="${build-path}/${release}" />

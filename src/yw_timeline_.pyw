@@ -13,6 +13,7 @@ from pathlib import Path
 from pywriter.pywriter_globals import *
 from pywriter.ui.ui import Ui
 from pywriter.ui.ui_tk import UiTk
+from pywriter.ui.set_icon_tk import *
 from pywriter.config.configuration import Configuration
 from ywtimelinelib.tl_converter import TlConverter
 
@@ -35,6 +36,7 @@ def run(sourcePath, silentMode=True, installDir='.'):
         ui = Ui('')
     else:
         ui = UiTk(f'{_("Synchronize Timeline and yWriter")} @release')
+        set_icon(ui.root, icon='tLogo32')
 
     #--- Try to get persistent configuration data
     sourceDir = os.path.dirname(sourcePath)

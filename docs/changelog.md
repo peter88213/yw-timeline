@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v1.4.1
+
+- Set own window icon.
+
+Based on PyWriter v7.4.1
+
 ### v1.4.0 
 
 - Handle the exception occurring when converting a yWriter project with no scene.

@@ -159,10 +159,9 @@ def install(pywriterPath):
         pass
     os.makedirs(cnfDir, exist_ok=True)
 
-    # Delete existing localization files.
-    rmtree(f'{installDir}/locale', ignore_errors=True)
-
     # Delete the old version, but retain configuration, if any.
+    rmtree(f'{installDir}/locale', ignore_errors=True)
+    rmtree(f'{installDir}/icons', ignore_errors=True)
     with os.scandir(installDir) as files:
         for file in files:
             if not 'config' in file.name:
@@ -175,6 +174,10 @@ def install(pywriterPath):
     # Install the localization files.
     copytree('locale', f'{installDir}/locale')
     output(f'Copying "locale"')
+
+    # Install the icon files.
+    copytree('icons', f'{installDir}/icons', dirs_exist_ok=True)
+    output(f'Copying "icons"')
 
     # Make the script executable under Linux.
     try:
