@@ -1,8 +1,11 @@
+[![Screenshot: Example](Screenshots/screen01.png)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/docs/Screenshots/screen01.png)
+
 The [Timeline Project](http://thetimelineproj.sourceforge.net/) application 
 can be used to visualize the course of the narrative time in a 
 [yWriter](http://spacejock.com/yWriter7.html) project.
 
-[![Screenshot: Example](Screenshots/screen01.png)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/docs/Screenshots/screen01.png)
+The application is ready for internationalization with GNU gettext. A German localization is provided. 
+
 ## Features
 
 - Generate a *yWriter* project from an outline created with *Timeline*.
@@ -10,9 +13,8 @@ can be used to visualize the course of the narrative time in a
 - Synchronize *yWriter* scenes with corresponding *Timeline* events in both directions.
 - When synchronizing a yWriter project with a timeline, optionally change unspecific scene "Day/Hour/Minute" to specific "date/time" and vice versa.
 - Launch via drag/drop or Windows context menu.
-- Optionally, a [novelyst](https://peter88213.github.io/novelyst/) plugin can be installed.
 
- 
+
 ## Requirements
 
 - [Python 3.7 or above](https://www.python.org). 
@@ -40,6 +42,11 @@ Please make sure that your Python3 installation has the *tkinter* module. On Ubu
 ## Usage and conventions
 
 See the [instructions for use](usage)
+
+## See also
+
+There is a [plugin](https://peter88213.github.io/yw_timeline_novelyst/) for the [novelyst](https://peter88213.github.io/novelyst/) application.
+
 
 ## Credits
 

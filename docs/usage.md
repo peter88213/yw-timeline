@@ -26,18 +26,6 @@ You can remove the context menu entries by double-clicking  `rem_context_menu.re
 
 Please note that these context menus depend on the currently installed Python version. After a major Python update you may need to run the setup program again and renew the registry entries.
 
-### Launch from novelyst
-
-If [novelyst](https://peter88213.github.io/novelyst/) is installed, the setup script offers the installation of a *Timeline* plugin.
-The plugin adds a *Timeline* submenu to the *novelyst* main menu. The submenu has the following entries:
-
-- Information (compare yWriter and timeline file dates)
-- Update timeline from yWriter
-- Update yWriter from timeline
-- Edit timeline (launch Timeline)
-
-If you install *novelyst* at a later time, you can always install the plugin afterwards by running the *yw-timeline* setup script again.
-
 ### Command line usage
 
 Alternatively, you can

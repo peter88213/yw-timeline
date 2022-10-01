@@ -211,26 +211,6 @@ def install(pywriterPath):
         output(Template(SHORTCUT_MESSAGE).safe_substitute(mapping))
 
 
-def install_plugin(pywriterPath):
-    """Install a novelyst plugin if novelyst is installed."""
-    plugin = f'yw_timeline_novelyst.py'
-    if os.path.isfile(f'./{plugin}'):
-        novelystDir = f'{pywriterPath}novelyst'
-        pluginDir = f'{novelystDir}/plugin'
-        output(f'Installing novelyst plugin at "{os.path.normpath(pluginDir)}"')
-        os.makedirs(pluginDir, exist_ok=True)
-        copyfile(plugin, f'{pluginDir}/{plugin}')
-        output(f'Copying "{plugin}"')
-    else:
-        output('Error: novelyst plugin file not found.')
-
-    # Install the localization files.
-    copytree('plugin_locale', f'{novelystDir}/locale', dirs_exist_ok=True)
-    output(f'Copying "plugin_locale"')
-
-    root.pluginButton['state'] = DISABLED
-
-
 if __name__ == '__main__':
     scriptPath = os.path.abspath(sys.argv[0])
     scriptDir = os.path.dirname(scriptPath)
@@ -252,11 +232,6 @@ if __name__ == '__main__':
         install(pywriterPath)
     except Exception as ex:
         output(str(ex))
-    novelystDir = f'{pywriterPath}novelyst'
-    if os.path.isdir(novelystDir):
-        root.pluginButton = Button(text="Install the novelyst plugin", command=lambda: install_plugin(pywriterPath))
-        root.pluginButton.config(height=1, width=30)
-        root.pluginButton.pack(padx=5, pady=5)
 
     # Show options: open installation folders or quit.
     root.openButton = Button(text="Open installation folder", command=lambda: open_folder(f'{pywriterPath}{APPNAME}'))

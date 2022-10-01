@@ -20,14 +20,10 @@ File structure:
     └── i18n/
         ├── messages.pot
         ├── de.po
-        ├── locale/
-        │   └─ de/
-        │      └─ LC_MESSAGES/
-        │         └─ pywriter.mo
-        └── plugin_locale/
+        └── locale/
             └─ de/
                └─ LC_MESSAGES/
-                  └─ yw-timeline_novelyst.mo
+                  └─ pywriter.mo
     
 Copyright (c) 2022 Peter Triesberger
 For further information see https://github.com/peter88213/yw-timeline
@@ -44,16 +40,12 @@ APP_NAME = 'yw-timeline'
 PO_PATH = '../i18n/de.po'
 MO_PATH = '../i18n/locale/de/LC_MESSAGES/pywriter.mo'
 PLUGIN_NAME = f'{APP_NAME}_novelyst'
-PLUGIN_MO_PATH = f'../i18n/plugin_locale/de/LC_MESSAGES/{PLUGIN_NAME}.mo'
-MO_COPY = f'../../novelyst/src/locale/de/LC_MESSAGES/{PLUGIN_NAME}.mo'
 
 
 def main(version='unknown'):
     if translations.main('de', app=APP_NAME, appVersion=version):
         print(f'Writing "{MO_PATH}" ...')
         msgfmt.make(PO_PATH, MO_PATH)
-        copyfile(MO_PATH, PLUGIN_MO_PATH)
-        copyfile(PLUGIN_MO_PATH, MO_COPY)
     else:
         sys.exit(1)
 

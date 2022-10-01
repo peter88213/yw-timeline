@@ -4,7 +4,7 @@
 msgid ""
 msgstr ""
 "Project-Id-Version: 1.4.1\n"
-"POT-Creation-Date: 2022-09-10 20:31:51\n"
+"POT-Creation-Date: 2022-10-01 09:10:57\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: LANGUAGE\n"
@@ -20,19 +20,10 @@ msgstr ""
 msgid "Can not process file"
 msgstr ""
 
-msgid "Cannot determine file date."
-msgstr ""
-
 msgid "Cannot write file"
 msgstr ""
 
 msgid "Create a yWriter project file from {0}\nNew project: \"{1}\""
-msgstr ""
-
-msgid "Create or update the timeline"
-msgstr ""
-
-msgid "Edit the timeline"
 msgstr ""
 
 msgid "File already exists"
@@ -45,9 +36,6 @@ msgid "File type is not supported"
 msgstr ""
 
 msgid "File written"
-msgstr ""
-
-msgid "Information"
 msgstr ""
 
 msgid "Input: {0} \"{1}\"\nOutput: {2} \"{3}\""
@@ -65,9 +53,6 @@ msgstr ""
 msgid "New scenes created during conversion."
 msgstr ""
 
-msgid "No {0} file available for this project."
-msgstr ""
-
 msgid "Novel"
 msgstr ""
 
@@ -80,41 +65,14 @@ msgstr ""
 msgid "Quit"
 msgstr ""
 
-msgid "Save the project and update it?"
-msgstr ""
-
-msgid "Save the project and {} the timeline?"
-msgstr ""
-
 msgid "Synchronize Timeline and yWriter"
 msgstr ""
 
-msgid "Update the project"
-msgstr ""
-
 msgid "WARNING"
-msgstr ""
-
-msgid "create"
-msgstr ""
-
-msgid "newer"
-msgstr ""
-
-msgid "older"
-msgstr ""
-
-msgid "update"
 msgstr ""
 
 msgid "yWriter 7 project"
 msgstr ""
 
 msgid "yWriter seems to be open. Please close first"
-msgstr ""
-
-msgid "{0} file is {1} than the yWriter project.\n (last saved on {2})"
-msgstr ""
-
-msgid "{0}No {1} file available for this project."
 msgstr ""
