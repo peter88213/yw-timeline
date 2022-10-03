@@ -45,7 +45,7 @@ See the [instructions for use](usage)
 
 ## See also
 
-There is a [plugin](https://peter88213.github.io/yw_timeline_novelyst/) for the [novelyst](https://peter88213.github.io/novelyst/) application.
+There is a [plugin](https://peter88213.github.io/novelyst_timeline/) for the [novelyst](https://peter88213.github.io/novelyst/) application.
 
 
 ## Credits
