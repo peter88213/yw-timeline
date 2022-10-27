@@ -17,7 +17,7 @@ The application is ready for internationalization with GNU gettext. A German loc
 
 ## Requirements
 
-- [Python 3.7 or above](https://www.python.org). 
+- [Python](https://www.python.org/) version 3.6 min.; version 3.10 max.
 - [yWriter 7](http://spacejock.com/yWriter7.html). Recent versions 5 or 6 might also work if they save in .yw7 file format.
 - [Timeline 2.4+](https://sourceforge.net/projects/thetimelineproj/). Versions below 2.4 do not support labels, which are necessary for synchronization with yWriter.
 
