@@ -82,7 +82,7 @@ class TlFile(Novel):
     def read(self):
         """Parse the file and get the instance variables.
         
-        Return a message beginning with the ERROR constant in case of error.
+        Raise the "Error" exception in case of error. 
         Overrides the superclass method.
         """
 
@@ -114,7 +114,7 @@ class TlFile(Novel):
         try:
             self._tree = ET.parse(self.filePath)
         except:
-            return f'{ERROR}{_("Can not process file")}: "{os.path.normpath(self.filePath)}".'
+            raise Error(f'{_("Can not process file")}: "{os.path.normpath(self.filePath)}".')
         root = self._tree.getroot()
         sceneCount = 0
         scIdsByDate = {}
@@ -192,9 +192,7 @@ class TlFile(Novel):
                 self._tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
             except:
                 os.replace(f'{self.filePath}.bak', self.filePath)
-                return f'{ERROR}{_("Cannot write file")}: "{os.path.normpath(self.filePath)}".'
-
-        return 'Timeline read in.'
+                raise Error(f'{_("Cannot write file")}: "{os.path.normpath(self.filePath)}".')
 
     def merge(self, source):
         """Update instance variables from a source instance.
@@ -202,7 +200,6 @@ class TlFile(Novel):
         Positional arguments:
             source -- Yw7File instance to merge.
         
-        Return a message beginning with the ERROR constant in case of error.
         Overrides the superclass method.
         """
 
@@ -213,10 +210,8 @@ class TlFile(Novel):
             return text
 
         if os.path.isfile(self.filePath):
-            message = self.read()
+            self.read()
             # initialize data
-            if message.startswith(ERROR):
-                return message
 
         self.chapters = {}
         self.srtChapters = []
@@ -243,12 +238,11 @@ class TlFile(Novel):
         for scId in scenes:
             if not scId in source.scenes:
                 del self.scenes[scId]
-        return 'Timeline updated from novel data.'
 
     def write(self):
         """Write instance variables to the file.
         
-        Return a message beginning with the ERROR constant in case of error.
+        Raise the "Error" exception in case of error. 
         Overrides the superclass method.
         """
 
@@ -377,9 +371,7 @@ class TlFile(Novel):
         except:
             if backedUp:
                 os.replace(f'{self.filePath}.bak', self.filePath)
-            return f'{ERROR}{_("Cannot write file")}: "{os.path.normpath(self.filePath)}".'
-
-        return f'{_("File written")}: "{os.path.normpath(self.filePath)}".'
+            raise Error(f'{_("Cannot write file")}: "{os.path.normpath(self.filePath)}".')
 
     def _convert_to_yw(self, text):
         """Unmask brackets in yWriter scene titles.
