@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v1.5.0
+
+Code optimization and library update. 
+
+Based on PyWriter v8.0.0
+
 ### v1.4.1
 
 - Set own window icon.
