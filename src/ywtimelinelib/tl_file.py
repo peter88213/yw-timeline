@@ -361,11 +361,16 @@ class TlFile(Novel):
             ET.SubElement(period, 'end').text = dtMax
         indent(root)
         self._tree = ET.ElementTree(root)
+
+        #--- Back up the old timeline and write a new file.
+        backedUp = False
         if os.path.isfile(self.filePath):
-            os.replace(self.filePath, f'{self.filePath}.bak')
-            backedUp = True
-        else:
-            backedUp = False
+            try:
+                os.replace(self.filePath, f'{self.filePath}.bak')
+            except:
+                raise Error(f'{_("Cannot overwrite file")}: "{os.path.normpath(self.filePath)}".')
+            else:
+                backedUp = True
         try:
             self._tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
         except:
