@@ -100,12 +100,11 @@ class SceneEvent(Scene):
                 self.time = None
 
     def merge_date_time(self, source):
-        """Get date/time related variables from a yWriter-generated source scene.
+        """Set date/time related variables from a yWriter-generated source scene.
                 
         Positional arguments:
             source -- Scene instance with date/time to merge.
         
-        Return a message beginning with the ERROR constant in case of error.        
         """
         #--- Set start date/time.
         if source.date is not None and source.date != Scene.NULL_DATE:
