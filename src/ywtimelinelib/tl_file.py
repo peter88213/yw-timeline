@@ -114,7 +114,7 @@ class TlFile(Novel):
         try:
             self._tree = ET.parse(self.filePath)
         except:
-            raise Error(f'{_("Can not process file")}: "{os.path.normpath(self.filePath)}".')
+            raise Error(f'{_("Can not process file")}: "{norm_path(self.filePath)}".')
         root = self._tree.getroot()
         sceneCount = 0
         scIdsByDate = {}
@@ -192,7 +192,7 @@ class TlFile(Novel):
                 self._tree.write(self.filePath, xml_declaration=True, encoding='utf-8')
             except:
                 os.replace(f'{self.filePath}.bak', self.filePath)
-                raise Error(f'{_("Cannot write file")}: "{os.path.normpath(self.filePath)}".')
+                raise Error(f'{_("Cannot write file")}: "{norm_path(self.filePath)}".')
 
     def merge(self, source):
         """Update instance variables from a source instance.
@@ -368,7 +368,7 @@ class TlFile(Novel):
             try:
                 os.replace(self.filePath, f'{self.filePath}.bak')
             except:
-                raise Error(f'{_("Cannot overwrite file")}: "{os.path.normpath(self.filePath)}".')
+                raise Error(f'{_("Cannot overwrite file")}: "{norm_path(self.filePath)}".')
             else:
                 backedUp = True
         try:
@@ -376,7 +376,7 @@ class TlFile(Novel):
         except:
             if backedUp:
                 os.replace(f'{self.filePath}.bak', self.filePath)
-            raise Error(f'{_("Cannot write file")}: "{os.path.normpath(self.filePath)}".')
+            raise Error(f'{_("Cannot write file")}: "{norm_path(self.filePath)}".')
 
     def _convert_to_yw(self, text):
         """Unmask brackets in yWriter scene titles.
