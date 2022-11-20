@@ -106,13 +106,12 @@ class TlFile(File):
             return text
 
         #--- Parse the Timeline file.
-        timeline = Novel()
-        if not self.novel.scenes is None:
+
+        if not self.novel.scenes:
             isOutline = True
         else:
             isOutline = False
-            timeline.chapters = self.novel.chapters
-            timeline.srtChapters = self.novel.srtChapters
+        timeline = self.novel
 
         try:
             self._tree = ET.parse(self.filePath)
@@ -133,6 +132,7 @@ class TlFile(File):
                 continue
 
             # The event is labeled as a scene.
+            sceneDate = None
             if isOutline:
                 sceneCount += 1
                 sceneMarker = sceneMatch.group()
@@ -144,9 +144,10 @@ class TlFile(File):
             else:
                 try:
                     scId = sceneMatch.group(1)
+                    sceneDate = self.novel.scenes[scId].date
                     timeline.scenes[scId] = SceneEvent()
                 except:
-                    continue
+                    pass
 
             try:
                 title = event.find('text').text
@@ -169,7 +170,7 @@ class TlFile(File):
                 isUnspecific = True
             elif self._dhmToDateTime and not self._dateTimeToDhm:
                 isUnspecific = False
-            elif not isOutline and self.self.novel.scenes[scId].date is None:
+            elif not isOutline and sceneDate is None:
                 isUnspecific = True
             else:
                 isUnspecific = False
