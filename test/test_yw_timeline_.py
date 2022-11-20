@@ -55,7 +55,6 @@ def read_file(inputFile):
 def remove_all_testfiles():
     try:
         os.remove(TEST_YW7)
-
     except:
         pass
     try:

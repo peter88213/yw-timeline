@@ -7,11 +7,13 @@ Published under the MIT License (https://opensource.org/licenses/mit-license.php
 import os
 import re
 import xml.etree.ElementTree as ET
+from datetime import date
 from datetime import datetime
 from datetime import timedelta
 from pywriter.pywriter_globals import *
 from pywriter.file.file import File
 from pywriter.model.novel import Novel
+from pywriter.model.scene import Scene
 from pywriter.model.chapter import Chapter
 from pywriter.yw.xml_indent import indent
 from ywtimelinelib.scene_event import SceneEvent
@@ -23,7 +25,6 @@ class TlFile(File):
 
     Public methods:
         read() -- parse the file and get the instance variables.
-        merge(source) -- update instance variables from a source instance.
         write() -- write instance variables to the file.
 
     Public instance variables:
@@ -74,10 +75,8 @@ class TlFile(File):
         self._ignoreUnspecific = kwargs['ignore_unspecific']
         self._dateTimeToDhm = kwargs['datetime_to_dhm']
         self._dhmToDateTime = kwargs['dhm_to_datetime']
-        SceneEvent.defaultDateTime = kwargs['default_date_time']
-        SceneEvent.sceneColor = kwargs['scene_color']
-        # The existing yWriter target project, if any.
-        # To be set by the calling converter class.
+        self.defaultDateTime = kwargs['default_date_time']
+        self.sceneColor = kwargs['scene_color']
 
     def read(self):
         """Parse the file and get the instance variables.
@@ -85,6 +84,68 @@ class TlFile(File):
         Raise the "Error" exception in case of error. 
         Overrides the superclass method.
         """
+
+        def set_date_time(scId, startDateTime, endDateTime, isUnspecific):
+            """Set date/time and, if applicable, duration.
+            
+            Positional arguments:
+                scId -- str: Scene ID.
+                startDateTime -- str: Event start date/time as stored in Timeline.
+                endDateTime -- str: Event end date/time as stored in Timeline.
+                isUnspecific -- str: If True, convert date/time to D/H/M.
+            
+            Because yWriter can not process two-figure years, 
+            they are replaced with 
+            a 'default negative date' for yWriter use.
+            """
+            dtIsValid = True
+            # The date/time combination is within the range yWriter can process.
+
+            # Prevent two-figure years from becoming "completed" by yWriter.
+            scDate, scTime = startDateTime.split(' ')
+            if scDate.startswith('-'):
+                startYear = -1 * int(scDate.split('-')[1])
+                dtIsValid = False
+                # "BC" year (yWriter won't process it).
+            else:
+                startYear = int(scDate.split('-')[0])
+
+            self.novel.scenes[scId].date = scDate
+            self.novel.scenes[scId].time = scTime
+
+            #--- Invalidate two-figure years.
+            if startYear < 100:
+                # Substitute date/time, so yWriter would not prefix them with '19' or '20'.
+                self.novel.scenes[scId].date = Scene.NULL_DATE
+                self.novel.scenes[scId].time = Scene.NULL_TIME
+                dtIsValid = False
+
+            if dtIsValid:
+                # Calculate duration of scenes that begin after 99-12-31.
+                sceneStart = datetime.fromisoformat(startDateTime)
+                sceneEnd = datetime.fromisoformat(endDateTime)
+                sceneDuration = sceneEnd - sceneStart
+                lastsHours = sceneDuration.seconds // 3600
+                lastsMinutes = (sceneDuration.seconds % 3600) // 60
+                self.novel.scenes[scId].lastsDays = str(sceneDuration.days)
+                self.novel.scenes[scId].lastsHours = str(lastsHours)
+                self.novel.scenes[scId].lastsMinutes = str(lastsMinutes)
+                if isUnspecific:
+                    # Convert date/time to D/H/M
+                    try:
+                        scTime = self.novel.scenes[scId].time.split(':')
+                        self.novel.scenes[scId].hour = scTime[0]
+                        self.novel.scenes[scId].minute = scTime[1]
+                        sceneDate = date.fromisoformat(self.novel.scenes[scId].date)
+                        referenceDate = date.fromisoformat(self.defaultDateTime.split(' ')[0])
+                        self.novel.scenes[scId].day = str((sceneDate - referenceDate).days)
+                    except:
+                        # Do not synchronize.
+                        self.novel.scenes[scId].day = None
+                        self.novel.scenes[scId].hour = None
+                        self.novel.scenes[scId].minute = None
+                    self.novel.scenes[scId].date = None
+                    self.novel.scenes[scId].time = None
 
         def remove_contId(event, text):
             """Separate container ID from event title.
@@ -109,10 +170,17 @@ class TlFile(File):
 
         if not self.novel.scenes:
             isOutline = True
+            # Create a single chapter and assign all scenes to it.
+            chId = '1'
+            self.novel.chapters[chId] = Chapter()
+            self.novel.chapters[chId].title = 'Chapter 1'
+            self.novel.srtChapters = [chId]
         else:
             isOutline = False
-        timeline = self.novel
 
+            # Monkey-patch the scenes for the contId instance variable.
+            for scId in self.novel.scenes:
+                self.novel.scenes[scId].contId = None
         try:
             self._tree = ET.parse(self.filePath)
         except:
@@ -120,8 +188,9 @@ class TlFile(File):
         root = self._tree.getroot()
         sceneCount = 0
         scIdsByDate = {}
+
         for event in root.iter('event'):
-            scId = None
+            # Search event labels for scene markers.
             sceneMatch = None
             if event.find('labels') is not None:
                 labels = event.find('labels').text
@@ -132,32 +201,27 @@ class TlFile(File):
                 continue
 
             # The event is labeled as a scene.
-            sceneDate = None
+            scId = None
             if isOutline:
+                # Create a scene from the event.
                 sceneCount += 1
                 sceneMarker = sceneMatch.group()
                 scId = str(sceneCount)
                 event.find('labels').text = labels.replace(sceneMarker, f'ScID:{scId}')
-                timeline.scenes[scId] = SceneEvent()
-                timeline.scenes[scId].status = 1
+                self.novel.scenes[scId] = Scene()
+                self.novel.scenes[scId].status = 1
                 # Set scene status = "Outline".
             else:
-                try:
-                    scId = sceneMatch.group(1)
-                    sceneDate = self.novel.scenes[scId].date
-                    timeline.scenes[scId] = SceneEvent()
-                except:
-                    pass
-
+                scId = sceneMatch.group(1)
             try:
                 title = event.find('text').text
-                title = remove_contId(timeline.scenes[scId], title)
+                title = remove_contId(event, title)
                 title = self._convert_to_yw(title)
-                timeline.scenes[scId].title = title
+                self.novel.scenes[scId].title = title
             except:
-                timeline.scenes[scId].title = f'Scene {scId}'
+                self.novel.scenes[scId].title = f'Scene {scId}'
             try:
-                timeline.scenes[scId].desc = event.find('description').text
+                self.novel.scenes[scId].desc = event.find('description').text
             except:
                 pass
 
@@ -170,11 +234,11 @@ class TlFile(File):
                 isUnspecific = True
             elif self._dhmToDateTime and not self._dateTimeToDhm:
                 isUnspecific = False
-            elif not isOutline and sceneDate is None:
+            elif not isOutline and self.novel.scenes[scId].date is None:
                 isUnspecific = True
             else:
                 isUnspecific = False
-            timeline.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
+            set_date_time(scId, startDateTime, endDateTime, isUnspecific)
             if not startDateTime in scIdsByDate:
                 scIdsByDate[startDateTime] = []
             scIdsByDate[startDateTime].append(scId)
@@ -182,14 +246,9 @@ class TlFile(File):
         # Sort scenes by date/time
         srtScenes = sorted(scIdsByDate.items())
         if isOutline:
-            # Create a single chapter and assign all scenes to it.
-            chId = '1'
-            timeline.chapters[chId] = Chapter()
-            timeline.chapters[chId].title = 'Chapter 1'
-            timeline.srtChapters = [chId]
             for __, scList in srtScenes:
                 for scId in scList:
-                    timeline.chapters[chId].srtScenes.append(scId)
+                    self.novel.chapters[chId].srtScenes.append(scId)
             # Rewrite the timeline with scene IDs inserted.
             os.replace(self.filePath, f'{self.filePath}.bak')
             try:
@@ -197,8 +256,6 @@ class TlFile(File):
             except:
                 os.replace(f'{self.filePath}.bak', self.filePath)
                 raise Error(f'{_("Cannot write file")}: "{norm_path(self.filePath)}".')
-
-        self.novel = timeline
 
     def write(self):
         """Write instance variables to the file.
@@ -209,8 +266,11 @@ class TlFile(File):
 
         def add_contId(event, text):
             """If event has a container ID, add it to text."""
-            if event.contId is not None:
-                return f'{event.contId}{text}'
+            try:
+                if event.contId is not None:
+                    return f'{event.contId}{text}'
+            except:
+                pass
             return text
 
         def set_view_range(dtMin, dtMax):
@@ -221,7 +281,7 @@ class TlFile(File):
                 dtMax -- str: upper date/time limit.
             """
             if dtMin is None:
-                dtMin = SceneEvent.defaultDateTime
+                dtMin = self.defaultDateTime
             if dtMax is None:
                 dtMax = dtMin
             TIME_LIMIT = '0100-01-01 00:00:00'
