@@ -10,6 +10,7 @@ import xml.etree.ElementTree as ET
 from datetime import datetime
 from datetime import timedelta
 from pywriter.pywriter_globals import *
+from pywriter.file.file import File
 from pywriter.model.novel import Novel
 from pywriter.model.chapter import Chapter
 from pywriter.yw.xml_indent import indent
@@ -17,7 +18,7 @@ from ywtimelinelib.scene_event import SceneEvent
 from ywtimelinelib.dt_helper import fix_iso_dt
 
 
-class TlFile(Novel):
+class TlFile(File):
     """Timeline project file representation.
 
     Public methods:
@@ -75,7 +76,6 @@ class TlFile(Novel):
         self._dhmToDateTime = kwargs['dhm_to_datetime']
         SceneEvent.defaultDateTime = kwargs['default_date_time']
         SceneEvent.sceneColor = kwargs['scene_color']
-        self.ywProject = None
         # The existing yWriter target project, if any.
         # To be set by the calling converter class.
 
@@ -106,11 +106,14 @@ class TlFile(Novel):
             return text
 
         #--- Parse the Timeline file.
-        if self.ywProject is None:
+        timeline = Novel()
+        if not self.novel.scenes is None:
             isOutline = True
         else:
-            self.ywProject.read()
             isOutline = False
+            timeline.chapters = self.novel.chapters
+            timeline.srtChapters = self.novel.srtChapters
+
         try:
             self._tree = ET.parse(self.filePath)
         except:
@@ -135,25 +138,25 @@ class TlFile(Novel):
                 sceneMarker = sceneMatch.group()
                 scId = str(sceneCount)
                 event.find('labels').text = labels.replace(sceneMarker, f'ScID:{scId}')
-                self.scenes[scId] = SceneEvent()
-                self.scenes[scId].status = 1
+                timeline.scenes[scId] = SceneEvent()
+                timeline.scenes[scId].status = 1
                 # Set scene status = "Outline".
             else:
                 try:
                     scId = sceneMatch.group(1)
-                    self.scenes[scId] = SceneEvent()
+                    timeline.scenes[scId] = SceneEvent()
                 except:
                     continue
 
             try:
                 title = event.find('text').text
-                title = remove_contId(self.scenes[scId], title)
+                title = remove_contId(timeline.scenes[scId], title)
                 title = self._convert_to_yw(title)
-                self.scenes[scId].title = title
+                timeline.scenes[scId].title = title
             except:
-                self.scenes[scId].title = f'Scene {scId}'
+                timeline.scenes[scId].title = f'Scene {scId}'
             try:
-                self.scenes[scId].desc = event.find('description').text
+                timeline.scenes[scId].desc = event.find('description').text
             except:
                 pass
 
@@ -166,11 +169,11 @@ class TlFile(Novel):
                 isUnspecific = True
             elif self._dhmToDateTime and not self._dateTimeToDhm:
                 isUnspecific = False
-            elif not isOutline and self.ywProject.scenes[scId].date is None:
+            elif not isOutline and self.self.novel.scenes[scId].date is None:
                 isUnspecific = True
             else:
                 isUnspecific = False
-            self.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
+            timeline.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
             if not startDateTime in scIdsByDate:
                 scIdsByDate[startDateTime] = []
             scIdsByDate[startDateTime].append(scId)
@@ -180,12 +183,12 @@ class TlFile(Novel):
         if isOutline:
             # Create a single chapter and assign all scenes to it.
             chId = '1'
-            self.chapters[chId] = Chapter()
-            self.chapters[chId].title = 'Chapter 1'
-            self.srtChapters = [chId]
+            timeline.chapters[chId] = Chapter()
+            timeline.chapters[chId].title = 'Chapter 1'
+            timeline.srtChapters = [chId]
             for __, scList in srtScenes:
                 for scId in scList:
-                    self.chapters[chId].srtScenes.append(scId)
+                    timeline.chapters[chId].srtScenes.append(scId)
             # Rewrite the timeline with scene IDs inserted.
             os.replace(self.filePath, f'{self.filePath}.bak')
             try:
@@ -194,12 +197,12 @@ class TlFile(Novel):
                 os.replace(f'{self.filePath}.bak', self.filePath)
                 raise Error(f'{_("Cannot write file")}: "{norm_path(self.filePath)}".')
 
-    def merge(self, source):
-        """Update instance variables from a source instance.
+        self.novel = timeline
+
+    def write(self):
+        """Write instance variables to the file.
         
-        Positional arguments:
-            source -- Yw7File instance to merge.
-        
+        Raise the "Error" exception in case of error. 
         Overrides the superclass method.
         """
 
@@ -208,43 +211,6 @@ class TlFile(Novel):
             if event.contId is not None:
                 return f'{event.contId}{text}'
             return text
-
-        if os.path.isfile(self.filePath):
-            self.read()
-            # initialize data
-
-        self.chapters = {}
-        self.srtChapters = []
-        for chId in source.srtChapters:
-            self.chapters[chId] = Chapter()
-            self.srtChapters.append(chId)
-            for scId in source.chapters[chId].srtScenes:
-                if self._ignoreUnspecific and source.scenes[scId].date is None and source.scenes[scId].time is None:
-                    # Skip scenes with unspecific date/time stamps.
-                    continue
-
-                if not scId in self.scenes:
-                    self.scenes[scId] = SceneEvent()
-                self.chapters[chId].srtScenes.append(scId)
-                if source.scenes[scId].title:
-                    title = source.scenes[scId].title
-                    title = self._convert_from_yw(title)
-                    title = add_contId(self.scenes[scId], title)
-                    self.scenes[scId].title = title
-                self.scenes[scId].desc = source.scenes[scId].desc
-                self.scenes[scId].merge_date_time(source.scenes[scId])
-                self.scenes[scId].scType = source.scenes[scId].scType
-        scenes = list(self.scenes)
-        for scId in scenes:
-            if not scId in source.scenes:
-                del self.scenes[scId]
-
-    def write(self):
-        """Write instance variables to the file.
-        
-        Raise the "Error" exception in case of error. 
-        Overrides the superclass method.
-        """
 
         def set_view_range(dtMin, dtMax):
             """Return maximum/minimum timestamp defining the view range in Timeline.
@@ -293,16 +259,49 @@ class TlFile(Novel):
                 pass
             return dtMin, dtMax
 
-        #--- Begin write method
+        #--- Merge first.
+        source = self.novel
+        self.novel = Novel()
+        if os.path.isfile(self.filePath):
+            self.read()
+            # initialize data
+
+        self.novel.chapters = {}
+        self.novel.srtChapters = []
+        for chId in source.srtChapters:
+            self.novel.chapters[chId] = Chapter()
+            self.novel.srtChapters.append(chId)
+            for scId in source.chapters[chId].srtScenes:
+                if self._ignoreUnspecific and source.scenes[scId].date is None and source.scenes[scId].time is None:
+                    # Skip scenes with unspecific date/time stamps.
+                    continue
+
+                if not scId in self.novel.scenes:
+                    self.novel.scenes[scId] = SceneEvent()
+                self.novel.chapters[chId].srtScenes.append(scId)
+                if source.scenes[scId].title:
+                    title = source.scenes[scId].title
+                    title = self._convert_from_yw(title)
+                    title = add_contId(self.novel.scenes[scId], title)
+                    self.novel.scenes[scId].title = title
+                self.novel.scenes[scId].desc = source.scenes[scId].desc
+                self.novel.scenes[scId].merge_date_time(source.scenes[scId])
+                self.novel.scenes[scId].scType = source.scenes[scId].scType
+        scenes = list(self.novel.scenes)
+        for scId in scenes:
+            if not scId in source.scenes:
+                del self.novel.scenes[scId]
+
+        #--- Begin writing
         dtMin = None
         dtMax = None
 
         # List all scenes to be exported.
-        # Note: self.scenes may also contain orphaned ones.
+        # Note: self.novel.scenes may also contain orphaned ones.
         srtScenes = []
-        for chId in self.srtChapters:
-            for scId in self.chapters[chId].srtScenes:
-                if self.scenes[scId].scType == 0:
+        for chId in self.novel.srtChapters:
+            for scId in self.novel.chapters[chId].srtScenes:
+                if self.novel.scenes[scId].scType == 0:
                     srtScenes.append(scId)
         if self._tree is not None:
             #--- Update an existing XML _tree.
@@ -323,7 +322,7 @@ class TlFile(Novel):
                     scId = sceneMatch.group(1)
                     if scId in srtScenes:
                         scIds.append(scId)
-                        dtMin, dtMax = self.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
+                        dtMin, dtMax = self.novel.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
                     else:
                         trash.append(event)
 
@@ -331,7 +330,7 @@ class TlFile(Novel):
             for scId in srtScenes:
                 if not scId in scIds:
                     event = ET.SubElement(events, 'event')
-                    dtMin, dtMax = self.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
+                    dtMin, dtMax = self.novel.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
             # Remove events that are assigned to missing scenes.
             for event in trash:
                 events.remove(event)
@@ -351,7 +350,7 @@ class TlFile(Novel):
             events = ET.SubElement(root, 'events')
             for scId in srtScenes:
                 event = ET.SubElement(events, 'event')
-                dtMin, dtMax = self.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
+                dtMin, dtMax = self.novel.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
 
             # Set the view range.
             dtMin, dtMax = set_view_range(dtMin, dtMax)
