@@ -83,10 +83,10 @@
   <CHAPTERS>
     <CHAPTER>
       <ID>1</ID>
-      <SortOrder>1</SortOrder>
       <Title><![CDATA[Chapter 1]]></Title>
-      <ChapterType>0</ChapterType>
+      <SortOrder>1</SortOrder>
       <Type>0</Type>
+      <ChapterType>0</ChapterType>
       <Scenes>
         <ScID>3</ScID>
         <ScID>5</ScID>
