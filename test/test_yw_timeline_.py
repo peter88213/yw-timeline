@@ -10,7 +10,6 @@ import os
 import unittest
 import yw_timeline_
 
-
 # Test environment
 
 # The paths are relative to the "test" directory,
@@ -54,28 +53,23 @@ def read_file(inputFile):
 
 
 def remove_all_testfiles():
-
     try:
         os.remove(TEST_YW7)
 
     except:
         pass
-
     try:
         os.remove(TEST_TL)
     except:
         pass
-
     try:
         os.remove(TEST_EXEC_PATH + INI_FILE)
     except:
         pass
-
     try:
         os.remove(TEST_TL_BAK)
     except:
         pass
-
     try:
         os.remove(TEST_YW_BAK)
     except:
@@ -86,13 +80,10 @@ class NormalOperation(unittest.TestCase):
     """Test case: Normal operation."""
 
     def setUp(self):
-
         try:
             os.mkdir(TEST_EXEC_PATH)
-
         except:
             pass
-
         remove_all_testfiles()
         copyfile(TEST_DATA_PATH + INI_FILE, TEST_EXEC_PATH + INI_FILE)
 
