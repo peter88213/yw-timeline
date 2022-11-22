@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v3.0.1
+
+- Code optimization and library update. 
+
+Based on PyWriter v9.0.4
+
 ### v2.0.2
 
 - Code optimization and library update. 
