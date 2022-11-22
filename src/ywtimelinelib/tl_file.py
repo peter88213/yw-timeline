@@ -147,7 +147,7 @@ class TlFile(File):
                     sceneDate = self.novel.scenes[scId].date
                     timeline.scenes[scId] = SceneEvent()
                 except:
-                    pass
+                    continue
 
             try:
                 title = event.find('text').text
