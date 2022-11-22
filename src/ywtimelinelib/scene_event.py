@@ -42,61 +42,61 @@ class SceneEvent(Scene):
             source -- Scene instance with date/time to merge.
         
         """
-        #--- Set start date/time.
-        if source.date is not None and source.date != Scene.NULL_DATE:
-            # The date is not "BC", so synchronize it.
-            if source.time:
-                self._startDateTime = source.date + ' ' + source.time
+            #--- Set start date/time.
+            if source.date is not None and source.date != Scene.NULL_DATE:
+                # The date is not "BC", so synchronize it.
+                if source.time:
+                    self._startDateTime = source.date + ' ' + source.time
+                else:
+                    self._startDateTime = source.date + ' 00:00:00'
+            elif source.date is None:
+                # calculate startDate/startTime from day/hour/minute.
+                if source.day:
+                    dayInt = int(source.day)
+                else:
+                    dayInt = 0
+                if source.hour:
+                    hourStr = source.hour
+                else:
+                    hourStr = '00'
+                if source.minute:
+                    minuteStr = source.minute
+                else:
+                    minuteStr = '00'
+                startTime = hourStr.zfill(2) + ':' + minuteStr.zfill(2) + ':00'
+                sceneDelta = timedelta(days=dayInt)
+                defaultDate = self.defaultDateTime.split(' ')[0]
+                startDate = (date.fromisoformat(defaultDate) + sceneDelta).isoformat()
+                self._startDateTime = startDate + ' ' + startTime
+            elif self._startDateTime is None:
+                self._startDateTime = self.defaultDateTime
             else:
-                self._startDateTime = source.date + ' 00:00:00'
-        elif source.date is None:
-            # calculate startDate/startTime from day/hour/minute.
-            if source.day:
-                dayInt = int(source.day)
+                # The date is "BC", so do not synchronize.
+                pass
+            #--- Set end date/time.
+            if source.date is not None and source.date == Scene.NULL_DATE:
+                # The year is two-figure, so do not synchronize.
+                if self._endDateTime is None:
+                    self._endDateTime = self._startDateTime
             else:
-                dayInt = 0
-            if source.hour:
-                hourStr = source.hour
-            else:
-                hourStr = '00'
-            if source.minute:
-                minuteStr = source.minute
-            else:
-                minuteStr = '00'
-            startTime = hourStr.zfill(2) + ':' + minuteStr.zfill(2) + ':00'
-            sceneDelta = timedelta(days=dayInt)
-            defaultDate = self.defaultDateTime.split(' ')[0]
-            startDate = (date.fromisoformat(defaultDate) + sceneDelta).isoformat()
-            self._startDateTime = startDate + ' ' + startTime
-        elif self._startDateTime is None:
-            self._startDateTime = self.defaultDateTime
-        else:
-            # The date is "BC", so do not synchronize.
-            pass
-        #--- Set end date/time.
-        if source.date is not None and source.date == Scene.NULL_DATE:
-            # The year is two-figure, so do not synchronize.
-            if self._endDateTime is None:
+                # Calculate end date from source scene duration.
+                if source.lastsDays:
+                    lastsDays = int(source.lastsDays)
+                else:
+                    lastsDays = 0
+                if source.lastsHours:
+                    lastsSeconds = int(source.lastsHours) * 3600
+                else:
+                    lastsSeconds = 0
+                if source.lastsMinutes:
+                    lastsSeconds += int(source.lastsMinutes) * 60
+                sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
+                sceneStart = datetime.fromisoformat(self._startDateTime)
+                sceneEnd = sceneStart + sceneDuration
+                self._endDateTime = sceneEnd.isoformat(' ')
+            # Tribute to defensive programming.
+            if self._startDateTime > self._endDateTime:
                 self._endDateTime = self._startDateTime
-        else:
-            # Calculate end date from source scene duration.
-            if source.lastsDays:
-                lastsDays = int(source.lastsDays)
-            else:
-                lastsDays = 0
-            if source.lastsHours:
-                lastsSeconds = int(source.lastsHours) * 3600
-            else:
-                lastsSeconds = 0
-            if source.lastsMinutes:
-                lastsSeconds += int(source.lastsMinutes) * 60
-            sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
-            sceneStart = datetime.fromisoformat(self._startDateTime)
-            sceneEnd = sceneStart + sceneDuration
-            self._endDateTime = sceneEnd.isoformat(' ')
-        # Tribute to defensive programming.
-        if self._startDateTime > self._endDateTime:
-            self._endDateTime = self._startDateTime
 
     def build_subtree(self, xmlEvent, scId, dtMin, dtMax):
         """Build a Timeline XML event subtree.

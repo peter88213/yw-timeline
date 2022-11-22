@@ -12,11 +12,9 @@ from datetime import datetime
 from datetime import timedelta
 from pywriter.pywriter_globals import *
 from pywriter.file.file import File
-from pywriter.model.novel import Novel
 from pywriter.model.scene import Scene
 from pywriter.model.chapter import Chapter
 from pywriter.yw.xml_indent import indent
-from ywtimelinelib.scene_event import SceneEvent
 from ywtimelinelib.dt_helper import fix_iso_dt
 
 
@@ -273,6 +271,137 @@ class TlFile(File):
                 pass
             return text
 
+        def build_subtree(xmlEvent, scId, dtMin, dtMax):
+            """Build a Timeline XML event subtree.
+            
+            Positional arguments:
+                xmlEvent -- elementTree.SubElement: Timeline event XML subtree.
+                scId -- str: scene ID.
+                dtMin -- str: lower date/time limit.
+                dtMax -- str: upper date/time limit.
+                
+            Return a tuple of two:  
+                dtMin -- str: updated lower date/time limit.
+                dtMax -- str: updated upper date/time limit.
+            
+            xmlEvent elements are created or updated.
+            """
+            #--- Set start date/time.
+            if self.novel.scenes[scId].date is not None and self.novel.scenes[scId].date != Scene.NULL_DATE:
+                # The date is not "BC", so synchronize it.
+                if self.novel.scenes[scId].time:
+                    startDateTime = self.novel.scenes[scId].date + ' ' + self.novel.scenes[scId].time
+                else:
+                    startDateTime = self.novel.scenes[scId].date + ' 00:00:00'
+            elif self.novel.scenes[scId].date is None:
+                # calculate startDate/startTime from day/hour/minute.
+                if self.novel.scenes[scId].day:
+                    dayInt = int(self.novel.scenes[scId].day)
+                else:
+                    dayInt = 0
+                if self.novel.scenes[scId].hour:
+                    hourStr = self.novel.scenes[scId].hour
+                else:
+                    hourStr = '00'
+                if self.novel.scenes[scId].minute:
+                    minuteStr = self.novel.scenes[scId].minute
+                else:
+                    minuteStr = '00'
+                startTime = hourStr.zfill(2) + ':' + minuteStr.zfill(2) + ':00'
+                sceneDelta = timedelta(days=dayInt)
+                defaultDate = self.defaultDateTime.split(' ')[0]
+                startDate = (date.fromisoformat(defaultDate) + sceneDelta).isoformat()
+                startDateTime = startDate + ' ' + startTime
+            elif self.novel.scenes[scId].date is None:
+                startDateTime = self.defaultDateTime
+            else:
+                # The date is "BC", so do not synchronize.
+                startDateTime = None
+
+            #--- Set end date/time.
+            if self.novel.scenes[scId].date is not None and self.novel.scenes[scId].date == Scene.NULL_DATE:
+                # The year is two-figure, so do not synchronize.
+                endDateTime = startDateTime
+            else:
+                # Calculate end date from source scene duration.
+                if self.novel.scenes[scId].lastsDays:
+                    lastsDays = int(self.novel.scenes[scId].lastsDays)
+                else:
+                    lastsDays = 0
+                if self.novel.scenes[scId].lastsHours:
+                    lastsSeconds = int(self.novel.scenes[scId].lastsHours) * 3600
+                else:
+                    lastsSeconds = 0
+                if self.novel.scenes[scId].lastsMinutes:
+                    lastsSeconds += int(self.novel.scenes[scId].lastsMinutes) * 60
+                sceneDuration = timedelta(days=lastsDays, seconds=lastsSeconds)
+                sceneStart = datetime.fromisoformat(startDateTime)
+                sceneEnd = sceneStart + sceneDuration
+                endDateTime = sceneEnd.isoformat(' ')
+
+            #--- Update XML events.
+            scIndex = 0
+            if startDateTime is not None:
+                try:
+                    xmlEvent.find('start').text = startDateTime
+                except(AttributeError):
+                    ET.SubElement(xmlEvent, 'start').text = startDateTime
+                if (not dtMin) or (startDateTime < dtMin):
+                    dtMin = startDateTime
+            scIndex += 1
+            if endDateTime is not None:
+                try:
+                    xmlEvent.find('end').text = endDateTime
+                except(AttributeError):
+                    ET.SubElement(xmlEvent, 'end').text = endDateTime
+                if (not dtMax) or (endDateTime > dtMax):
+                    dtMax = endDateTime
+            scIndex += 1
+            if not self.novel.scenes[scId].title:
+                self.novel.scenes[scId].title = 'Unnamed scene ID' + scId
+            try:
+                xmlEvent.find('text').text = self.novel.scenes[scId].title
+            except(AttributeError):
+                ET.SubElement(xmlEvent, 'text').text = self.novel.scenes[scId].title
+            scIndex += 1
+            if xmlEvent.find('progress') is None:
+                ET.SubElement(xmlEvent, 'progress').text = '0'
+            scIndex += 1
+            if xmlEvent.find('fuzzy') is None:
+                ET.SubElement(xmlEvent, 'fuzzy').text = 'False'
+            scIndex += 1
+            if xmlEvent.find('fuzzy_start') is not None:
+                scIndex += 1
+            if xmlEvent.find('fuzzy_end') is not None:
+                scIndex += 1
+            if xmlEvent.find('locked') is None:
+                ET.SubElement(xmlEvent, 'locked').text = 'False'
+            scIndex += 1
+            if xmlEvent.find('ends_today') is None:
+                ET.SubElement(xmlEvent, 'ends_today').text = 'False'
+            scIndex += 1
+            if self.novel.scenes[scId].desc is not None:
+                try:
+                    xmlEvent.find('description').text = self.novel.scenes[scId].desc
+                except(AttributeError):
+                    if xmlEvent.find('labels') is None:
+                        # Append the description.
+                        ET.SubElement(xmlEvent, 'description').text = self.novel.scenes[scId].desc
+                    else:
+                        # Insert the description.
+                        if xmlEvent.find('category') is not None:
+                            scIndex += 1
+                        desc = ET.Element('description')
+                        desc.text = self.novel.scenes[scId].desc
+                        xmlEvent.insert(scIndex, desc)
+            elif xmlEvent.find('description') is not None:
+                xmlEvent.remove(xmlEvent.find('description'))
+            if xmlEvent.find('labels') is None:
+                ET.SubElement(xmlEvent, 'labels').text = 'ScID:' + scId
+            if xmlEvent.find('default_color') is None:
+                ET.SubElement(xmlEvent, 'default_color').text = self.sceneColor
+            return dtMin, dtMax
+
         def set_view_range(dtMin, dtMax):
             """Return maximum/minimum timestamp defining the view range in Timeline.
             
@@ -320,39 +449,6 @@ class TlFile(File):
                 pass
             return dtMin, dtMax
 
-        #--- Merge first.
-        source = self.novel
-        self.novel = Novel()
-        if os.path.isfile(self.filePath):
-            self.read()
-            # initialize data
-
-        self.novel.chapters = {}
-        self.novel.srtChapters = []
-        for chId in source.srtChapters:
-            self.novel.chapters[chId] = Chapter()
-            self.novel.srtChapters.append(chId)
-            for scId in source.chapters[chId].srtScenes:
-                if self._ignoreUnspecific and source.scenes[scId].date is None and source.scenes[scId].time is None:
-                    # Skip scenes with unspecific date/time stamps.
-                    continue
-
-                if not scId in self.novel.scenes:
-                    self.novel.scenes[scId] = SceneEvent()
-                self.novel.chapters[chId].srtScenes.append(scId)
-                if source.scenes[scId].title:
-                    title = source.scenes[scId].title
-                    title = self._convert_from_yw(title)
-                    title = add_contId(self.novel.scenes[scId], title)
-                    self.novel.scenes[scId].title = title
-                self.novel.scenes[scId].desc = source.scenes[scId].desc
-                self.novel.scenes[scId].merge_date_time(source.scenes[scId])
-                self.novel.scenes[scId].scType = source.scenes[scId].scType
-        scenes = list(self.novel.scenes)
-        for scId in scenes:
-            if not scId in source.scenes:
-                del self.novel.scenes[scId]
-
         #--- Begin writing
         dtMin = None
         dtMax = None
@@ -383,7 +479,9 @@ class TlFile(File):
                     scId = sceneMatch.group(1)
                     if scId in srtScenes:
                         scIds.append(scId)
-                        dtMin, dtMax = self.novel.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
+
+                        #--- Update event date/time from scene.
+                        dtMin, dtMax = build_subtree(event, scId, dtMin, dtMax)
                     else:
                         trash.append(event)
 
@@ -391,7 +489,8 @@ class TlFile(File):
             for scId in srtScenes:
                 if not scId in scIds:
                     event = ET.SubElement(events, 'event')
-                    dtMin, dtMax = self.novel.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
+                    dtMin, dtMax = build_subtree(event, scId, dtMin, dtMax)
+
             # Remove events that are assigned to missing scenes.
             for event in trash:
                 events.remove(event)
@@ -411,7 +510,7 @@ class TlFile(File):
             events = ET.SubElement(root, 'events')
             for scId in srtScenes:
                 event = ET.SubElement(events, 'event')
-                dtMin, dtMax = self.novel.scenes[scId].build_subtree(event, scId, dtMin, dtMax)
+                dtMin, dtMax = build_subtree(event, scId, dtMin, dtMax)
 
             # Set the view range.
             dtMin, dtMax = set_view_range(dtMin, dtMax)
