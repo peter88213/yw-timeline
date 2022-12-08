@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Helper file for yw-timeline test.
 
 Create config file.

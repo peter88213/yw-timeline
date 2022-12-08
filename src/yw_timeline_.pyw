@@ -1,4 +1,4 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 """Synchronize yWriter project with Timeline
 
 Version @release
