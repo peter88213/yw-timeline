@@ -58,7 +58,10 @@ python3 '$Apppath' %F
 
 SET_CONTEXT_MENU = f'''Windows Registry Editor Version 5.00
 
-[-HKEY_CURRENT_USER\SOFTWARE\Classes\\yWriter7\\shell\\Export to Timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\yWriter7\\shell\Export to Timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\yWriter7\\shell\{_('Export to Timeline')}]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
 
 [HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
 
