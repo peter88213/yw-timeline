@@ -8,6 +8,12 @@
 
 See the [GitHub "features" project](https://github.com/peter88213/yw-timeline/projects/1).
 
+### v2.0.4
+
+- Make it run on old Windows versions.
+
+Based on PyWriter v8.0.11
+
 ### v2.0.3
 
 Downgrade from v3.0.2 due to a possible regression that takes some time to fix.
