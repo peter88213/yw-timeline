@@ -26,7 +26,11 @@ except ModuleNotFoundError:
 
 # Initialize localization.
 LOCALE_PATH = f'{os.path.dirname(sys.argv[0])}/locale/'
-CURRENT_LANGUAGE = locale.getlocale()[0][:2]
+try:
+    CURRENT_LANGUAGE = locale.getlocale()[0][:2]
+except:
+    # Fallback for old Windows versions.
+    CURRENT_LANGUAGE = locale.getdefaultlocale()[0][:2]
 try:
     t = gettext.translation('reg', LOCALE_PATH, languages=[CURRENT_LANGUAGE])
     _ = t.gettext
@@ -58,7 +62,10 @@ python3 '$Apppath' %F
 
 SET_CONTEXT_MENU = f'''Windows Registry Editor Version 5.00
 
-[-HKEY_CURRENT_USER\SOFTWARE\Classes\\yWriter7\\shell\\Export to Timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\yWriter7\\shell\Export to Timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\yWriter7\\shell\{_('Export to Timeline')}]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\.timeline]
+[-HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
 
 [HKEY_CURRENT_USER\\SOFTWARE\\Classes\\TimelineProject]
 
