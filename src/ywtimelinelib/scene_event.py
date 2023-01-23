@@ -1,6 +1,6 @@
 """Provide a class for Timeline scene event representation.
 
-Copyright (c) 2021 Peter Triesberger
+Copyright (c) 2023 Peter Triesberger
 For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
@@ -41,7 +41,7 @@ class SceneEvent(Scene):
         Positional arguments:
             startDateTime -- str: event start date/time as stored in Timeline.
             endDateTime -- str: event end date/time as stored in Timeline.
-            isUnspecific -- str: if True, convert date/time to D/H/M.
+            isUnspecific -- str: if True, convert date to Day.
         
         Because yWriter can not process two-figure years, 
         they are saved for Timeline use and replaced with 
@@ -83,21 +83,15 @@ class SceneEvent(Scene):
             self.lastsHours = str(lastsHours)
             self.lastsMinutes = str(lastsMinutes)
             if isUnspecific:
-                # Convert date/time to D/H/M
+                # Convert date to day
                 try:
-                    sceneTime = self.time.split(':')
-                    self.hour = sceneTime[0]
-                    self.minute = sceneTime[1]
                     sceneDate = date.fromisoformat(self.date)
                     referenceDate = date.fromisoformat(self.defaultDateTime.split(' ')[0])
                     self.day = str((sceneDate - referenceDate).days)
                 except:
                     # Do not synchronize.
                     self.day = None
-                    self.hour = None
-                    self.minute = None
                 self.date = None
-                self.time = None
 
     def merge_date_time(self, source):
         """Set date/time related variables from a yWriter-generated source scene.
@@ -110,33 +104,29 @@ class SceneEvent(Scene):
         if source.date is not None and source.date != Scene.NULL_DATE:
             # The date is not "BC", so synchronize it.
             if source.time:
-                self._startDateTime = source.date + ' ' + source.time
+                self._startDateTime = f'{source.date} {source.time}'
             else:
-                self._startDateTime = source.date + ' 00:00:00'
+                self._startDateTime = f'{source.date} 00:00:00'
         elif source.date is None:
-            # calculate startDate/startTime from day/hour/minute.
+            # calculate startDate/startTime from day and time.
             if source.day:
                 dayInt = int(source.day)
             else:
                 dayInt = 0
-            if source.hour:
-                hourStr = source.hour
+            if source.time:
+                startTime = source.time
             else:
-                hourStr = '00'
-            if source.minute:
-                minuteStr = source.minute
-            else:
-                minuteStr = '00'
-            startTime = hourStr.zfill(2) + ':' + minuteStr.zfill(2) + ':00'
+                startTime = '00:00:00'
             sceneDelta = timedelta(days=dayInt)
             defaultDate = self.defaultDateTime.split(' ')[0]
             startDate = (date.fromisoformat(defaultDate) + sceneDelta).isoformat()
-            self._startDateTime = startDate + ' ' + startTime
+            self._startDateTime = f'{startDate} {startTime}'
         elif self._startDateTime is None:
             self._startDateTime = self.defaultDateTime
         else:
             # The date is "BC", so do not synchronize.
             pass
+
         #--- Set end date/time.
         if source.date is not None and source.date == Scene.NULL_DATE:
             # The year is two-figure, so do not synchronize.
@@ -193,7 +183,7 @@ class SceneEvent(Scene):
             dtMax = self._endDateTime
         scIndex += 1
         if not self.title:
-            self.title = 'Unnamed scene ID' + scId
+            self.title = f'Unnamed scene ID{scId}'
         try:
             xmlEvent.find('text').text = self.title
         except(AttributeError):
@@ -232,7 +222,7 @@ class SceneEvent(Scene):
         elif xmlEvent.find('description') is not None:
             xmlEvent.remove(xmlEvent.find('description'))
         if xmlEvent.find('labels') is None:
-            ET.SubElement(xmlEvent, 'labels').text = 'ScID:' + scId
+            ET.SubElement(xmlEvent, 'labels').text = f'ScID:{scId}'
         if xmlEvent.find('default_color') is None:
             ET.SubElement(xmlEvent, 'default_color').text = self.sceneColor
         return dtMin, dtMax

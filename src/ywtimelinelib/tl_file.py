@@ -1,6 +1,6 @@
 """Provide a class for Timeline project file representation.
 
-Copyright (c) 2022 Peter Triesberger
+Copyright (c) 2023 Peter Triesberger
 For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
@@ -58,13 +58,13 @@ class TlFile(File):
             get the default date plus the unspecific 'D' as start date, 
             and 'H':'M' as start time.
             
-        If datetime_to_dhm is True, convert yWriter specific date/time to unspecific D/H/M
+        If datetime_to_dhm is True, convert yWriter specific date to unspecific Day
             when synchronizing from Timeline. Use the date from default_date_time as a reference. 
-            H, M are taken from the scene time. Precondition: dhm_to_datetime is False.
+            Precondition: dhm_to_datetime is False.
         
-        If dhm_to_datetime is True, convert yWriter unspecific D/H/M to specific date/time
+        If dhm_to_datetime is True, convert yWriter unspecific Day to specific date
             when synchronizing from Timeline. Use the date from default_date_time as a reference.
-            Time is 'H':'M'. Precondition: datetime_to_dhm is False.
+            Precondition: datetime_to_dhm is False.
             
         Extends the superclass constructor.
         """
@@ -140,7 +140,6 @@ class TlFile(File):
                 event.find('labels').text = labels.replace(sceneMarker, f'ScID:{scId}')
                 timeline.scenes[scId] = SceneEvent()
                 timeline.scenes[scId].status = 1
-                # Set scene status = "Outline".
             else:
                 try:
                     scId = sceneMatch.group(1)

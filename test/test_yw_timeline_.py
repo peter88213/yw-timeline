@@ -40,7 +40,6 @@ def read_file(inputFile):
 def remove_all_testfiles():
     try:
         os.remove(TEST_YW7)
-
     except:
         pass
     try:
@@ -72,6 +71,7 @@ class NormalOperation(unittest.TestCase):
         remove_all_testfiles()
         copyfile(TEST_DATA_PATH + INI_FILE, TEST_EXEC_PATH + INI_FILE)
 
+    # @unittest.skip('')
     def test_tl_to_new_yw(self):
         copyfile(TEST_DATA_PATH + 'outline.timeline', TEST_TL)
         os.chdir(TEST_EXEC_PATH)
@@ -79,6 +79,7 @@ class NormalOperation(unittest.TestCase):
         self.assertEqual(read_file(TEST_YW7), read_file(TEST_DATA_PATH + 'normal.yw7'))
         self.assertEqual(read_file(TEST_TL), read_file(TEST_DATA_PATH + 'rewritten.timeline'))
 
+    # @unittest.skip('')
     def test_modified_yw_to_tl(self):
         copyfile(TEST_DATA_PATH + 'normal.timeline', TEST_TL)
         copyfile(TEST_DATA_PATH + 'modified.yw7', TEST_YW7)
@@ -87,6 +88,7 @@ class NormalOperation(unittest.TestCase):
         self.assertEqual(read_file(TEST_TL), read_file(TEST_DATA_PATH + 'modified.timeline'))
         self.assertEqual(read_file(TEST_TL_BAK), read_file(TEST_DATA_PATH + 'normal.timeline'))
 
+    # @unittest.skip('')
     def test_modified2_tl_to_yw(self):
         copyfile(TEST_DATA_PATH + 'modified2.timeline', TEST_TL)
         copyfile(TEST_DATA_PATH + 'modified.yw7', TEST_YW7)
@@ -95,12 +97,14 @@ class NormalOperation(unittest.TestCase):
         self.assertEqual(read_file(TEST_YW7), read_file(TEST_DATA_PATH + 'modified2.yw7'))
         self.assertEqual(read_file(TEST_YW_BAK), read_file(TEST_DATA_PATH + 'modified.yw7'))
 
+    # @unittest.skip('')
     def test_modified_yw_to_new_tl(self):
         copyfile(TEST_DATA_PATH + 'modified.yw7', TEST_YW7)
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_YW7, silentMode=True)
         self.assertEqual(read_file(TEST_TL), read_file(TEST_DATA_PATH + 'new.timeline'))
 
+    # @unittest.skip('')
     def test_dateTimeToDhm(self):
         copyfile(TEST_DATA_PATH + 'normal.yw7', TEST_YW7)
         copyfile(TEST_DATA_PATH + 'dateTimeToDhm.ini', TEST_EXEC_PATH + INI_FILE)
@@ -109,6 +113,7 @@ class NormalOperation(unittest.TestCase):
         yw_timeline_.run(TEST_TL, silentMode=True)
         self.assertEqual(read_file(TEST_YW7), read_file(TEST_DATA_PATH + 'dateTimeToDhm.yw7'))
 
+    # @unittest.skip('')
     def test_dhmToDateTime(self):
         copyfile(TEST_DATA_PATH + 'dateTimeToDhm.yw7', TEST_YW7)
         copyfile(TEST_DATA_PATH + 'dhmToDateTime.ini', TEST_EXEC_PATH + INI_FILE)
