@@ -8,6 +8,12 @@
 
 See the [GitHub "Features" project](https://github.com/users/peter88213/projects/10/views/1).
 
+### v3.0.4
+
+- Reduce the memory use by discarding the docstrings on building.
+
+Based on PyWriter v12.1.2
+
 ### v3.0.3
 
 - Update for new libraries.
