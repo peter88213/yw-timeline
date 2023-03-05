@@ -4,7 +4,6 @@ The [Timeline Project](http://thetimelineproj.sourceforge.net/) application
 can be used to visualize the course of the narrative time in a 
 [yWriter](http://spacejock.com/yWriter7.html) project.
 
-The application is ready for internationalization with GNU gettext. A German localization is provided. 
 
 ## Features
 
@@ -13,6 +12,7 @@ The application is ready for internationalization with GNU gettext. A German loc
 - Synchronize *yWriter* scenes with corresponding *Timeline* events in both directions.
 - When synchronizing a yWriter project with a timeline, optionally change unspecific scene "Day/Hour/Minute" to specific "date/time" and vice versa.
 - Launch via drag/drop or Windows context menu.
+- The application is ready for internationalization with GNU gettext. A German localization is provided. 
 
 
 ## Requirements
