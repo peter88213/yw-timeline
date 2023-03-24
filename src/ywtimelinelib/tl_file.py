@@ -27,7 +27,7 @@ class TlFile(File):
         write() -- write instance variables to the file.
 
     Public instance variables:
-        ywProject -- Yw7File: the existing yWriter target project, if any.
+        ywProject: Yw7File -- the existing yWriter target project, if any.
 
     This class represents a file containing a timeline with additional 
     attributes and structural information (a full set or a subset
@@ -41,15 +41,15 @@ class TlFile(File):
         """Initialize instance variables and SceneEvent class variables.
 
         Positional arguments:
-            filePath -- str: path to the file represented by the Novel instance.
+            filePath: str -- path to the file represented by the Novel instance.
             
         Required keyword arguments:
-            scene_label -- str: event label marking "scene" events.
-            ignore_unspecific -- bool: ignore yWriter scenes with unspecific date/time. 
-            datetime_to_dhm -- bool: convert yWriter specific date/time to unspecific D/H/M.
-            dhm_to_datetime -- bool: convert yWriter unspecific D/H/M to specific date/time.
-            default_date_time -- str: date/time stamp for undated yWriter scenes.
-            scene_color -- str: color for events imported as scenes from yWriter.
+            scene_label: str -- event label marking "scene" events.
+            ignore_unspecific: bool -- ignore yWriter scenes with unspecific date/time. 
+            datetime_to_dhm: bool -- convert yWriter specific date/time to unspecific D/H/M.
+            dhm_to_datetime: bool -- convert yWriter unspecific D/H/M to specific date/time.
+            default_date_time: str -- date/time stamp for undated yWriter scenes.
+            scene_color: str -- color for events imported as scenes from yWriter.
         
         If ignore_unspecific is True, only transfer Scenes with a specific 
             date/time stamp from yWriter to Timeline.
@@ -91,7 +91,7 @@ class TlFile(File):
             
             Positional arguments:
                 event -- SceneEvent to update.
-                text -- str: event title.         
+                text: str -- event title.         
             
             If text comes with a Container ID, remove it 
             and store it in the event.contId instance variable.
@@ -216,8 +216,8 @@ class TlFile(File):
             """Return maximum/minimum timestamp defining the view range in Timeline.
             
             Positional arguments:
-                dtMin -- str: lower date/time limit.
-                dtMax -- str: upper date/time limit.
+                dtMin: str -- lower date/time limit.
+                dtMax: str -- upper date/time limit.
             """
             if dtMin is None:
                 dtMin = SceneEvent.defaultDateTime
@@ -400,7 +400,7 @@ class TlFile(File):
             text -- string to convert.
         
         Optional arguments:
-            quick -- bool: not used here.
+            quick: bool -- not used here.
         
         Return a string.
         Overrides the superclass method.

@@ -20,7 +20,7 @@ class SceneEvent(Scene):
         build_subtree(xmlEvent, scId, dtMin, dtMax) -- build a Timeline XML event subtree. 
 
     Public instance variables:
-        contId -- str: container ID.
+        contId: str -- container ID.
     """
     defaultDateTime = '2021-07-26 00:00:00'
     sceneColor = '170,240,160'
@@ -39,9 +39,9 @@ class SceneEvent(Scene):
         """Set date/time and, if applicable, duration.
         
         Positional arguments:
-            startDateTime -- str: event start date/time as stored in Timeline.
-            endDateTime -- str: event end date/time as stored in Timeline.
-            isUnspecific -- str: if True, convert date to Day.
+            startDateTime: str -- event start date/time as stored in Timeline.
+            endDateTime: str -- event end date/time as stored in Timeline.
+            isUnspecific: str -- if True, convert date to Day.
         
         Because yWriter can not process two-figure years, 
         they are saved for Timeline use and replaced with 
@@ -156,14 +156,14 @@ class SceneEvent(Scene):
         """Build a Timeline XML event subtree.
         
         Positional arguments:
-            xmlEvent -- elementTree.SubElement: Timeline event XML subtree.
-            scId -- str: scene ID.
-            dtMin -- str: lower date/time limit.
-            dtMax -- str: upper date/time limit.
+            xmlEvent: elementTree.SubElement -- Timeline event XML subtree.
+            scId: str -- scene ID.
+            dtMin: str -- lower date/time limit.
+            dtMax: str -- upper date/time limit.
             
         Return a tuple of two:  
-            dtMin -- str: updated lower date/time limit.
-            dtMax -- str: updated upper date/time limit.
+            dtMin: str -- updated lower date/time limit.
+            dtMax: str -- updated upper date/time limit.
         
         xmlEvent elements are created or updated.
         """

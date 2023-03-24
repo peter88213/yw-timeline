@@ -23,7 +23,7 @@ class TlConverter(YwCnvUi):
         """Create source and target objects and run conversion.
 
         Positional arguments: 
-            sourcePath -- str: the source file path.
+            sourcePath: str -- the source file path.
 
         The direction of the conversion is determined by the source file type.
         Only yWriter project files and Timeline files are accepted.
