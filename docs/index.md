@@ -1,3 +1,5 @@
+# yw-timeline
+
 [![Screenshot: Example](Screenshots/screen01.png)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/docs/Screenshots/screen01.png)
 
 The [Timeline Project](http://thetimelineproj.sourceforge.net/) application 
@@ -26,10 +28,10 @@ can be used to visualize the course of the narrative time in a
 
 [Download the latest release (version 3.0.5)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v3.0.5.zip)
 
-- Unzip the downloaded zipfile "yw-timeline_v3.0.5.zip" into a new folder.
+- Extract the "yw-timeline_v3.0.5" folder from the downloaded zipfile "yw-timeline_v3.0.5.zip".
 - Move into this new folder and launch **setup.pyw**. This installs the script for the local user.
 - Create a shortcut on the desktop when asked.
-- Open "README.md" for usage instructions.
+- Open "README.md" for further instructions.
 
 ### Note for Linux users
 
