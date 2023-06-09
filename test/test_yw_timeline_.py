@@ -16,7 +16,7 @@ import yw_timeline_
 
 TEST_PATH = os.getcwd() + '/../test'
 TEST_DATA_PATH = TEST_PATH + '/data/'
-TEST_EXEC_PATH = TEST_PATH + '/yw7/'
+TEST_EXEC_PATH = TEST_PATH + '/'
 
 # Test data
 TEST_YW7 = TEST_EXEC_PATH + 'yw7 Sample Project.yw7'
