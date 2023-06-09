@@ -1,7 +1,6 @@
-""" Regression test for the yw-timeline project.
+"""Regression test for the yw-timeline project.
 
-Test suite for yw-timeline.pyw.
-
+Copyright (c) 2023 Peter Triesberger
 For further information see https://github.com/peter88213/yw-timeline
 Published under the MIT License (https://opensource.org/licenses/mit-license.php)
 """
