@@ -1,4 +1,4 @@
-""" Python unit tests for the yw-timeline project.
+""" Regression test for the yw-timeline project.
 
 Test suite for yw-timeline.pyw.
 
