@@ -53,6 +53,7 @@ class TlFile(File):
         
         If ignore_unspecific is True, only transfer Scenes with a specific 
             date/time stamp from yWriter to Timeline.
+            
         If ignore_unspecific is False, transfer all Scenes from yWriter to Timeline. 
             Events assigned to scenes having no specific date/time stamp
             get the default date plus the unspecific 'D' as start date, 
@@ -111,7 +112,6 @@ class TlFile(File):
             isOutline = True
         else:
             isOutline = False
-        timeline = self.novel
 
         try:
             self._tree = ET.parse(self.filePath)
@@ -138,25 +138,25 @@ class TlFile(File):
                 sceneMarker = sceneMatch.group()
                 scId = str(sceneCount)
                 event.find('labels').text = labels.replace(sceneMarker, f'ScID:{scId}')
-                timeline.scenes[scId] = SceneEvent()
-                timeline.scenes[scId].status = 1
+                self.novel.scenes[scId] = SceneEvent()
+                self.novel.scenes[scId].status = 1
             else:
                 try:
                     scId = sceneMatch.group(1)
                     sceneDate = self.novel.scenes[scId].date
-                    timeline.scenes[scId] = SceneEvent()
+                    self.novel.scenes[scId] = SceneEvent()
                 except:
                     continue
 
             try:
                 title = event.find('text').text
-                title = remove_contId(timeline.scenes[scId], title)
+                title = remove_contId(self.novel.scenes[scId], title)
                 title = self._convert_to_yw(title)
-                timeline.scenes[scId].title = title
+                self.novel.scenes[scId].title = title
             except:
-                timeline.scenes[scId].title = f'Scene {scId}'
+                self.novel.scenes[scId].title = f'Scene {scId}'
             try:
-                timeline.scenes[scId].desc = event.find('description').text
+                self.novel.scenes[scId].desc = event.find('description').text
             except:
                 pass
 
@@ -173,7 +173,7 @@ class TlFile(File):
                 isUnspecific = True
             else:
                 isUnspecific = False
-            timeline.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
+            self.novel.scenes[scId].set_date_time(startDateTime, endDateTime, isUnspecific)
             if not startDateTime in scIdsByDate:
                 scIdsByDate[startDateTime] = []
             scIdsByDate[startDateTime].append(scId)
@@ -183,12 +183,12 @@ class TlFile(File):
         if isOutline:
             # Create a single chapter and assign all scenes to it.
             chId = '1'
-            timeline.chapters[chId] = Chapter()
-            timeline.chapters[chId].title = 'Chapter 1'
-            timeline.srtChapters = [chId]
+            self.novel.chapters[chId] = Chapter()
+            self.novel.chapters[chId].title = 'Chapter 1'
+            self.novel.srtChapters = [chId]
             for __, scList in srtScenes:
                 for scId in scList:
-                    timeline.chapters[chId].srtScenes.append(scId)
+                    self.novel.chapters[chId].srtScenes.append(scId)
             # Rewrite the timeline with scene IDs inserted.
             os.replace(self.filePath, f'{self.filePath}.bak')
             try:
@@ -196,8 +196,6 @@ class TlFile(File):
             except:
                 os.replace(f'{self.filePath}.bak', self.filePath)
                 raise Error(f'{_("Cannot write file")}: "{norm_path(self.filePath)}".')
-
-        self.novel = timeline
 
     def write(self):
         """Write instance variables to the file.
