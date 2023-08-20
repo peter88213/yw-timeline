@@ -23,7 +23,6 @@ class TlFile(File):
 
     Public methods:
         read() -- parse the file and get the instance variables.
-        merge(source) -- update instance variables from a source instance.
         write() -- write instance variables to the file.
 
     Public instance variables:
