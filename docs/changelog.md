@@ -10,7 +10,7 @@ See the [GitHub "Features" project](https://github.com/users/peter88213/projects
 
 ### v3.0.6
 
-- Fix a bug in the setup script that may cause problems when updating an older version.
+- Library update.
 
 Based on PyWriter v12.16.8
 
