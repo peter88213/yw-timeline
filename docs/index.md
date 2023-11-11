@@ -26,9 +26,9 @@ can be used to visualize the course of the narrative time in a
 
 ## Download and install
 
-[Download the latest release (version 3.0.5)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v3.0.5.zip)
+[Download the latest release (version 3.0.6)](https://raw.githubusercontent.com/peter88213/yw-timeline/main/dist/yw-timeline_v3.0.6.zip)
 
-- Extract the "yw-timeline_v3.0.5" folder from the downloaded zipfile "yw-timeline_v3.0.5.zip".
+- Extract the "yw-timeline_v3.0.6" folder from the downloaded zipfile "yw-timeline_v3.0.6.zip".
 - Move into this new folder and launch **setup.pyw**. This installs the script for the local user.
 - Create a shortcut on the desktop when asked.
 - Open "README.md" for further instructions.

@@ -8,6 +8,12 @@
 
 See the [GitHub "Features" project](https://github.com/users/peter88213/projects/10/views/1).
 
+### v3.0.6
+
+- Fix a bug in the setup script that may cause problems when updating an older version.
+
+Based on PyWriter v12.16.8
+
 ### v3.0.5
 
 - Restore the "shebang" line.
