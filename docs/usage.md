@@ -70,7 +70,7 @@ The yw-timeline distribution comes with a sample configuration file located in t
 
 This is the configuration explained: 
 
-```
+```ini
 [SETTINGS]
 
 scene_label = Scene
