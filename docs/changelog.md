@@ -8,6 +8,12 @@
 
 See the [GitHub "Features" project](https://github.com/users/peter88213/projects/10/views/1).
 
+### v3.0.7
+
+- Reading .yw7 files created with the iOS yWriter version.
+
+Based on PyWriter v12.19.0
+
 ### v3.0.6
 
 - Library update.
