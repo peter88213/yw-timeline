@@ -98,7 +98,7 @@ class TlFile(File):
             Return the stripped string.
             """
             if text:
-                match = re.match('([\(\[][0-9]+[\)\]])', text)
+                match = re.match(r'([\(\[][0-9]+[\)\]])', text)
                 if match:
                     contId = match.group()
                     event.contId = contId
@@ -124,7 +124,7 @@ class TlFile(File):
             sceneMatch = None
             if event.find('labels') is not None:
                 labels = event.find('labels').text
-                sceneMatch = re.search('ScID\:([0-9]+)', labels)
+                sceneMatch = re.search(r'ScID\:([0-9]+)', labels)
                 if isOutline and sceneMatch is None:
                     sceneMatch = re.search(self._sceneMarker, labels)
             if sceneMatch is None:
@@ -311,7 +311,7 @@ class TlFile(File):
             for event in events.iter('event'):
                 if event.find('labels') is not None:
                     labels = event.find('labels').text
-                    sceneMatch = re.search('ScID\:([0-9]+)', labels)
+                    sceneMatch = re.search(r'ScID\:([0-9]+)', labels)
                 else:
                     continue
 
