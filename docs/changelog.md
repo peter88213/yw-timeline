@@ -8,6 +8,13 @@
 
 See the [GitHub "Features" project](https://github.com/users/peter88213/projects/10/views/1).
 
+### Version 3.0.9
+
+- Refactor for future Python versions: No longer test truth value of
+xml.etree.ElementTree.Element.
+
+Based on PyWriter version 12.19.5
+
 ### Version 3.0.8
 
 - Refactor for future Python versions.
