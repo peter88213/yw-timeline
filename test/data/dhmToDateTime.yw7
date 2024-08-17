@@ -10,10 +10,7 @@
     <SCENE>
       <ID>1</ID>
       <Title><![CDATA[(3)Die <zweite> Szene]]></Title>
-      <BelongsToChID>1</BelongsToChID>
       <SceneContent />
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
       <Status>1</Status>
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
@@ -24,11 +21,8 @@
     <SCENE>
       <ID>2</ID>
       <Title><![CDATA[Die erste Szene]]></Title>
-      <BelongsToChID>1</BelongsToChID>
       <Desc><![CDATA[Dieses Ereignis wird nicht beschrieben.]]></Desc>
       <SceneContent />
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
       <Status>1</Status>
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
@@ -39,11 +33,8 @@
     <SCENE>
       <ID>3</ID>
       <Title><![CDATA[(6)Die dritte Szene]]></Title>
-      <BelongsToChID>1</BelongsToChID>
       <Desc><![CDATA[Das ist die <dritte> Szene.]]></Desc>
       <SceneContent />
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
       <Status>1</Status>
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
@@ -54,10 +45,7 @@
     <SCENE>
       <ID>4</ID>
       <Title><![CDATA[Die vierte Szene]]></Title>
-      <BelongsToChID>1</BelongsToChID>
       <SceneContent />
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
       <Status>1</Status>
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
@@ -68,10 +56,7 @@
     <SCENE>
       <ID>5</ID>
       <Title><![CDATA[New Scene]]></Title>
-      <BelongsToChID>1</BelongsToChID>
       <SceneContent />
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
       <Status>1</Status>
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
@@ -84,7 +69,6 @@
     <CHAPTER>
       <ID>1</ID>
       <Title><![CDATA[Chapter 1]]></Title>
-      <SortOrder>1</SortOrder>
       <Type>0</Type>
       <ChapterType>0</ChapterType>
       <Scenes>

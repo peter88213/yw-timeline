@@ -9,6 +9,8 @@ import os
 import unittest
 import yw_timeline_
 
+UPDATE = False
+
 # Test environment
 
 # The paths are relative to the "test" directory,
@@ -75,6 +77,8 @@ class NormalOperation(unittest.TestCase):
         copyfile(TEST_DATA_PATH + 'outline.timeline', TEST_TL)
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_TL, silentMode=True)
+        if UPDATE:
+            copyfile(TEST_YW7, TEST_DATA_PATH + 'normal.yw7')
         self.assertEqual(read_file(TEST_YW7), read_file(TEST_DATA_PATH + 'normal.yw7'))
         self.assertEqual(read_file(TEST_TL), read_file(TEST_DATA_PATH + 'rewritten.timeline'))
 
@@ -93,6 +97,8 @@ class NormalOperation(unittest.TestCase):
         copyfile(TEST_DATA_PATH + 'modified.yw7', TEST_YW7)
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_TL, silentMode=True)
+        if UPDATE:
+            copyfile(TEST_YW7, TEST_DATA_PATH + 'modified2.yw7')
         self.assertEqual(read_file(TEST_YW7), read_file(TEST_DATA_PATH + 'modified2.yw7'))
         self.assertEqual(read_file(TEST_YW_BAK), read_file(TEST_DATA_PATH + 'modified.yw7'))
 
@@ -110,6 +116,8 @@ class NormalOperation(unittest.TestCase):
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_YW7, silentMode=True)
         yw_timeline_.run(TEST_TL, silentMode=True)
+        if UPDATE:
+            copyfile(TEST_YW7, TEST_DATA_PATH + 'dateTimeToDhm.yw7')
         self.assertEqual(read_file(TEST_YW7), read_file(TEST_DATA_PATH + 'dateTimeToDhm.yw7'))
 
     # @unittest.skip('')
@@ -119,6 +127,8 @@ class NormalOperation(unittest.TestCase):
         os.chdir(TEST_EXEC_PATH)
         yw_timeline_.run(TEST_YW7, silentMode=True)
         yw_timeline_.run(TEST_TL, silentMode=True)
+        if UPDATE:
+            copyfile(TEST_YW7, TEST_DATA_PATH + 'dhmToDateTime.yw7')
         self.assertEqual(read_file(TEST_YW7), read_file(TEST_DATA_PATH + 'dhmToDateTime.yw7'))
 
     def tearDown(self):

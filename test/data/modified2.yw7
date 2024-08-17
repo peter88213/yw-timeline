@@ -48,13 +48,11 @@
       <ID>1</ID>
       <Title><![CDATA[Bird]]></Title>
       <Desc><![CDATA[This bird is not dead.]]></Desc>
-      <SortOrder>1</SortOrder>
     </ITEM>
     <ITEM>
       <ID>2</ID>
       <Title><![CDATA[The ministry of silly walk]]></Title>
       <Desc><![CDATA[The place to be.]]></Desc>
-      <SortOrder>2</SortOrder>
     </ITEM>
   </ITEMS>
   <CHARACTERS>
@@ -63,7 +61,6 @@
     <SCENE>
       <ID>1</ID>
       <Title><![CDATA[(3)Die <zweite> Szene]]></Title>
-      <BelongsToChID>1</BelongsToChID>
       <SpecificDateMode>-1</SpecificDateMode>
       <SpecificDateTime>1844-02-10 13:34:51</SpecificDateTime>
       <Field1>1</Field1>
@@ -71,14 +68,6 @@
       <Field3>1</Field3>
       <Field4>1</Field4>
       <Status>1</Status>
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
-      <Characters>
-		</Characters>
-      <Locations>
-		</Locations>
-      <Items>
-		</Items>
       <SceneContent />
       <LastsDays>56937</LastsDays>
       <LastsHours>10</LastsHours>
@@ -88,7 +77,6 @@
       <ID>2</ID>
       <Title><![CDATA[Die erste Szene]]></Title>
       <Desc><![CDATA[Dieses Ereignis wird nicht beschrieben.]]></Desc>
-      <BelongsToChID>1</BelongsToChID>
       <SpecificDateMode>-1</SpecificDateMode>
       <SpecificDateTime>0166-05-12 09:33:00</SpecificDateTime>
       <Field1>1</Field1>
@@ -96,14 +84,6 @@
       <Field3>1</Field3>
       <Field4>1</Field4>
       <Status>1</Status>
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
-      <Characters>
-		</Characters>
-      <Locations>
-		</Locations>
-      <Items>
-		</Items>
       <SceneContent />
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
@@ -113,7 +93,6 @@
       <ID>3</ID>
       <Title><![CDATA[(6)Die dritte Szene]]></Title>
       <Desc><![CDATA[Das ist die <dritte> Szene.]]></Desc>
-      <BelongsToChID>1</BelongsToChID>
       <SpecificDateMode>-1</SpecificDateMode>
       <SpecificDateTime>0001-01-01 00:00:00</SpecificDateTime>
       <Field1>1</Field1>
@@ -121,20 +100,11 @@
       <Field3>1</Field3>
       <Field4>1</Field4>
       <Status>1</Status>
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
-      <Characters>
-		</Characters>
-      <Locations>
-		</Locations>
-      <Items>
-		</Items>
       <SceneContent />
     </SCENE>
     <SCENE>
       <ID>4</ID>
       <Title><![CDATA[Die vierte Szene]]></Title>
-      <BelongsToChID>1</BelongsToChID>
       <SpecificDateMode>-1</SpecificDateMode>
       <SpecificDateTime>0001-01-01 00:00:00</SpecificDateTime>
       <Field1>1</Field1>
@@ -142,14 +112,6 @@
       <Field3>1</Field3>
       <Field4>1</Field4>
       <Status>1</Status>
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
-      <Characters>
-		</Characters>
-      <Locations>
-		</Locations>
-      <Items>
-		</Items>
       <SceneContent />
     </SCENE>
     <SCENE>
@@ -158,7 +120,6 @@
       <Fields>
         <Field_UseExporterTags>0</Field_UseExporterTags>
       </Fields>
-      <BelongsToChID>1</BelongsToChID>
       <Minute>00</Minute>
       <Hour>11</Hour>
       <Day>18</Day>
@@ -169,14 +130,6 @@
       <Field3>1</Field3>
       <Field4>1</Field4>
       <Status>1</Status>
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
-      <Characters>
-		</Characters>
-      <Locations>
-		</Locations>
-      <Items>
-		</Items>
       <SceneContent><![CDATA[]]></SceneContent>
       <LastsDays>0</LastsDays>
     </SCENE>
@@ -187,7 +140,6 @@
       <Fields>
         <Field_UseExporterTags>0</Field_UseExporterTags>
       </Fields>
-      <BelongsToChID>1</BelongsToChID>
       <SpecificDateMode>-1</SpecificDateMode>
       <SpecificDateTime>2021-08-10 19:36:00</SpecificDateTime>
       <Field1>1</Field1>
@@ -195,14 +147,6 @@
       <Field3>1</Field3>
       <Field4>1</Field4>
       <Status>1</Status>
-      <WordCount>0</WordCount>
-      <LetterCount>0</LetterCount>
-      <Characters>
-		</Characters>
-      <Locations>
-		</Locations>
-      <Items>
-		</Items>
       <SceneContent><![CDATA[]]></SceneContent>
       <LastsDays>0</LastsDays>
       <LastsHours>0</LastsHours>
@@ -213,7 +157,6 @@
     <CHAPTER>
       <ID>1</ID>
       <Title><![CDATA[Chapter 1]]></Title>
-      <SortOrder>1</SortOrder>
       <Type>0</Type>
       <ChapterType>0</ChapterType>
       <Scenes>
